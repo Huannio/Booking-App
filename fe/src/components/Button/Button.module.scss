@@ -1,0 +1,108 @@
+button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn {
+  box-shadow: var(--shadow-xs);
+  border-radius: 100rem;
+}
+
+.primary {
+  background-color: #77dada;
+  border: 1px solid #77dada;
+  color: #0e4f4f;
+  fill: #0e4f4f;
+}
+
+.primary:hover {
+  background-color: var(--primary-dark);
+  color: #fff;
+  cursor: pointer;
+  fill: #fff;
+}
+
+.outline {
+  background: linear-gradient(0deg, #fff, #fff),
+    linear-gradient(0deg, #eaecf0, #eaecf0);
+  border: 1px solid #eaecf0;
+  color: var(--gray-800);
+  fill: var(--gray-800);
+}
+
+.outline:hover {
+  background: var(--gray-50);
+  color: var(--gray-700);
+  fill: var(--gray-700);
+  cursor: pointer;
+}
+
+.normal {
+  padding: 16px 20px;
+  white-space: nowrap;
+}
+
+.normal .small {
+  width: 20px;
+  height: 20px;
+}
+
+.small {
+  padding: 10px 16px;
+  white-space: nowrap;
+}
+
+.onlyIcon {
+  gap: 0;
+  padding: 8px;
+}
+
+.linkColor {
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+
+  &:hover {
+    color: var(--primary);
+    fill: var(--primary);
+    cursor: pointer;
+
+    > svg > path {
+      stroke: var(--primary-base);
+    }
+  }
+
+  > svg > path {
+    stroke: var(--primary-dark);
+  }
+}
+
+.widthFull {
+  width: 100%;
+}
+
+.color {
+  background-color: var(--primary-base);
+  border: 1px solid var(--primary-base);
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+
+  &:hover {
+    background-color: var(--primary-dark);
+    color: #fff;
+    cursor: pointer;
+    fill: #fff;
+  }
+
+  > svg > path {
+    stroke: var(--primary-dark);
+  }
+
+  &:hover > svg > path {
+    stroke: var(--base-white);
+  }
+}
