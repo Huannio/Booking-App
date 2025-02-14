@@ -7,6 +7,7 @@ const cx = classNames.bind(styles);
 Button.propTypes = {
   to: PropTypes.string,
   href: PropTypes.string,
+  submit: PropTypes.bool,
   primary: PropTypes.bool,
   outline: PropTypes.bool,
   color: PropTypes.bool,
@@ -22,6 +23,7 @@ Button.propTypes = {
 function Button({
   to,
   href,
+  submit = false,
   primary = false,
   outline = false,
   color = false,
@@ -47,20 +49,27 @@ function Button({
     Component = "a";
   }
 
-  const classes = cx("btn", {
-    primary,
-    outline,
-    color,
-    linkColor,
-    onlyIcon,
-    normal,
-    small,
-    widthFull,
-    className,
-  });
+  const classes = cx(
+    "btn",
+    {
+      primary,
+      outline,
+      color,
+      linkColor,
+      onlyIcon,
+      normal,
+      small,
+      widthFull,
+    },
+    className
+  );
 
   return (
-    <Component className={classes} {...props}>
+    <Component
+      type={submit ? "submit" : "button"}
+      className={classes}
+      {...props}
+    >
       {children}
     </Component>
   );

@@ -1,0 +1,9 @@
+.ClientLayout-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.ClientLayout-main {
+  flex-grow: 1;
+}
