@@ -17,18 +17,10 @@ function Create() {
   const [roles, setRoles] = useState(null);
 
   const getRoles = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const { roles } = await axios.get("/roles");
-      setRoles(roles || []);
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: error?.response?.message || "Lỗi khi tải vai trò",
-      });
-    } finally {
-      setGlobalLoading(false);
-    }
+    setGlobalLoading(true);
+    const { roles } = await axios.get("/roles");
+    setRoles(roles || []);
+    setGlobalLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
@@ -46,19 +38,12 @@ function Create() {
   });
 
   const handleCreateUserForm = async (data) => {
-    try {
-      const response = await axios.post("/users/create", data);
-      notification.success({
-        message: response?.data?.message || "Tạo người dùng thành công!",
-      });
-      reset();
-      navigate("/users");
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: error?.response?.data?.message || "Lỗi khi tạo người dùng",
-      });
-    }
+    const response = await axios.post("/users/create", data);
+    notification.success({
+      message: response?.data?.message || "Tạo người dùng thành công!",
+    });
+    reset();
+    navigate("/users");
   };
 
   const roleOptions = useMemo(

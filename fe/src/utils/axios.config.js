@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import axios from "axios";
 import { handleLogoutApi, handleRefreshTokenApi } from "~/api";
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true, // Cho phép gửi cookie
@@ -19,6 +20,8 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+let promiseRefreshToken = null;
 
 // Add a response interceptor
 instance.interceptors.response.use(
@@ -47,16 +50,24 @@ instance.interceptors.response.use(
     // Gọi api refresh token khi bị lỗi 403
     const originalRequest = error.config; // Lấy các request api đang bị lỗi
     if (error.response?.status === 403 && !originalRequest._retry) {
-      // Gán giá trị _retry = true cho request refresh token => Trong khoảng thời gian chờ, chỉ gọi 1 lần refresh token
-      originalRequest._retry = true;
-      handleRefreshTokenApi()
-        .then(() => {
-          return instance(originalRequest);
-        })
-        .catch((error) => {
-          return Promise.reject(error);
-        });
-      return instance(originalRequest);
+      if (!promiseRefreshToken) {
+        // Gán giá trị _retry = true cho request refresh token => Trong khoảng thời gian chờ, chỉ gọi 1 lần refresh token
+        originalRequest._retry = true;
+        promiseRefreshToken = handleRefreshTokenApi()
+          .catch((error) => {
+            handleLogoutApi().then(() => {
+              location.href = "/login";
+            });
+            return Promise.reject(error);
+          })
+          .finally(() => {
+            promiseRefreshToken = null;
+          });
+      }
+
+      return promiseRefreshToken.then(() => {
+        return instance(originalRequest);
+      });
     }
 
     Promise.reject(error);

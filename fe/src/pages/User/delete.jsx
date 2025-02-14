@@ -21,34 +21,23 @@ function Delete() {
   } = useForm();
 
   const getOneUser = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const response = await axios.get(`/users/${id}`);
-      reset({ name: response?.data?.name });
-    } catch (error) {
-      notification.error({ message: error?.response?.data?.message });
-      navigate("/users");
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [id, navigate, reset, setGlobalLoading]);
+    setGlobalLoading(true);
+    const response = await axios.get(`/users/${id}`);
+    reset({ name: response?.data?.name });
+    setGlobalLoading(false);
+  }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
     getOneUser();
   }, [getOneUser]);
 
   const deleteUser = async () => {
-    try {
-      setConfirmLoading(true);
-      const response = await axios.delete(`/users/delete/${id}`);
-      notification.success({ message: response?.data?.message });
-      navigate("/users");
-    } catch (error) {
-      notification.error({ message: error?.response?.data?.message });
-    } finally {
-      setConfirmLoading(false);
-      setModalVisible(false);
-    }
+    setConfirmLoading(true);
+    const response = await axios.delete(`/users/delete/${id}`);
+    notification.success({ message: response?.data?.message });
+    navigate("/users");
+    setConfirmLoading(false);
+    setModalVisible(false);
   };
 
   return (

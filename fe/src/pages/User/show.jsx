@@ -50,25 +50,20 @@ function Show() {
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
   const getUsers = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      setLoading(true);
-      const response = await axios.get("/users");
+    setGlobalLoading(true);
+    setLoading(true);
+    const response = await axios.get("/users");
 
-      const formattedData = response.data.users.map((user) => ({
-        key: user.id,
-        name: user.name,
-        email: user.email,
-        roles: user.roles.name,
-        role_id: user.role_id,
-      }));
-      setUsers(formattedData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setGlobalLoading(false);
-      setLoading(false);
-    }
+    const formattedData = response.data.users.map((user) => ({
+      key: user.id,
+      name: user.name,
+      email: user.email,
+      roles: user.roles.name,
+      role_id: user.role_id,
+    }));
+    setUsers(formattedData);
+    setGlobalLoading(false);
+    setLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {

@@ -26,40 +26,22 @@ function Update() {
   } = useForm({ resolver: yupResolver(config.userSchema) });
 
   const getRoles = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const { roles } = await axios.get("/roles");
-      setRoles(roles || []);
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message:
-          error?.response?.data?.message || "Lỗi khi tải danh sách vai trò",
-      });
-    } finally {
-      setGlobalLoading(false);
-    }
+    setGlobalLoading(true);
+    const { roles } = await axios.get("/roles");
+    setRoles(roles || []);
+    setGlobalLoading(false);
   }, [setGlobalLoading]);
 
   const getOneUser = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const response = await axios.get(`/users/${id}`);
-      reset({
-        name: response.data.name,
-        email: response.data.email,
-        role_id: response.data.roles.id,
-      });
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: error?.response?.data?.message || "Lỗi khi tải thông tin người dùng",
-      });
-      navigate("/users");
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [id, reset, navigate, setGlobalLoading]);
+    setGlobalLoading(true);
+    const response = await axios.get(`/users/${id}`);
+    reset({
+      name: response.data.name,
+      email: response.data.email,
+      role_id: response.data.roles.id,
+    });
+    setGlobalLoading(false);
+  }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
     getRoles();
@@ -67,20 +49,12 @@ function Update() {
   }, [getRoles, getOneUser]);
 
   const handleUpdateUserForm = async (data) => {
-    try {
-      const response = await axios.put(`/users/update/${id}`, data);
+    const response = await axios.put(`/users/update/${id}`, data);
 
-      notification.success({
-        message: response?.data?.message || "Cập nhật người dùng thành công!",
-      });
-      navigate("/users");
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message:
-          error?.response?.data?.message || "Lỗi khi cập nhật người dùng",
-      });
-    }
+    notification.success({
+      message: response?.data?.message || "Cập nhật người dùng thành công!",
+    });
+    navigate("/users");
   };
 
   const roleOptions = useMemo(
