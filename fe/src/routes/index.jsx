@@ -20,6 +20,10 @@ const publicRoutes = [
     component: CruiseSearch,
   },
   {
+    path: "/tim-khach-san",
+    component: CruiseSearch,
+  },
+  {
     path: "/tim-ve-may-bay",
     component: FlightSearch,
   },
