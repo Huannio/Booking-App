@@ -1,13 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../app/models/User");
+const UserController = require("../app/controllers/UserController");
 
-router.get("/", async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.render("home", { users: users });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// GET /users
+router.get("/", UserController.show);
+
+// GET /users/:id
+router.get("/:id", UserController.index);
+
+// POST /users/create
+router.post("/create", UserController.create);
+
+// PUT /users/update/:id
+router.put("/update/:id", UserController.update);
+
+// DELETE /users/delete/:id
+router.delete("/delete/:id", UserController.delete);
+
+module.exports = router;
