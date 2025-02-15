@@ -70,7 +70,7 @@ function Login() {
                 required
               />
 
-              <Button primary normal submit>
+              <Button primary normal submit className="interceptor-loading">
                 <div className="label md">Login</div>
               </Button>
             </div>

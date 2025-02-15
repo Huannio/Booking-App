@@ -121,7 +121,7 @@ function Update() {
           </div>
         </div>
 
-        <Button primary normal submit className="align-self-end">
+        <Button primary normal submit className="align-self-end interceptor-loading">
           <div className="label md">Cập nhật</div>
         </Button>
       </form>

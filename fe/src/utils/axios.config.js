@@ -1,7 +1,7 @@
 import { notification } from "antd";
 import axios from "axios";
 import { handleLogoutApi, handleRefreshTokenApi } from "~/api";
-
+import { interceptorLoadingElements } from "./formatters";
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true, // Cho phép gửi cookie
@@ -14,6 +14,7 @@ instance.defaults.timeout = 1000 * 60 * 10; // 10 phut
 instance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    interceptorLoadingElements(true);
     return config;
   },
   function (error) {
@@ -27,10 +28,14 @@ let promiseRefreshToken = null;
 instance.interceptors.response.use(
   (response) => {
     if (response && response.data) {
+      interceptorLoadingElements(false);
       return response.data;
     }
   },
   (error) => {
+    // Chặn user spam click
+    interceptorLoadingElements(false);
+
     // Any status codes that falls outside the range of 2xx cause this function to trigger (200-299)
     // Do something with response error
     // Hiển thị thông báo các loại lỗi khác trừ mã 403 => dùng cho refresh token

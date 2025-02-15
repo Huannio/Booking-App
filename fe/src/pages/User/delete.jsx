@@ -69,7 +69,7 @@ function Delete() {
 
           <Button
             normal
-            className="align-self-end"
+            className="align-self-end interceptor-loading"
             onClick={() => setModalVisible(true)}
           >
             <span className="label md">Xóa</span>

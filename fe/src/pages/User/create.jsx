@@ -108,7 +108,7 @@ function Create() {
           </div>
         </div>
 
-        <Button primary normal submit className="align-self-end">
+        <Button primary normal submit className="align-self-end interceptor-loading">
           <div className="label md">Tạo</div>
         </Button>
       </form>
