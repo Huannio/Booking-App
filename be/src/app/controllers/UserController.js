@@ -34,6 +34,16 @@ class UserController {
     }
   };
 
+  search = async (req, res, next) => {
+    try {
+      const { q } = req.query;
+      const users = await this.userService.searchUser(q);
+      res.success({ users, message: "Tìm kiếm thành công!" });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
   update = async (req, res, next) => {
     try {
       const { id } = req.params;
