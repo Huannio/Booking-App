@@ -43,6 +43,7 @@ function Update() {
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
 
+
   useEffect(() => {
     getRoles();
     getOneUser();
