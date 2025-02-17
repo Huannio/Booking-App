@@ -1,5 +1,13 @@
+import Banner from './components/banner';
+import BlogSection from './components/BlogSection';
+
 function Home() {
-  return <h2>1</h2>;
+  return (
+    <>
+      <Banner />
+      <BlogSection />
+    </>
+  );
 }
 
 export default Home;
