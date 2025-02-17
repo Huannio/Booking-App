@@ -234,6 +234,10 @@ h6 {
   align-items: start;
 }
 
+.align-self-end {
+  align-self: flex-end;
+}
+
 /*  */
 .gray-900 {
   --gray-900: #101828;
@@ -396,6 +400,101 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+/*  */
+.select-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-group > label {
+  position: absolute;
+  top: -10px;
+  transform: translateY(-50%);
+  left: 0;
+  background-color: #fff;
+  padding: 0 4px;
+  color: var(--gray-600, #475467);
+}
+
+.input-group {
+  position: relative;
+  padding: 16px 20px;
+  border-radius: 28px;
+  border: 1px solid #eaecf0;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  fill: #fff;
+}
+
+.input-group > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.input-group > img {
+  width: 20px;
+  height: 20px;
+}
+
+.input-group > svg > path {
+  stroke: var(--gray-400, #98a2b3);
+}
+
+.input-group:focus-within {
+  border: 1px solid var(--primary-base);
+  box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.input-group > label {
+  position: absolute;
+  top: 0;
+  transform: translateY(-50%);
+  left: 16px;
+  background-color: #fff;
+  padding: 0 4px;
+  color: var(--gray-600, #475467);
+}
+
+.input-group > input,
+.input-group > textarea {
+  border: none;
+  flex-grow: 1;
+  width: 0;
+  color: var(--gray-800, #1d2939);
+  height: 24px;
+}
+
+.input-group > input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.input-group > textarea {
+  height: 140px;
+}
+
+.input-group > input[type="button"] {
+  background: var(--base-white);
+  text-align: left;
+}
+
+.input-destructive > .input-group {
+  border: 1px solid var(--error-base);
+}
+
+.input-destructive > .input-group:focus-within {
+  box-shadow: 0 0 0 4px var(--error-light);
+}
+
+.input-required::after {
+  content: "*";
+  color: red;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -420,4 +519,20 @@ input[type="number"] {
 }
 .select-input:focus-within .dropdown {
   display: flex;
+}
+
+.group-input {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 24px;
+  gap: 24px;
+  justify-content: flex-start;
+}
+
+.modal {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1 0;
 }
