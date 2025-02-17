@@ -4,7 +4,6 @@ const { Users, Roles } = require("../../models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const jwt = require("jsonwebtoken");
 
 class UserService {
   async getAllUsers() {
@@ -49,7 +48,7 @@ class UserService {
     const userExists = await Users.findOne({ where: { email } });
     if (userExists) {
       throw {
-        statusCode: 400,
+        statusCode: 409,
         message: "Email đã tồn tại!",
       };
     }
@@ -57,7 +56,7 @@ class UserService {
     const roleExists = await Roles.findByPk(role_id);
     if (!roleExists) {
       throw {
-        statusCode: 400,
+        statusCode: 404,
         message: "Vai trò không tồn tại!",
       };
     }
@@ -97,7 +96,7 @@ class UserService {
 
     if (checkEmail) {
       throw {
-        statusCode: 400,
+        statusCode: 409,
         message: "Email đã tồn tại!",
       };
     }
@@ -105,7 +104,7 @@ class UserService {
     const roleExists = await Roles.findByPk(role_id);
     if (!roleExists) {
       throw {
-        statusCode: 400,
+        statusCode: 404,
         message: "Vai trò không tồn tại!",
       };
     }
@@ -136,7 +135,7 @@ class UserService {
     const deletedUser = await user.destroy();
     if (!deletedUser) {
       throw {
-        statusCode: 404,
+        statusCode: 400,
         message: "Có lỗi!",
       };
     }

@@ -13,7 +13,7 @@ class AuthService {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      throw { statusCode: 401, message: "Mật khẩu không chính xác!" };
+      throw { statusCode: 406, message: "Email hoặc Mật khẩu không chính xác!" };
     }
 
     const payload = {

@@ -23,6 +23,7 @@ instance.interceptors.request.use(
 );
 
 let promiseRefreshToken = null;
+
 // Add a response interceptor
 instance.interceptors.response.use(
   (response) => {
@@ -34,6 +35,7 @@ instance.interceptors.response.use(
   (error) => {
     // Chặn user spam click
     interceptorLoadingElements(false);
+
     // Any status codes that falls outside the range of 2xx cause this function to trigger (200-299)
     // Do something with response error
     // Hiển thị thông báo các loại lỗi khác trừ mã 403 => dùng cho refresh token
@@ -71,7 +73,6 @@ instance.interceptors.response.use(
       return promiseRefreshToken.then(() => {
         return instance(originalRequest);
       });
-
     }
 
     Promise.reject(error);

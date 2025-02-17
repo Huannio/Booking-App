@@ -26,11 +26,13 @@ function Login() {
 
   const handleLogin = async (data) => {
     const response = await axios.post("/auth/login", data);
-    localStorage.setItem("user", JSON.stringify(response?.data?.user));
-    notification.success({
-      message: "Đăng nhập thành công!",
-    });
-    navigate("/dashboard");
+    if (response?.data?.user) {
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      notification.success({
+        message: "Đăng nhập thành công!",
+      });
+      navigate("/dashboard");
+    }
   };
 
   return (
