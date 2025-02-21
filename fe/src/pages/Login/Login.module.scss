@@ -1,0 +1,23 @@
+.Login-container {
+  width: 100vw;
+  height: 90vh;
+  min-height: 500px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Login-modalLogin {
+  width: 370px;
+  height: -moz-min-content;
+  height: min-content;
+  border-radius: 16px;
+  border: 1px solid #eaecf0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  flex-direction: column;
+  gap: 30px;
+}
