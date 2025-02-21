@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("users", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -21,22 +21,27 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      role_id: {
+      publish: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      user_catalogues_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Roles",
+          model: "user_catalogues",
           key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      forgot_password_token: {
-        type: Sequelize.STRING,
+      active_token: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
-      forgot_password_expires: {
-        type: Sequelize.DATE,
+      remember_token: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       createdAt: {
@@ -47,13 +52,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      deletedAt: {
-        allowNull: true,
-        type: Sequelize.DATE,
-      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("users");
   },
 };
