@@ -1,11 +1,12 @@
 import styles from "./Cruise.module.scss";
+
 function Cruise() {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg text-center">
+    <div className="bg-white p-6 rounded-2xl shadow-lg text-center fresnel-container">
       <h1 className="text-2xl font-bold text-gray-900 search-box-title">
         Bạn lựa chọn du thuyền Hạ Long nào?
       </h1>
-      <p className="text-gray-500 mt-2 search-box-description">
+      <p className="search-box-description">
         Hơn 100 tour du thuyền hạng sang giá tốt đang chờ bạn
       </p>
 
