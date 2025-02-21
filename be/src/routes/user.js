@@ -8,6 +8,9 @@ router.get("/", UserController.show);
 // GET /users/:id
 router.get("/:id", UserController.index);
 
+// POST /users/seach
+router.get("/search", UserController.search);
+
 // POST /users/create
 router.post("/create", UserController.create);
 
