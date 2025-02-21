@@ -11,7 +11,7 @@ export const userSchema = yup.object({
     .transform((value) => value.trim())
     .required("Vui lòng nhập trường này"),
   email: emailYup,
-  role_id: yup.string().required("Vui lòng chọn trường này"),
+  user_catalogues_id: yup.string().required("Vui lòng chọn trường này"),
 });
 
 export const loginSchema = yup.object({

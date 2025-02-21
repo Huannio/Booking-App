@@ -70,6 +70,7 @@ instance.interceptors.response.use(
           });
       }
 
+      // Gọi lại api bị lỗi khi accessToken hết hạn được refresh
       return promiseRefreshToken.then(() => {
         return instance(originalRequest);
       });

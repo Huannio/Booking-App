@@ -23,7 +23,8 @@ function Delete() {
   const getOneUser = useCallback(async () => {
     setGlobalLoading(true);
     const response = await axios.get(`/users/${id}`);
-    reset({ name: response?.data?.name });
+
+    reset({ name: response?.user?.name });
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
 
@@ -34,8 +35,11 @@ function Delete() {
   const deleteUser = async () => {
     setConfirmLoading(true);
     const response = await axios.delete(`/users/delete/${id}`);
-    notification.success({ message: response?.data?.message });
-    navigate("/users");
+
+    if (response.statusCode === 200) {
+      notification.success({ message: response?.message });
+      navigate("/users");
+    }
     setConfirmLoading(false);
     setModalVisible(false);
   };

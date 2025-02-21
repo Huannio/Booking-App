@@ -15,7 +15,7 @@ function Update() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [roles, setRoles] = useState(null);
+
 
   const {
     control,
@@ -25,10 +25,13 @@ function Update() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(config.userSchema) });
 
-  const getRoles = useCallback(async () => {
+
+  const [userCatalogues, setUserCatalogues] = useState(null);
+
+  const getUserCatalogues = useCallback(async () => {
     setGlobalLoading(true);
-    const { roles } = await axios.get("/roles");
-    setRoles(roles || []);
+    const { userCatalogues } = await axios.get("/users-catalogues");
+    setUserCatalogues(userCatalogues || []);
     setGlobalLoading(false);
   }, [setGlobalLoading]);
 
@@ -36,35 +39,38 @@ function Update() {
     setGlobalLoading(true);
     const response = await axios.get(`/users/${id}`);
     reset({
-      name: response.data.name,
-      email: response.data.email,
-      role_id: response.data.roles.id,
+
+      name: response.user.name,
+      email: response.user.email,
+      user_catalogues_id: response.user.user_catalogues.id,
     });
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
-    getRoles();
+
+    getUserCatalogues();
     getOneUser();
-  }, [getRoles, getOneUser]);
+  }, [getUserCatalogues, getOneUser]);
 
   const handleUpdateUserForm = async (data) => {
     const response = await axios.put(`/users/update/${id}`, data);
-
-    notification.success({
-      message: response?.data?.message || "Cập nhật người dùng thành công!",
-    });
-    navigate("/users");
+    if (response.statusCode === 200) {
+      notification.success({
+        message: response?.message || "Cập nhật người dùng thành công!",
+      });
+      navigate("/users");
+    }
   };
 
-  const roleOptions = useMemo(
+  const userCataloguesOption = useMemo(
     () =>
-      roles?.map((role) => (
-        <Option key={role.id} value={role.id}>
-          {role.name}
+      userCatalogues?.map((user_catalogues) => (
+        <Option key={user_catalogues.id} value={user_catalogues.id}>
+          {user_catalogues.name}
         </Option>
       )) || [],
-    [roles]
+    [userCatalogues]
   );
 
   return (
@@ -108,20 +114,27 @@ function Update() {
         <div className="group-input">
           <div className="form-group">
             <SelectField
-              name="role_id"
+
+              name="user_catalogues_id"
               label="Chọn vai trò"
               placeholder="Chọn một vai trò"
               control={control}
-              error={errors.role_id}
-              options={roleOptions}
-              onChange={(value) => setValue("role_id", value)}
-              loading={!roles}
+              error={errors.user_catalogues_id}
+              options={userCataloguesOption}
+              onChange={(value) => setValue("user_catalogues_id", value)}
+              loading={!userCatalogues}
               required
             />
           </div>
         </div>
 
-        <Button primary normal submit className="align-self-end interceptor-loading">
+
+        <Button
+          primary
+          normal
+          submit
+          className="align-self-end interceptor-loading"
+        >
           <div className="label md">Cập nhật</div>
         </Button>
       </form>

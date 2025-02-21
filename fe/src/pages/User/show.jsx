@@ -18,10 +18,11 @@ const columns = [
     key: "email",
   },
   {
-    title: "Roles",
-    key: "role_id",
-    dataIndex: "roles",
-    render: (roles) => <Tag color="green">{roles}</Tag>,
+
+    title: "Vai trò",
+    key: "user_catalogues",
+    dataIndex: "user_catalogues",
+    render: (user_catalogues) => <Tag color="green">{user_catalogues}</Tag>,
   },
   {
     title: "Action",
@@ -54,12 +55,13 @@ function Show() {
     setLoading(true);
     const response = await axios.get("/users");
 
-    const formattedData = response.data.users.map((user) => ({
+
+    const formattedData = response.users.map((user) => ({
       key: user.id,
       name: user.name,
       email: user.email,
-      roles: user.roles.name,
-      role_id: user.role_id,
+      user_catalogues: user.user_catalogues.name,
+      user_catalogues_id: user.user_catalogues.id,
     }));
     setUsers(formattedData);
     setGlobalLoading(false);

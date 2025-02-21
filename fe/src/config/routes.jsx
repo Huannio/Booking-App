@@ -15,6 +15,7 @@ const routes = {
     update: "/ships/update/:id",
     delete: "/ships/delete/:id",
   },
+
 };
 
 export default routes;

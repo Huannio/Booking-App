@@ -1,18 +1,17 @@
-require("dotenv").config();
+const env = require("./config/environment");
 const express = require("express");
 const morgan = require("morgan");
-const configViewEngine = require("./config/viewEngine");
 const router = require("./routes/index");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { responseHandler, errorHandler } = require("./middleware/response");
+const errorHandler = require("./middleware/ErrorHandler");
 const sequelize = require("./config/database");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = env.PORT || 3000;
 
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    origin: env.ORIGIN,
     credentials: true,
   })
 );
@@ -20,7 +19,6 @@ app.use(
 app.use(express.json()); // for parsing application/json
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(responseHandler);
 // HTTP logger
 app.use(morgan("combined"));
 
@@ -34,8 +32,6 @@ sequelize
     console.error("Unable to connect to the database:", error);
   });
 
-// Template Engine  
-configViewEngine(app);
 router(app);
 
 app.use(errorHandler);
