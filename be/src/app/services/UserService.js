@@ -76,7 +76,6 @@ class UserService {
     } catch (error) {
       throw error;
     }
->>>>>>> 59fe93010a96daa542b52bfe1827107015e3d16e
   }
 }
 

@@ -13,15 +13,12 @@ import {
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
-<<<<<<< HEAD
 import {
   Show as ShowShip,
   Create as CreateShip,
   Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
-=======
->>>>>>> 59fe93010a96daa542b52bfe1827107015e3d16e
 import config from "~/config";
 
 export const publicRoutes = [
