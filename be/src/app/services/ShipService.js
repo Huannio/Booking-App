@@ -1,57 +1,55 @@
-// src/services/ShipService.js
-import axios from 'axios';
+const { Ship } = require("../../models");
 
-const apiUrl = '/api/ship';
-
-const getAllShips = async () => {
-  try {
-    const response = await axios.get(apiUrl);
-    return response.data.ships;
-  } catch (error) {
-    throw new Error('Không thể lấy thông tin du thuyền.');
+class ShipService {
+  async getAllShips() {
+    try {
+      const ships = await Ship.findAll();
+      return ships;
+    } catch (error) {
+      throw new Error("Không thể lấy thông tin du thuyền.");
+    }
   }
-};
 
-const getShipById = async (id) => {
-  try {
-    const response = await axios.get(`${apiUrl}/${id}`);
-    return response.data.ship;
-  } catch (error) {
-    throw new Error(`Không thể tìm thấy du thuyền với id ${id}`);
+  async getShipById(id) {
+    try {
+      const ship = await Ship.findByPk(id);
+      if (!ship) throw new Error(`Không thể tìm thấy du thuyền với id ${id}`);
+      return ship;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
-};
 
-const createShip = async (shipData) => {
-  try {
-    const response = await axios.post(`${apiUrl}/create`, shipData);
-    return response.data.ship;
-  } catch (error) {
-    throw new Error('Không thể tạo mới du thuyền.');
+  async createShip(shipData) {
+    try {
+      const newShip = await Ship.create(shipData);
+      return newShip;
+    } catch (error) {
+      throw new Error("Không thể tạo mới du thuyền.");
+    }
   }
-};
 
-const updateShip = async (id, shipData) => {
-  try {
-    const response = await axios.put(`${apiUrl}/update/${id}`, shipData);
-    return response.data.ship;
-  } catch (error) {
-    throw new Error('Không thể cập nhật du thuyền.');
+  async updateShip(id, shipData) {
+    try {
+      const ship = await Ship.findByPk(id);
+      if (!ship) throw new Error(`Không tìm thấy du thuyền với id ${id}`);
+      await ship.update(shipData);
+      return ship;
+    } catch (error) {
+      throw new Error("Không thể cập nhật du thuyền.");
+    }
   }
-};
 
-const deleteShip = async (id) => {
-  try {
-    const response = await axios.delete(`${apiUrl}/delete/${id}`);
-    return response.data.ship;
-  } catch (error) {
-    throw new Error('Không thể xóa du thuyền.');
+  async deleteShip(id) {
+    try {
+      const ship = await Ship.findByPk(id);
+      if (!ship) throw new Error(`Không tìm thấy du thuyền với id ${id}`);
+      await ship.destroy();
+      return ship;
+    } catch (error) {
+      throw new Error("Không thể xóa du thuyền.");
+    }
   }
-};
+}
 
-export default {
-  getAllShips,
-  getShipById,
-  createShip,
-  updateShip,
-  deleteShip,
-};
+module.exports = new ShipService();

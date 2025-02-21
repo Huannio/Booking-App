@@ -8,6 +8,13 @@ const routes = {
     update: "/users/update/:id",
     delete: "/users/delete/:id",
   },
+
+  ships: {
+    index: "/ships",
+    create: "/ships/create",
+    update: "/ships/update/:id",
+    delete: "/ships/delete/:id",
+  },
 };
 
 export default routes;

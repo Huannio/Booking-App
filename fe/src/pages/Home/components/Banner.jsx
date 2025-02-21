@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from "~/components/Button";
 import classNames from 'classnames/bind';
-import styles from '../Home.module.scss'; // Đảm bảo đường dẫn đúng
+import styles from '../Home.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -10,16 +10,18 @@ function Banner() {
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('Tất cả địa điểm');
   const [price, setPrice] = useState('Tất cả mức giá');
-  const [locationsDropdownVisible, setLocationsDropdownVisible] = useState(false); // Điều khiển hiển thị dropdown địa điểm
-  const [pricesDropdownVisible, setPricesDropdownVisible] = useState(false); // Điều khiển hiển thị dropdown mức giá
+  const [locationsDropdownVisible, setLocationsDropdownVisible] = useState(false); // dropdown địa điểm
+  const [pricesDropdownVisible, setPricesDropdownVisible] = useState(false); // dropdown mức giá
   const navigate = useNavigate();
 
   const handleLocationClick = () => {
-    setLocationsDropdownVisible(!locationsDropdownVisible); // Toggle visibility dropdown địa điểm
+    setLocationsDropdownVisible(!locationsDropdownVisible);
+    setPricesDropdownVisible(false); // Toggle visibility dropdown
   };
 
   const handlePriceClick = () => {
-    setPricesDropdownVisible(!pricesDropdownVisible); // Toggle visibility dropdown mức giá
+    setPricesDropdownVisible(!pricesDropdownVisible); 
+    setLocationsDropdownVisible(false);
   };
 
   const handleLocationSelect = (selectedLocation) => {

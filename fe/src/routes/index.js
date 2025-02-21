@@ -13,6 +13,12 @@ import {
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
+import {
+  Show as ShowShip,
+  Create as CreateShip,
+  Update as UpdateShip,
+  Delete as DeleteShip,
+} from "../pages/Ship";
 import config from "~/config";
 
 export const publicRoutes = [
@@ -60,6 +66,29 @@ export const privateRoutes = [
     component: DeleteUser,
     layout: AdminLayout,
   },
+
+  // Ship
+  {
+    path: config.routes.ships.index,
+    component: ShowShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.create,
+    component: CreateShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.update,
+    component: UpdateShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.delete,
+    component: DeleteShip,
+    layout: AdminLayout,
+  },
+
 ];
 
 export const authRoutes = [

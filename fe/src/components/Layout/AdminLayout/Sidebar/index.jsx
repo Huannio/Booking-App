@@ -27,7 +27,7 @@ const items = [
   {
     key: "3",
     icon: <ContainerOutlined />,
-    label: "Option 3",
+    label: <Link to = {config.routes.ships.index}>Quản lý du thuyền</Link>,
   },
   {
     key: "sub1",
