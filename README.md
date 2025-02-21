@@ -54,7 +54,7 @@ git push -u origin "Tên nhánh"  # Đẩy code lên GitHub
 
 ### 📌 Dùng sequelize để tạo database
 Khi kéo code về, hãy vào terminal theo đường dẫn: BookingApp\be\src: 
-```bash
 Running Migrations:
+```bash
 npx sequelize-cli db:migrate
 npx sequelize-cli db:seed:all
