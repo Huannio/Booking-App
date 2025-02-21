@@ -26,7 +26,7 @@ class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
-      role_id: user.role_id,
+      user_catalogues_id: user.user_catalogues_id,
     };
 
     const accessToken = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
@@ -41,25 +41,22 @@ class AuthService {
   }
 
   async refreshToken(refreshToken) {
-    const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET);
-    if (!decoded) {
-      throw new ApiError(
-        StatusCodes.UNAUTHORIZED,
-        "Invalid refresh token! Please log in again."
+    try {
+      const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET);
+      const newToken = jwt.sign(
+        {
+          id: decoded.id,
+        },
+        env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
+        }
       );
+
+      return { accessToken: newToken };
+    } catch (error) {
+      throw error;
     }
-
-    const newToken = jwt.sign(
-      {
-        id: decoded.id,
-      },
-      env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
-      }
-    );
-
-    return { accessToken: newToken };
   }
 
   async checkAuth(accessToken) {
