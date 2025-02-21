@@ -59,11 +59,11 @@ instance.interceptors.response.use(
         // Gán giá trị _retry = true cho request refresh token => Trong khoảng thời gian chờ, chỉ gọi 1 lần refresh token
         originalRequest._retry = true;
         promiseRefreshToken = handleRefreshTokenApi()
-          .catch((error) => {
-            handleLogoutApi().then(() => {
+          .catch((_error) => {
+            return handleLogoutApi().then(() => {
               location.href = "/login";
+              return Promise.reject(_error);
             });
-            return Promise.reject(error);
           })
           .finally(() => {
             promiseRefreshToken = null;
@@ -75,7 +75,7 @@ instance.interceptors.response.use(
       });
     }
 
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 

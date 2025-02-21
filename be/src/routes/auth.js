@@ -10,7 +10,7 @@ router.post("/login", AuthValidation.login, AuthController.login);
 router.get("/check-auth", authorizeJWT, AuthController.checkAuth);
 
 // POST /auth/logout
-router.post("/logout", authorizeJWT, AuthController.logout);
+router.post("/logout", AuthController.logout);
 
 // POST /auth/refresh-token
 router.post("/refresh-token", AuthController.refreshToken);
