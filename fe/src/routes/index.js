@@ -5,6 +5,8 @@ import {
   Cruise as CruiseSearch,
   Flight as FlightSearch,
 } from "../pages/Search";
+
+
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import {
@@ -14,6 +16,7 @@ import {
   Delete as DeleteUser,
 } from "../pages/User";
 import config from "~/config";
+import BlogPage from "../pages/Blog/Homeblog";
 
 export const publicRoutes = [
   {
@@ -31,6 +34,10 @@ export const publicRoutes = [
   {
     path: "/tim-ve-may-bay",
     component: FlightSearch,
+  },
+  {
+    path: "/blog",
+    component: BlogPage,
   },
 ];
 

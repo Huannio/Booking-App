@@ -87,6 +87,27 @@ class UserService {
     };
   }
 
+  async searchUser(keyword) {
+    const users = await Users.findAll({
+      attributes: ["id", "name", "email", "role_id"],
+      where: {
+        [Op.or]: [
+          { name: { [Op.like]: `%${keyword}%` } },
+          { email: { [Op.like]: `%${keyword}%` } },
+        ],
+      },
+      include: [{ model: Roles, as: "roles", attributes: ["name"] }],
+    });
+
+    if (!users)
+      throw {
+        statusCode: 404,
+        message: "Không tìm thấy người dùng!",
+      };
+
+    return users;
+  }
+  
   async updateUser(id, data) {
     const user = await this.getUserById(id);
 

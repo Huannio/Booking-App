@@ -11,6 +11,9 @@ router.get("/:id", UserController.index);
 // POST /users/create
 router.post("/create", UserController.create);
 
+// POST /users/search
+router.get("/search", UserController.search);
+
 // PUT /users/update/:id
 router.put("/update/:id", UserController.update);
 
