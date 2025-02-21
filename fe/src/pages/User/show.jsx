@@ -18,10 +18,10 @@ const columns = [
     key: "email",
   },
   {
-    title: "Roles",
-    key: "role_id",
-    dataIndex: "roles",
-    render: (roles) => <Tag color="green">{roles}</Tag>,
+    title: "Vai trò",
+    key: "user_catalogues",
+    dataIndex: "user_catalogues",
+    render: (user_catalogues) => <Tag color="green">{user_catalogues}</Tag>,
   },
   {
     title: "Action",
@@ -50,25 +50,20 @@ function Show() {
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
   const getUsers = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      setLoading(true);
-      const response = await axios.get("/users");
+    setGlobalLoading(true);
+    setLoading(true);
+    const response = await axios.get("/users");
 
-      const formattedData = response.data.users.map((user) => ({
-        key: user.id,
-        name: user.name,
-        email: user.email,
-        roles: user.roles.name,
-        role_id: user.role_id,
-      }));
-      setUsers(formattedData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setGlobalLoading(false);
-      setLoading(false);
-    }
+    const formattedData = response.users.map((user) => ({
+      key: user.id,
+      name: user.name,
+      email: user.email,
+      user_catalogues: user.user_catalogues.name,
+      user_catalogues_id: user.user_catalogues.id,
+    }));
+    setUsers(formattedData);
+    setGlobalLoading(false);
+    setLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {

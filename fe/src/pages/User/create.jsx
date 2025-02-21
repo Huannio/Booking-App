@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Select, notification } from "antd";
@@ -14,26 +14,18 @@ const { Option } = Select;
 function Create() {
   const navigate = useNavigate();
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [roles, setRoles] = useState(null);
+  const [userCatalogues, setUserCatalogues] = useState(null);
 
-  const getRoles = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const { roles } = await axios.get("/roles");
-      setRoles(roles || []);
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: error?.response?.message || "Lỗi khi tải vai trò",
-      });
-    } finally {
-      setGlobalLoading(false);
-    }
+  const getUserCatalogues = useCallback(async () => {
+    setGlobalLoading(true);
+    const { userCatalogues } = await axios.get("/users-catalogues");
+    setUserCatalogues(userCatalogues || []);
+    setGlobalLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
-    getRoles();
-  }, [getRoles]);
+    getUserCatalogues();
+  }, [getUserCatalogues]);
 
   const {
     control,
@@ -46,30 +38,22 @@ function Create() {
   });
 
   const handleCreateUserForm = async (data) => {
-    try {
-      const response = await axios.post("/users/create", data);
+    const response = await axios.post("/users/create", data);
+    if (response.statusCode === 200) {
       notification.success({
         message: response?.data?.message || "Tạo người dùng thành công!",
       });
       reset();
       navigate("/users");
-    } catch (error) {
-      console.error(error);
-      notification.error({
-        message: error?.response?.data?.message || "Lỗi khi tạo người dùng",
-      });
     }
   };
 
-  const roleOptions = useMemo(
-    () =>
-      roles?.map((role) => (
-        <Option key={role.id} value={role.id}>
-          {role.name}
-        </Option>
-      )) || [],
-    [roles]
-  );
+  const roleOptions =
+    userCatalogues?.map((user_catalogues) => (
+      <Option key={user_catalogues.id} value={user_catalogues.id}>
+        {user_catalogues.name}
+      </Option>
+    )) || [];
 
   return (
     <div className="flex w-full flex-col gap-16">
@@ -110,20 +94,25 @@ function Create() {
         <div className="group-input">
           <div className="form-group">
             <SelectField
-              name="role_id"
+              name="user_catalogues_id"
               label="Chọn vai trò"
               placeholder="Chọn một vai trò"
               control={control}
-              error={errors.role_id}
-              status={errors.role_id && "error"}
+              error={errors.user_catalogues_id}
+              status={errors.user_catalogues_id && "error"}
               options={roleOptions}
-              onChange={(value) => setValue("role_id", value)}
-              loading={!roles}
+              onChange={(value) => setValue("user_catalogues_id", value)}
+              loading={!userCatalogues}
             />
           </div>
         </div>
 
-        <Button primary normal submit className="align-self-end">
+        <Button
+          primary
+          normal
+          submit
+          className="align-self-end interceptor-loading"
+        >
           <div className="label md">Tạo</div>
         </Button>
       </form>

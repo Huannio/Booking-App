@@ -121,7 +121,7 @@ const Sidebar = () => {
         primary
         small
         widthFull
-        className="text-center"
+        className="text-center interceptor-loading"
       >
         <div className="label md w-full">Logout</div>
       </Button>

@@ -1,5 +1,4 @@
 "use strict";
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -13,20 +12,24 @@ module.exports = {
      * }], {});
      */
 
-    const users = [];
-
-    for (let i = 1; i <= 100; i++) {
-      users.push({
-        name: `User ${i}`,
-        email: `user${i}@example.com`,
-        password: "password123", 
-        role_id: 1,
+    const userCatalogues = [
+      {
+        name: "Quản trị viên",
+        description: "Quản lý toàn bộ website",
+        publish: true,
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
-    }
+      },
+      {
+        name: "Cộng tác viên",
+        description: "Quản lý đơn hàng, sản phẩm của cộng tác viên",
+        publish: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
 
-    await queryInterface.bulkInsert("Users", users, {});
+    await queryInterface.bulkInsert("user_catalogues", userCatalogues, {});
   },
 
   async down(queryInterface, Sequelize) {
@@ -37,6 +40,6 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    await queryInterface.bulkDelete("Users", null, {});
+    await queryInterface.bulkDelete("user_catalogues", null, {});
   },
 };
