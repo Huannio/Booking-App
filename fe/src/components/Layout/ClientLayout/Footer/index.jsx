@@ -40,6 +40,7 @@ function Footer() {
                   <Link
                     to={item.href}
                     key={index}
+                    target="_blank"
                     className={cx("subheading sm", "anchor")}
                   >
                     {item.content}
@@ -78,22 +79,22 @@ function Footer() {
               <span className={cx("detail-sm")}>DU THUYỀN</span>
               <div className={cx("flex flex-col gap-12")}>
                 <Link
-                  to={config.routes.home}
+                  to="/blog" target="_blank"
                   className={cx("subheading sm", "anchor")}
                 >
                   Blog
                 </Link>
                 <Link
-                  to={config.routes.home}
+                  to="/quy-dinh-chung-va-luu-y" target="_blank"
                   className={cx("subheading sm", "anchor")}
                 >
-                  Blog
+                  Quy định chung và lưu ý
                 </Link>
                 <Link
-                  to={config.routes.home}
+                  to="/cau-hoi-thuong-gap" target="_blank"
                   className={cx("subheading sm", "anchor")}
                 >
-                  Blog
+                  Câu hỏi thường gặp
                 </Link>
               </div>
             </div>

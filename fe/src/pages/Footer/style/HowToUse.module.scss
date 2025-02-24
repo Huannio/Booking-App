@@ -1,0 +1,15 @@
+.Instruction-wrapper {
+  padding: 80px 32px;
+}
+
+.Instruction-wrapper li {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--gray-600, #475467);
+  margin-bottom: 10px;
+}
+
+.Instruction-wrapper ul {
+  padding-left: 20px;
+}

@@ -13,6 +13,16 @@ import {
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
+import {
+  AboutUs,
+  Terms,
+  Privacy,
+  HowToUse,
+  Payment,
+  Contact,
+  Rules,
+  Question,
+} from "../pages/Footer";
 import config from "~/config";
 
 export const publicRoutes = [
@@ -31,6 +41,41 @@ export const publicRoutes = [
   {
     path: "/tim-ve-may-bay",
     component: FlightSearch,
+  },
+  
+
+  // Footer
+  {
+    path: '/ve-chung-toi',
+    component: AboutUs,
+  },
+  {
+    path: '/dieu-khoan-va-dieu-kien',
+    component: Terms,
+  },
+  {
+    path: '/chinh-sach-rieng-tu',
+    component: Privacy,
+  },
+  {
+    path: '/huong-dan-su-dung',
+    component: HowToUse,
+  },
+  {
+    path: '/hinh-thuc-thanh-toan',
+    component: Payment,
+  },
+  {
+    path: '/lien-he',
+    component: Contact,
+  },
+  {
+    path: '/quy-dinh-chung-va-luu-y',
+    component: Rules,
+  },
+  {
+    path: '/cau-hoi-thuong-gap',
+    component: Question,
   },
 ];
 

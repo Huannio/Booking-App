@@ -47,7 +47,7 @@ function Header() {
             <Link to="tel:0922222016">Hotline: 0922222016</Link>
           </div>
 
-          <Button to={config.routes.search} small color>
+          <Button to="/lien-he" small color>
             <div className="label sm">Liên hệ Mixivivu</div>
           </Button>
 
@@ -71,7 +71,7 @@ function Header() {
                   d="M14 7C14 5.34315 15.3431 4 17 4C18.6569 4 20 5.34315 20 7C20 8.65685 18.6569 10 17 10C15.3431 10 14 8.65685 14 7Z"
                   stroke="#1D2939"
                   strokeWidth="2"
-                  strokeLinecap="round"
+strokeLinecap="round"
                   strokeLinejoin="round"
                 ></path>
                 <path

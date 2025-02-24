@@ -1,7 +1,7 @@
-@import "./style/banner.module.css";
-@import "./style/button.module.css";
-@import "./style/seach.module.css";
-@import "../../components/GlobalStyles/GlobalStyles.scss";
+@use "./style/banner.module.css";
+@use "./style/button.module.css";
+@use "./style/seach.module.css";
+@use "../../components/GlobalStyles/GlobalStyles.scss";
 
 #Home-popularSections {
   padding-top: 136px;
