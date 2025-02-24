@@ -2,7 +2,7 @@
 const { Model} = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Ship extends Model {
+  class Ships extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,12 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Nếu không có quan hệ với models khác, bạn có thể bỏ qua phần này
+      Ships.belongsTo(models.ShipType, {
+        foreignKey: "ship_type_id",
+        as: "ship_type",
+      });
     }
   }
   
-  Ship.init({
+  Ships.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
     title: DataTypes.STRING,
     address:  DataTypes.STRING,
+    admin:  DataTypes.STRING,
     map_link:  DataTypes.TEXT ,
     map_iframe_link:  DataTypes.TEXT,
     default_price:  DataTypes.DECIMAL,
@@ -27,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
     images:  DataTypes.TEXT,
     type_product:  DataTypes.INTEGER, 
     active:  DataTypes.TINYINT,
-  }, {
+  }, 
+  {
     sequelize,
-    modelName: 'Ship',  
-    tableName: 'products', 
+    modelName: 'Ships',  
   });
 
-  return Ship;
+  return Ships;
 };

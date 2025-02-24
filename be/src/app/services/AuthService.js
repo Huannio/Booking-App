@@ -27,7 +27,7 @@ class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
-      role_id: user.role_id,
+      user_catalogues_id: user.user_catalogues_id,
     };
 
     const accessToken = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {

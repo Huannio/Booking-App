@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const AuthService = require("../services/AuthService");
 class AuthController {
   constructor() {

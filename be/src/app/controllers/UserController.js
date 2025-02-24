@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const UserService = require("../services/UserService");
 class UserController {
   constructor() {

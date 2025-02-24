@@ -1,14 +1,15 @@
+const { StatusCodes } = require("http-status-codes");
 const ShipService = require("../services/ShipService");
-
 class ShipController {
   constructor() {
-    this.shipService = ShipService;
+    this.ShipService = ShipService;
   }
+
   index = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const ship = await this.shipService.getShipById(id);
-      res.success({ ship });
+      const Ship = await this.ShipService.getShipById(id);
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, Ship });
     } catch (error) {
       next(error);
     }
@@ -16,8 +17,8 @@ class ShipController {
 
   show = async (req, res, next) => {
     try {
-      const ships = await this.shipService.getAllShips();
-      res.success({ ships });
+      const Ships = await this.ShipService.getAllShips();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, Ships });
     } catch (error) {
       next(error);
     }
@@ -25,9 +26,11 @@ class ShipController {
 
   create = async (req, res, next) => {
     try {
-      const shipData = req.body;
-      const newShip = await this.shipService.createShip(shipData);
-      res.success({ ship: newShip, message: "Tạo du thuyền thành công!" });
+      const ShipData = req.body;
+      const createShip = await this.ShipService.createShip(ShipData);
+      res
+        .status(StatusCodes.CREATED)
+        .json({ statusCode: StatusCodes.OK, createShip });
     } catch (error) {
       next(error);
     }
@@ -36,11 +39,10 @@ class ShipController {
   update = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const updatedShip = await this.shipService.updateShip(id, req.body);
-      res.success({
-        ship: updatedShip,
-        message: "Cập nhật du thuyền thành công!",
-      });
+      const updateShip = await this.ShipService.updateShip(id, req.body);
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateShip });
     } catch (error) {
       next(error);
     }
@@ -49,8 +51,14 @@ class ShipController {
   delete = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const result = await this.shipService.deleteShip(id);
-      res.success({ ship: result, message: "Xóa du thuyền thành công!" });
+      const deleteShip = await this.ShipService.deleteShip(id);
+      res
+        .status(StatusCodes.OK)
+        .json({
+          statusCode: StatusCodes.OK,
+          deleteShip,
+          message: "Xóa thành công!",
+        });
     } catch (error) {
       next(error);
     }

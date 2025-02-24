@@ -47,7 +47,7 @@ function Header() {
             <Link to="tel:0922222016">Hotline: 0922222016</Link>
           </div>
 
-          <Button to={config.routes.search} small color>
+          <Button to="/lien-he" small color>
             <div className="label sm">Liên hệ Mixivivu</div>
           </Button>
 

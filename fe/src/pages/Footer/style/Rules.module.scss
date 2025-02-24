@@ -1,0 +1,25 @@
+.TermAndConditions-wrapper {
+  padding: 80px 32px;
+}
+
+.TermAndConditions-wrapper .TermAndConditions-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 24px 20px;
+}
+
+.TermAndConditions-wrapper .TermAndConditions-custom-header {
+  border-bottom: none;
+}
+
+.TermAndConditions-wrapper .TermAndConditions-content {
+  padding: 0 24px 24px;
+  color: var(--gray-600, #475467);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.TermAndConditions-wrapper .TermAndConditions-content ul {
+  padding-left: 20px;
+}
