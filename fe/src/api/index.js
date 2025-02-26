@@ -9,6 +9,6 @@ export const handleRefreshTokenApi = async () => {
   return await axios.post("/auth/refresh-token");
 };
 
-export const hanldCheckAuthApi = async () => {
+export const handleCheckAuthApi = async () => {
   return await axios.get("/auth/check-auth");
 };

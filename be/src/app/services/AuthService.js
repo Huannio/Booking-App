@@ -47,7 +47,8 @@ class AuthService {
       const newToken = jwt.sign(
         {
           id: decoded.id,
-        },
+
+        },  
         env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
