@@ -1,0 +1,26 @@
+.AboutUsPage-wrapper {
+  padding: 80px 32px;
+}
+
+.AboutUsPage-wrapper .AboutUsPage-question-card {
+  padding: 24px;
+}
+
+.AboutUsPage-wrapper ul {
+  padding-left: 20px;
+}
+.AboutUsPage-wrapper .AboutUsPage-WhyUs .AboutUsPage-WhyIcon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background: var(--primary-base, #77dada);
+}
+
+@media (max-width: 1024px) {
+  .AboutUsPage-WhyUs {
+    grid-template-columns: auto;
+  }
+}

@@ -24,6 +24,7 @@ function Create() {
   }, [setGlobalLoading]);
 
   useEffect(() => {
+
     getUserCatalogues();
   }, [getUserCatalogues]);
 
@@ -39,6 +40,7 @@ function Create() {
 
   const handleCreateUserForm = async (data) => {
     const response = await axios.post("/users/create", data);
+
     if (response.statusCode === 200) {
       notification.success({
         message: response?.data?.message || "Tạo người dùng thành công!",
@@ -94,6 +96,7 @@ function Create() {
         <div className="group-input">
           <div className="form-group">
             <SelectField
+
               name="user_catalogues_id"
               label="Chọn vai trò"
               placeholder="Chọn một vai trò"
@@ -106,6 +109,7 @@ function Create() {
             />
           </div>
         </div>
+
 
         <Button
           primary

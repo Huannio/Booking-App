@@ -1,26 +1,28 @@
+import { PATHS } from "./constant";
+
 const intro = [
   {
-    href: "/ve-chung-toi",
+    href: PATHS.ABOUT,
     content: "Về chúng tôi",
   },
   {
-    href: "/dieu-khoan-va-dieu-kien",
+    href: PATHS.TERM,
     content: "Điều khoản và điều kiện",
   },
   {
-    href: "/chinh-sach-rieng-tu",
+    href: PATHS.PRIVACY,
     content: "Chính sách riêng tư",
   },
   {
-    href: "/huong-dan-su-dung",
+    href: PATHS.HowToUse,
     content: "Hướng dẫn sử dụng",
   },
   {
-    href: "/hinh-thuc-thanh-toan",
+    href: PATHS.PAYMENT,
     content: "Hình thức thanh toán",
   },
   {
-    href: "/lien-he",
+    href: PATHS.CONTACT,
     content: "Liên hệ",
   },
   {

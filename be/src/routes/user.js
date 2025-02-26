@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const UsersValidation = require("../validations/usersValidation");
 const UserController = require("../app/controllers/UserController");
 
@@ -10,6 +11,7 @@ router.get("/", UserController.show);
 router.get("/:id", UserController.index);
 
 // POST /users/create
+
 router.post("/create", UsersValidation.createNewUser, UserController.create);
 
 // PUT /users/update/:id

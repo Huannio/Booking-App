@@ -3,9 +3,9 @@ const router = express.Router();
 const AuthController = require("../app/controllers/AuthController");
 const AuthValidation = require("../validations/AuthValidation");
 const authorizeJWT = require("../middleware/authorize");
+
 // POST /auth/login
 router.post("/login", AuthValidation.login, AuthController.login);
-
 // GET /auth/check-auth
 router.get("/check-auth", authorizeJWT, AuthController.checkAuth);
 
