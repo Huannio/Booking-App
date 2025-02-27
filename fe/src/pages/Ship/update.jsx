@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { notification } from "antd";
 import axios from "~/utils/axios.config";
 import { LoadingContext } from "~/components/Loading/Loading";
@@ -14,6 +14,7 @@ function Update() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
+  const [ship, setShip] = useState(null);
   const [shipTypes, setShipTypes] = useState([]);
   const [selectedShipType, setSelectedShipType] = useState("");
   const [isActive, setIsActive] = useState(false);
@@ -22,29 +23,37 @@ function Update() {
   const [images, setImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isDropdownCategoryOpen, setIsDropdownCategoryOpen] = useState(false);
-  const [shipData, setShipData] = useState(null);
 
-  // Fetch dữ liệu hiện tại của du thuyền
   useEffect(() => {
     const fetchShipData = async () => {
       setGlobalLoading(true);
       try {
         const { data } = await axios.get(`/ships/${id}`);
-        setShipData(data);
+        setShip(data);
         setSelectedShipType(data.ship_type);
         setIsActive(data.active);
         setThumbnail(data.thumbnail);
         setImages(data.images);
         setSelectedCategory(data.category);
       } catch {
-        notification.error;
+        notification.error({ message: "Failed to fetch ship data" });
       } finally {
         setGlobalLoading(false);
       }
     };
 
+    const fetchShipTypes = async () => {
+      try {
+        const { data } = await axios.get("/ship_type");
+        setShipTypes(data || []);
+      } catch {
+        notification.error({ message: "Failed to fetch ship types" });
+      }
+    };
+
     fetchShipData();
-  }, [id]);
+    fetchShipTypes();
+  }, [id, setGlobalLoading]);
 
   const handleSelectActive = (value) => {
     setIsActive(value === "Kích hoạt");
@@ -59,25 +68,11 @@ function Update() {
   const handleSelectShipType = (type) => {
     setSelectedShipType(type.name);
   };
-
-  // Fetch danh sách loại tàu
-  const getShipTypes = async () => {
-    setGlobalLoading(true);
-    try {
-      const { data } = await axios.get("/ships-type");
-      setShipTypes(data || []);
-    } catch {
-      notification.error;
-    } finally {
-      setGlobalLoading(false);
-    }
+  
+  const handleUpdateFeature = () => {
+    navigate(`/backend/ship/feature/${id}`); // Điều hướng đến trang cập nhật tính năng
   };
 
-  useEffect(() => {
-    getShipTypes();
-  }, []);
-
-  // Xử lý upload ảnh
   const handleUploadImage = async (file, isThumbnail = false) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -95,12 +90,11 @@ function Update() {
       }
       notification.success({ message: "Upload ảnh thành công!" });
     } catch {
-      notification.error;
+      notification.error({ message: "Upload ảnh thất bại" });
     }
   };
 
-  // Xử lý submit form
-  const handleEditShipForm = async (e) => {
+  const handleUpdateShipForm = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     formData.append("ship_type", selectedShipType);
@@ -117,25 +111,23 @@ function Update() {
         navigate("/ships");
       }
     } catch {
-      notification.error;
+      notification.error({ message: "Cập nhật du thuyền thất bại" });
     }
   };
 
-  if (!shipData) {
-    return <div>Loading...</div>;
-  }
+  if (!ship) return null;
 
   return (
     <div className={cx("action-page")}>
       <form
         method="post"
         action=""
-        id="CruiseEditForm"
+        id="CruiseUpdateForm"
         encType="multipart/form-data"
-        onSubmit={handleEditShipForm}
+        onSubmit={handleUpdateShipForm}
       >
         <div className={cx("modal")}>
-          <h6>Chỉnh sửa du thuyền</h6>
+          <h6>Cập nhật du thuyền</h6>
           <div className={cx("divider")} style={{ borderBottom: "1px solid var(--gray-200, #eaecf0)" }}></div>
 
           {/* Nhóm thông tin cơ bản */}
@@ -148,8 +140,8 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập tiêu đề"
                     name="title"
+                    defaultValue={ship.title}
                     autoComplete="off"
-                    defaultValue={shipData.title}
                   />
                   <label htmlFor="title" className={cx("sm", "input-required")}>
                     Tiêu đề
@@ -167,8 +159,8 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập địa chỉ"
                     name="address"
+                    defaultValue={ship.address}
                     autoComplete="off"
-                    defaultValue={shipData.address}
                   />
                   <label htmlFor="address" className={cx("sm", "input-required")}>
                     Địa chỉ
@@ -189,10 +181,10 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập vật liệu thân vỏ"
                     name="shell"
+                    defaultValue={ship.shell}
                     autoComplete="off"
-                    defaultValue={shipData.shell}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
+                  <label htmlFor="shell" className={cx("sm", "input-required")}>
                     Thân vỏ
                   </label>
                 </label>
@@ -208,10 +200,10 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập năm hạ thủy"
                     name="year"
+                    defaultValue={ship.year}
                     autoComplete="off"
-                    defaultValue={shipData.year}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
+                  <label htmlFor="year" className={cx("sm", "input-required")}>
                     Năm hạ thủy
                   </label>
                 </label>
@@ -227,11 +219,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập số lượng cabin"
                     name="cabin"
+                    defaultValue={ship.cabin}
                     autoComplete="off"
-                    defaultValue={shipData.cabin}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                  Cabin
+                  <label htmlFor="cabin" className={cx("sm", "input-required")}>
+                    Cabin
                   </label>
                 </label>
               </div>
@@ -246,11 +238,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập tên công ty điều hành"
                     name="admin"
+                    defaultValue={ship.admin}
                     autoComplete="off"
-                    defaultValue={shipData.admin}
                   />
-                 <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Tên công ty điều hànhhành
+                  <label htmlFor="admin" className={cx("sm", "input-required")}>
+                    Tên công ty điều hành
                   </label>
                 </label>
               </div>
@@ -268,12 +260,12 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập link bản đồ google map"
                     name="map_link"
+                    defaultValue={ship.map_link}
                     autoComplete="off"
                     type="text"
-                    defaultValue={shipData.map_link}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Map LinkLink
+                  <label htmlFor="map_link" className={cx("sm", "input-required")}>
+                    Map Link
                   </label>
                 </label>
               </div>
@@ -288,11 +280,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập link nhúng bản đồ google map cho thẻ iframe"
                     name="map_iframe_link"
+                    defaultValue={ship.map_iframe_link}
                     autoComplete="off"
-                    defaultValue={shipData.map_iframe_link}
                   />
-                 <label htmlFor="title" className={cx("sm", "input-required")}>
-                  Map Iframe Link
+                  <label htmlFor="map_iframe_link" className={cx("sm", "input-required")}>
+                    Map Iframe Link
                   </label>
                 </label>
               </div>
@@ -310,11 +302,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập lịch trình. Ví dụ: 2 ngày 1 đêm."
                     name="schedule"
+                    defaultValue={ship.schedule}
                     autoComplete="off"
-                    defaultValue={shipData.schedule}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Lịch trình
+                  <label htmlFor="schedule" className={cx("sm", "input-required")}>
+                    Lịch trình
                   </label>
                 </label>
               </div>
@@ -329,11 +321,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập hành trình. Ví dụ: Vịnh Lan Hạ - Bãi tắm Ba Trái Đào - Hang Sáng Tối"
                     name="trip"
+                    defaultValue={ship.trip}
                     autoComplete="off"
-                    defaultValue={shipData.trip}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Hành trình
+                  <label htmlFor="trip" className={cx("sm", "input-required")}>
+                    Hành trình
                   </label>
                 </label>
               </div>
@@ -348,11 +340,11 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Nhập giá"
                     name="default_price"
+                    defaultValue={ship.default_price}
                     autoComplete="off"
-                    defaultValue={shipData.default_price}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Giá
+                  <label htmlFor="default_price" className={cx("sm", "input-required")}>
+                    Giá
                   </label>
                 </label>
               </div>
@@ -370,12 +362,12 @@ function Update() {
                     className={cx("p-md")}
                     placeholder="Slug"
                     name="slug"
+                    defaultValue={ship.slug}
                     autoComplete="off"
                     type="text"
-                    defaultValue={shipData.slug}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Slug
+                  <label htmlFor="slug" className={cx("sm", "input-required")}>
+                    Slug
                   </label>
                 </label>
               </div>
@@ -394,7 +386,7 @@ function Update() {
                     value={selectedShipType}
                     readOnly
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
+                  <label htmlFor="ship_type" className={cx("sm", "input-required")}>
                     Loại sản phẩm
                   </label>
                 </label>
@@ -426,7 +418,7 @@ function Update() {
                     readOnly
                     onClick={() => setIsDropdownActiveOpen(!isDropdownActiveOpen)}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
+                  <label htmlFor="active" className={cx("sm", "input-required")}>
                     Kích hoạt
                   </label>
                 </label>
@@ -463,7 +455,7 @@ function Update() {
                     readOnly
                     onClick={() => setIsDropdownCategoryOpen(!isDropdownCategoryOpen)}
                   />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
+                  <label htmlFor="category" className={cx("sm", "input-required")}>
                     Chọn danh mục du thuyền
                   </label>
                 </label>
@@ -568,9 +560,19 @@ function Update() {
               <div className={cx("error")}></div>
             </div>
           </div>
-          <div className={cx("actions")}>
+          <div className={cx("flex", "align-center", "gap-16", "actions")}>
+            {/* Nút "Cập nhật" để submit form */}
             <Button type="submit" className={cx("btn", "btn-normal", "btn-primary")}>
-              <div className={cx("label", "md")}>Tạo</div>
+              <div className={cx("label", "md")}>Cập nhật</div>
+            </Button>
+
+            {/* Nút "Cập nhật tính năng" để điều hướng */}
+            <Button
+              type="button"
+              className={cx("btn", "btn-normal", "btn-outline")}
+              onClick={handleUpdateFeature}
+            >
+              <div className={cx("label", "md")}>Cập nhật tính năng</div>
             </Button>
           </div>
         </div>

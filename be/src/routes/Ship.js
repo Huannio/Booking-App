@@ -1,20 +1,23 @@
 const express = require("express");
 const router = express.Router();
+
+const ShipsValidation = require("../validations/ShipsValidation");
 const ShipController = require("../app/controllers/ShipController");
 
-// GET /Ship
+// GET /users
 router.get("/", ShipController.show);
 
-// GET /Ship/:id
+// GET /users/:id
 router.get("/:id", ShipController.index);
 
-// POST /Ship/create
-router.post("/create", ShipController.create);
+// POST /users/create
 
-// PUT /Ship/update/:id
-router.put("/update/:id", ShipController.update);
+router.post("/create", ShipsValidation.createNewShip, ShipController.create);
 
-// DELETE /Ship/delete/:id
+// PUT /users/update/:id
+router.put("/update/:id", ShipsValidation.updateShip, ShipController.update);
+
+// DELETE /users/delete/:id
 router.delete("/delete/:id", ShipController.delete);
 
 module.exports = router;

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Nếu không có quan hệ với models khác, bạn có thể bỏ qua phần này
       Ships.belongsTo(models.ShipType, {
-        foreignKey: "ship_type_id",
+        foreignKey: "type_product",
         as: "ship_type",
       });
     }
@@ -25,18 +25,22 @@ module.exports = (sequelize, DataTypes) => {
       },
     title: DataTypes.STRING,
     address:  DataTypes.STRING,
+    shell:  DataTypes.STRING,
+    year:  DataTypes.INTEGER,
+    cabin:  DataTypes.INTEGER,
     admin:  DataTypes.STRING,
     map_link:  DataTypes.TEXT ,
     map_iframe_link:  DataTypes.TEXT,
-    default_price:  DataTypes.DECIMAL,
-    slug:  DataTypes.STRING,
-    num_reviews:  DataTypes.INTEGER,
-    score_review:  DataTypes.FLOAT,
     schedule:  DataTypes.STRING,
-    thumbnail:  DataTypes.TEXT,
-    images:  DataTypes.TEXT,
+    trip:  DataTypes.STRING,
+    slug:  DataTypes.STRING,
     type_product:  DataTypes.INTEGER, 
     active:  DataTypes.TINYINT,
+    default_price:  DataTypes.DECIMAL,
+    num_reviews:  DataTypes.INTEGER,
+    score_review:  DataTypes.FLOAT,
+    thumbnail:  DataTypes.TEXT,
+    images:  DataTypes.TEXT,
   }, 
   {
     sequelize,

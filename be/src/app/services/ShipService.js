@@ -30,13 +30,11 @@ class ShipService {
 
   async createShip(data) {
     try {
-      // Kiểm tra xem slug đã tồn tại chưa
       const shipExists = await Ships.findOne({ where: { slug: data.slug } });
       if (shipExists) {
         throw new ApiError(StatusCodes.CONFLICT, "Slug đã tồn tại!");
       }
 
-      // Tạo tàu mới
       return await Ships.create(data);
     } catch (error) {
       throw error;
@@ -47,7 +45,6 @@ class ShipService {
     try {
       const ship = await this.getShipById(id);
 
-      // Kiểm tra xem slug mới có trùng với slug của tàu khác không
       if (data.slug) {
         const checkSlug = await Ships.findOne({
           where: { slug: data.slug, id: { [Op.ne]: id } },
@@ -57,7 +54,6 @@ class ShipService {
         }
       }
 
-      // Cập nhật thông tin tàu
       return await ship.update(data);
     } catch (error) {
       throw error;

@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const ShipTypeController = require("../app/controllers/ShipTypeController");
+// const express = require("express");
+// const router = express.Router();
+// const ShipTypeController = require("../app/controllers/ShipTypeController");
 
-// GET /users
-router.get("/", ShipTypeController.show);
+// // GET /users
+// router.get("/", ShipTypeController.show);
 
-module.exports = router;
+// module.exports = router;

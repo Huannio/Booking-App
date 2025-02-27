@@ -34,11 +34,13 @@ const columns = [
       <Space size="middle">
         <Link to={`/ships/update/${record.key}`}>
           <EditOutlined
+            type="edit"
             style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
           />
         </Link>
         <Link to={`/ships/delete/${record.key}`}>
           <DeleteOutlined
+            type="delete"
             style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
           />
         </Link>
@@ -55,18 +57,21 @@ function Show() {
   const getShips = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
+
     try {
       const response = await axios.get("/ships");
-      const formattedData = response.ships.map((ship, index) => ({
+      
+      const formattedData = response.Ships?.map((ship, index) => ({
         key: ship.id,
         STT: index + 1,
         title: ship.title,
         address: ship.address,
         admin: ship.admin,
-      }));
+      })) || [];
+
       setShips(formattedData);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching ships:", error);
     } finally {
       setGlobalLoading(false);
       setLoading(false);
@@ -97,7 +102,7 @@ function Show() {
       <Table
         bordered
         columns={columns}
-        dataSource={ships}
+        dataSource={ships || []}
         loading={loading}
         pagination={{
           pageSize: 5,
