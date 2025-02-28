@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import config from "~/config";
 import ImageWrapper from "~/components/ImageWrapper";
 import images from "~/assets/images";
@@ -18,7 +18,12 @@ function Header() {
       >
         <div className={cx("flex align-center gap-40 h-full")}>
           <Link to={config.routes.home} className={cx("header-logo")}>
-            <ImageWrapper src={images.logo} alt="mixivivu" widthSvgWrapperImage={156} heightSvgWrapperImage={42} />
+            <ImageWrapper
+              src={images.logo}
+              alt="mixivivu"
+              widthSvgWrapperImage={156}
+              heightSvgWrapperImage={42}
+            />
           </Link>
 
           <ul
@@ -28,11 +33,19 @@ function Header() {
             )}
           >
             {config.menus.map((item, index) => (
-              <Link className={cx("header-menu", "flex align-center h-full")} key={index} to={item.to}>
+              <NavLink
+                className={({ isActive }) =>
+                  cx("header-menu", "flex align-center h-full", {
+                    "header-active": isActive,
+                  })
+                }
+                key={index}
+                to={item.to}
+              >
                 <label htmlFor="" className="md">
                   {item.label}
                 </label>
-              </Link>
+              </NavLink>
             ))}
           </ul>
         </div>

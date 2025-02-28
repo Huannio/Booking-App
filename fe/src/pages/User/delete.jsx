@@ -21,34 +21,27 @@ function Delete() {
   } = useForm();
 
   const getOneUser = useCallback(async () => {
-    try {
-      setGlobalLoading(true);
-      const response = await axios.get(`/users/${id}`);
-      reset({ name: response?.data?.name });
-    } catch (error) {
-      notification.error({ message: error?.response?.data?.message });
-      navigate("/users");
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [id, navigate, reset, setGlobalLoading]);
+    setGlobalLoading(true);
+    const response = await axios.get(`/users/${id}`);
+
+    reset({ name: response?.user?.name });
+    setGlobalLoading(false);
+  }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
     getOneUser();
   }, [getOneUser]);
 
   const deleteUser = async () => {
-    try {
-      setConfirmLoading(true);
-      const response = await axios.delete(`/users/delete/${id}`);
-      notification.success({ message: response?.data?.message });
+    setConfirmLoading(true);
+    const response = await axios.delete(`/users/delete/${id}`);
+
+    if (response.statusCode === 200) {
+      notification.success({ message: response?.message });
       navigate("/users");
-    } catch (error) {
-      notification.error({ message: error?.response?.data?.message });
-    } finally {
-      setConfirmLoading(false);
-      setModalVisible(false);
     }
+    setConfirmLoading(false);
+    setModalVisible(false);
   };
 
   return (
@@ -80,7 +73,7 @@ function Delete() {
 
           <Button
             normal
-            className="align-self-end"
+            className="align-self-end interceptor-loading"
             onClick={() => setModalVisible(true)}
           >
             <span className="label md">Xóa</span>

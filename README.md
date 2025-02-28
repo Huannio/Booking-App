@@ -51,3 +51,9 @@ git add .  # Thêm tất cả file vào Git
 git commit -m "Commit"  # Lưu thay đổi với thông điệp commit
 git push -u origin "Tên nhánh"  # Đẩy code lên GitHub
 ```
+
+### 📌 Dùng sequelize để tạo database
+Khi kéo code về, hãy vào terminal theo đường dẫn: BookingApp\be\src: 
+```bash
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all

@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const AuthService = require("../services/AuthService");
 class AuthController {
   constructor() {
@@ -22,7 +23,8 @@ class AuthController {
         sameSite: "strict",
       });
 
-      res.success({ data });
+
+      res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);
     }
@@ -35,13 +37,14 @@ class AuthController {
       );
 
       res.cookie("accessToken", data.accessToken, {
-        expires: new Date(Date.now() + 60 * 60 * 1000), // 1h
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7d
         httpOnly: true,
         secure: req.secure || req.headers["x-forwarded-proto"] === "https",
         sameSite: "strict",
       });
 
-      res.success({ data });
+
+      res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);
     }
@@ -50,7 +53,7 @@ class AuthController {
   checkAuth = async (req, res, next) => {
     try {
       const data = await this.authService.checkAuth(req?.cookies?.accessToken);
-      res.success({ data });
+      res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);
     }
@@ -60,7 +63,7 @@ class AuthController {
     try {
       res.clearCookie("accessToken");
       res.clearCookie("refreshToken");
-      res.success({ message: "Đăng xuất thành công!" });
+      res.status(StatusCodes.OK).json({ message: "Đăng xuất thành công!" });
     } catch (error) {
       next(error);
     }

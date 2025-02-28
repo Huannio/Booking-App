@@ -14,6 +14,17 @@ import {
   Delete as DeleteUser,
 } from "../pages/User";
 import {
+
+  Show as ShowShip,
+  Create as CreateShip,
+  Update as UpdateShip,
+  Delete as DeleteShip,
+} from "../pages/Ship";
+import config from "~/config";
+import BusinessPage from "../pages/business";
+
+// Footer
+import {
   AboutUs,
   Terms,
   Privacy,
@@ -23,7 +34,6 @@ import {
   Rules,
   Question,
 } from "../pages/Footer";
-import config from "~/config";
 
 export const publicRoutes = [
   {
@@ -42,7 +52,11 @@ export const publicRoutes = [
     path: "/tim-ve-may-bay",
     component: FlightSearch,
   },
-  
+
+  {
+    path: "/doanh-nghiep",
+    component: BusinessPage,
+  },
 
   // Footer
   {
@@ -105,6 +119,29 @@ export const privateRoutes = [
     component: DeleteUser,
     layout: AdminLayout,
   },
+
+  // Ship
+  {
+    path: config.routes.ships.index,
+    component: ShowShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.create,
+    component: CreateShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.update,
+    component: UpdateShip,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.ships.delete,
+    component: DeleteShip,
+    layout: AdminLayout,
+  },
+
 ];
 
 export const authRoutes = [

@@ -8,8 +8,8 @@ import {
 import { publicRoutes, privateRoutes, authRoutes } from "./routes";
 import { ClientLayout } from "./components/Layout";
 import { Fragment } from "react";
-import { LoadingProvider } from "./components/Loading/Loading";
 import { AuthProvider } from "./context/AuthContext";
+import { LoadingProvider } from "./components/Loading/Loading";
 
 const ProtectedRoute = () => {
   const user = JSON.parse(localStorage.getItem("user"));
