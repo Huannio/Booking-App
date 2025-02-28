@@ -1,0 +1,29 @@
+$color_1: var(--gray-700, #344054);
+
+.Alert-alert {
+	position: relative;
+	display: flex;
+	padding: 16px;
+	align-items: flex-start;
+	gap: 12px;
+	border-radius: 8px;
+	.Alert-content {
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 20px;
+	}
+}
+.Alert-alert-gray {
+	border: 1px solid var(--gray-300, #d0d5dd);
+	background: var(--gray-100, #f2f4f7);
+	color: $color_1;
+	fill: var(--gray-100);
+	stroke: var(--gray-600);
+}
+.Alert-alert-clostBtn {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	padding: 8px;
+	cursor: pointer;
+}

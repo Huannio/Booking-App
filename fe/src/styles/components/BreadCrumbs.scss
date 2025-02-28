@@ -1,0 +1,36 @@
+$color_1: var(--gray-600);
+$color_2: var(--primary-dark, #0e4f4f);
+$color_3: var(--primary-base);
+
+.BreadCrumbs-breadCrumbsContainer {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.BreadCrumbs-breadCrumbs {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	svg {
+		width: 16px;
+		height: 16px;
+	}
+	img {
+		width: 16px;
+		height: 16px;
+	}
+}
+.BreadCrumbs-breadCrumb {
+	color: $color_1;
+	fill: #fff;
+	stroke: var(--gray-600);
+	cursor: pointer;
+}
+.BreadCrumbs-selected {
+	color: $color_2;
+	stroke: var(--primary-dark);
+	&:hover {
+		color: $color_3;
+		stroke: var(--primary-base);
+	}
+}

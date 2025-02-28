@@ -1,0 +1,17 @@
+
+.PartnerSection-section {
+	display: flex;
+	flex-direction: column;
+	gap: 80px;
+	padding: 80px 32px;
+}
+.PartnerSection-partnerList {
+	display: flex;
+	gap: 32px;
+	overflow: auto;
+	flex-wrap: wrap;
+	.PartnerSection-img-wrapper {
+		width: 176px;
+		height: 64px;
+	}
+}

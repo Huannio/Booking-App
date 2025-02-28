@@ -1,0 +1,24 @@
+
+.RatingInput-rating {
+	padding: 12px 20px;
+	border-radius: 28px;
+	border: 1px solid var(--gray-200, #eaecf0);
+	background: var(--base-white, #fff);
+	box-shadow: var(--shadow-xs);
+	height: -moz-fit-content;
+	height: fit-content;
+	.RatingInput-star-icon {
+		cursor: pointer;
+	}
+	path {
+		stroke: var(--gray-400);
+	}
+}
+.RatingInput-error {
+	border: 1px solid var(--error-base);
+}
+.RatingInput-active {
+	path {
+		stroke: var(--warning-base);
+	}
+}

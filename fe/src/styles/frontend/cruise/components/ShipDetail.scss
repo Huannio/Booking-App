@@ -1,0 +1,125 @@
+$color_1: var(--gray-600, #475467);
+$background-color_1: #f2f4f7;
+
+.ShipDetail-ship-info-header {
+	padding: 20px 24px;
+	border-bottom: 1px solid var(--gray-200, #eaecf0);
+}
+.ShipDetail-ship-info-content {
+	padding: 20px 24px;
+	svg {
+		width: 20px;
+		min-width: 20px;
+		height: 20px;
+	}
+	img {
+		width: 20px;
+		min-width: 20px;
+		height: 20px;
+	}
+}
+.ShipDetail-ship-info-content-label {
+	width: 120px;
+	min-width: 120px;
+	color: $color_1;
+}
+.ShipDetail-ship-detail {
+	padding: 80px 32px;
+	.ShipDetail-tabs {
+		position: sticky;
+		top: 96px;
+		z-index: 10;
+	}
+}
+.ShipDetail-features {
+	.ShipDetail-overview {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-column-gap: 32px;
+		grid-row-gap: 24px;
+	}
+}
+.ShipDetail-room-types {
+	border-radius: 24px;
+	background-color: $background-color_1;
+	padding: 32px;
+}
+.ShipDetail-output {
+	font-size: 16px;
+	line-height: 24px;
+}
+.ShipDetail-search-input {
+	width: 200px;
+	height: 40px;
+	>label {
+		padding: 5px 16px;
+		height: 100%;
+	}
+}
+.ShipDetail-rating-list {
+	padding-bottom: 40px;
+	border-bottom: 1px solid var(--gray-200, #eaecf0);
+}
+.ShipDetail-group-input {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 24px;
+	gap: 24px;
+	justify-content: flex-start;
+}
+.ShipDetail-booking-detail-modal {
+	width: 800px;
+	display: flex;
+	padding: 24px;
+	flex-direction: column;
+	gap: 24px;
+	flex: 1 0;
+}
+.ShipDetail-divider {
+	border-bottom: 1px solid var(--gray-200, #eaecf0);
+}
+@media (max-width: 1200px) {
+	.ShipDetail-ship-detail {
+		padding: 24px;
+		gap: 24px;
+	}
+	.ShipDetail-features {
+		.ShipDetail-overview {
+			grid-template-columns: auto;
+		}
+	}
+	.ShipDetail-room-types {
+		padding: 16px;
+		gap: 16px;
+	}
+	.ShipDetail-rooms-footer {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+	.ShipDetail-review-header {
+		flex-direction: column;
+		.ShipDetail-group-btn {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			.ShipDetail-search-input {
+				width: 100%;
+			}
+		}
+	}
+	.ShipDetail-group-btn {
+		button {
+			width: 100%;
+		}
+	}
+	.ShipDetail-group-input {
+		grid-template-columns: 100%;
+	}
+	.ShipDetail-booking-detail-modal {
+		width: 100%;
+	}
+	.ShipDetail-booking-detail-modal-footer {
+		flex-direction: column;
+		gap: 24px;
+	}
+}

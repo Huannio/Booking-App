@@ -1,0 +1,34 @@
+$color_1: var(--gray-700, #344054);
+$color_2: var(--warning-dark, #7a2e0e);
+$background-color_1: var(--gray-100, #f2f4f7);
+$background-color_2: var(--warning-light, #fedf89);
+
+.Badge-default {
+	background-color: $background-color_1;
+	color: $color_1;
+}
+.Badge-warning {
+	background-color: $background-color_2;
+	color: $color_2;
+}
+.Badge-lg {
+	padding: 4px 12px;
+}
+.Badge-sm {
+	padding: 2px 8px;
+}
+.Badge-container {
+	border-radius: 16px;
+	width: fit-content;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	svg {
+		width: 12px;
+		height: 12px;
+	}
+	img {
+		width: 12px;
+		height: 12px;
+	}
+}

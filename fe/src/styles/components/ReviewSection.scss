@@ -1,0 +1,33 @@
+$background-color_1: #f3ffff;
+
+.reviewSections {
+	background-color: $background-color_1;
+}
+.reviewSections-section {
+	display: flex;
+	flex-direction: column;
+	gap: 80px;
+	padding: 80px 32px;
+}
+.ReviewSection-reviewBtn {
+	padding: 8px 16px 8px 8px;
+}
+.ReviewSection-defaultBtn {
+	background: #fff8f8;
+}
+.ReviewSection-reviewList {
+	overflow: auto;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+@media (max-width: 1024px) {
+	.ReviewQuote-reviewQuote {
+		flex-direction: column;
+		gap: 24px;
+	}
+	.reviewSections-section {
+		padding: 24px;
+		gap: 24px;
+	}
+}

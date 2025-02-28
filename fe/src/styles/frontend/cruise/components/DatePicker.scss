@@ -1,0 +1,104 @@
+$color_1: var(--gray-700, #344054);
+$color_2: var(--gray-200, #eaecf0);
+$color_3: var(--primary-base);
+$color_4: var(--primary-dark, #0e4f4f);
+
+.DatePicker-popper {
+	padding-top: 10px;
+	z-index: 1;
+}
+.DatePicker-DatePicker {
+	display: flex;
+	padding: 20px 24px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
+	align-self: stretch;
+	border-radius: 8px;
+	border: 1px solid var(--gray-100, #f2f4f7);
+	background: var(--base-white, #fff);
+	box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.03), 0 20px 24px -4px rgba(16, 24, 40, 0.08);
+}
+.DatePicker-tab-loop {
+	display: none;
+}
+.DatePicker-mixi-date-picker {
+	&:focus-within {
+		.DatePicker-tab-loop {
+			display: flex;
+		}
+	}
+	.DatePicker-day-btn-today {
+		color: $color_3;
+		background: none;
+	}
+}
+.DatePicker-header {
+	background: var(--base-white, #fff);
+	border-bottom: none;
+	margin: 0;
+	padding: 8px 0;
+	border-top-left-radius: 0.3rem;
+	text-align: center;
+}
+.DatePicker-header-custom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 5px;
+}
+.DatePicker-day-names {
+	white-space: nowrap;
+	margin-bottom: -20px;
+}
+.DatePicker-day-name {
+	display: inline-flex;
+	width: 39px;
+	height: 40px;
+	padding: 10px 8px;
+	justify-content: center;
+	align-items: center;
+	color: $color_1;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: center;
+	margin: 0;
+}
+.DatePicker-dates {
+	margin: 0.08rem;
+	text-align: center;
+	display: grid;
+	grid-template-columns: repeat(7, 32px);
+	gap: 10px;
+	margin-block: 10px;
+}
+.DatePicker-day-btn {
+	display: inline-flex;
+	width: 40px;
+	height: 40px;
+	padding: 10px 8px;
+	justify-content: center;
+	align-items: center;
+	color: $color_1;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: center;
+	margin: 0;
+	box-shadow: none;
+	&:disabled {
+		color: $color_2;
+		pointer-events: none;
+	}
+	&:hover {
+		background: var(--gray-50, #f9fafb);
+		border-radius: 50%;
+		color: $color_1;
+	}
+}
+.DatePicker-day-btn-selectedDate {
+	background: var(--primary-base, #77dada);
+	color: $color_4;
+	border-radius: 50%;
+}

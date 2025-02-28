@@ -3,8 +3,7 @@ import Home from "../pages/Home";
 import Detail from "../pages/Detail";
 import {
   Cruise as CruiseSearch,
-  Flight as FlightSearch,
-} from "../pages/Search";
+} from "../pages/servicesList";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import {
@@ -14,6 +13,7 @@ import {
   Delete as DeleteUser,
 } from "../pages/User";
 import config from "~/config";
+import HotelSearch from "../pages/servicesList/Hotel";
 
 export const publicRoutes = [
   {
@@ -29,8 +29,8 @@ export const publicRoutes = [
     component: CruiseSearch,
   },
   {
-    path: "/tim-ve-may-bay",
-    component: FlightSearch,
+    path: "/tim-khach-san",
+    component: HotelSearch,
   },
 ];
 

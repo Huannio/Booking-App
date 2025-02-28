@@ -1,0 +1,49 @@
+
+@keyframes anvil {
+	0% {
+		transform: scale(1) translateY(0);
+		opacity: 0;
+		box-shadow: 0 0 0 hsla(0, 0%, 95%, 0);
+	}
+	1% {
+		transform: scale(0.96) translateY(10px);
+		opacity: 0;
+		box-shadow: 0 0 0 hsla(0, 0%, 95%, 0);
+	}
+	100% {
+		transform: scale(1) translateY(0);
+		opacity: 1;
+		box-shadow: 0 0 500px hsla(0, 0%, 95%, 0);
+	}
+}
+.popup-overlay {
+	background: rgba(0, 0, 0, 0.5);
+	overflow-y: auto;
+}
+.popup-content {
+	margin: auto;
+	background: #fff;
+	width: 50%;
+	padding: 5px;
+	border: 1px solid #d7d7d7;
+	width: -moz-fit-content !important;
+	width: fit-content !important;
+	border: none !important;
+	border-radius: 24px;
+	border: 1px solid var(--gray-200, #eaecf0);
+	background: var(--base-white, #fff) !important;
+	box-shadow: var(--shadow-sm);
+	padding: 0;
+	animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+	-webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+}
+.Modal-close-btn {
+	position: absolute;
+	right: 24px;
+	top: 24px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}

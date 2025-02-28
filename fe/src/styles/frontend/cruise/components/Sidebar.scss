@@ -1,0 +1,19 @@
+
+.ShipDetail-side-bar-mb {
+	display: none;
+	min-width: 0;
+	width: 100%;
+	padding: 24px;
+}
+.ShipDetail-side-bar {
+	min-width: 384px;
+	max-width: 25vw;
+}
+@media (max-width: 1200px) {
+	.ShipDetail-side-bar-mb {
+		display: block;
+	}
+	.ShipDetail-side-bar {
+		display: none;
+	}
+}

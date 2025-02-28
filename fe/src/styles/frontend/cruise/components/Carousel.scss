@@ -1,0 +1,89 @@
+
+.ShipDetail-carousel {
+	padding: 0 24px;
+}
+.Carousel-carousel {
+	margin: auto;
+	position: relative;
+	width: 100%;
+	padding: 0 24px;
+	height: auto;
+	border-radius: 24px;
+	overflow: hidden;
+}
+.Carousel-carousel-btn {
+	display: flex;
+	padding: 10px;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	border: 1px solid var(--gray-200, #eaecf0);
+	background: var(--base-white, #fff);
+	box-shadow: var(--shadow-sm);
+	z-index: 2;
+}
+.Carousel-left-btn {
+	position: absolute;
+	left: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.Carousel-right-btn {
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.Carousel-carouselItem {
+	width: 70vw;
+	height: 50vh;
+	flex-shrink: 0;
+	cursor: pointer;
+}
+.Carousel-thumbs {
+	max-width: 50vw;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 16px;
+	.Carousel-thumbItem {
+		min-width: 66px;
+		width: 66px;
+		height: 66px;
+		border-radius: 8px;
+		border: 2px solid #fff;
+		cursor: pointer;
+		overflow: hidden;
+	}
+}
+.Carousel-thumbItem.Carousel-thumbItem-active {
+	border-radius: 8px;
+	border: 1px solid var(--primary-base, #77dada);
+	box-shadow: 0 0 0 4px #caf8f8, 0 1px 2px 0 rgba(24, 24, 27, 0.05);
+}
+@media (max-width: 1024px) {
+	.Carousel-carousel-btn {
+		padding: 4px;
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+		img {
+			width: 16px;
+			height: 16px;
+		}
+	}
+	.Carousel-left-btn {
+		left: 8px;
+	}
+	.Carousel-right-btn {
+		right: 8px;
+	}
+	.Carousel-carouselItem {
+		width: 100vw;
+		height: 203px;
+	}
+	.Carousel-thumbs {
+		display: none;
+	}
+}

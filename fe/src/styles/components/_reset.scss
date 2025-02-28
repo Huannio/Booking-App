@@ -1,0 +1,59 @@
+$font-family_1: "Archivo", sans-serif;
+$background-color_1: transparent;
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: $font-family_1;
+	&:before {
+		box-sizing: border-box;
+	}
+	&:after {
+		box-sizing: border-box;
+	}
+}
+img {
+	display: block;
+	max-width: 100%;
+}
+picture {
+	display: block;
+	max-width: 100%;
+}
+svg {
+	display: block;
+	max-width: 100%;
+}
+video {
+	display: block;
+	max-width: 100%;
+}
+input {
+	background-color: $background-color_1;
+	outline: none;
+}
+select {
+	background-color: $background-color_1;
+	outline: none;
+}
+textarea {
+	background-color: $background-color_1;
+	outline: none;
+}
+button {
+	cursor: pointer;
+	background-color: $background-color_1;
+	outline: none;
+	border: 0;
+}
+body {
+	min-height: 100vh;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 1;
+}
+html {
+	scroll-behavior: smooth;
+}

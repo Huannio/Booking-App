@@ -1,0 +1,41 @@
+$background-color_1: var(--base-white);
+$background-color_2: #e0e0e0;
+
+.LayoutAdmin {
+	gap: 32px;
+}
+.Dashboard-sidebar {
+	width: 240px;
+	height: 100vh;
+	background-color: $background-color_1;
+	box-shadow: var(--shadow-xs);
+	padding-bottom: 90px;
+	border-right: 1px solid rgba(0, 0, 0, 0.04);
+}
+.Dashboard-sidebar-logo {
+	margin-bottom: 30px;
+}
+.Dashboard-sidebar-menu {
+	display: flex;
+	flex-direction: column;
+}
+.Dashboard-sidebar-menu-item {
+	display: flex;
+	height: 50px;
+	align-items: center;
+	flex-shrink: 0;
+	gap: 16px;
+	padding-left: 20px;
+}
+.Dashboard-sidebar-menu-item.active {
+	background-color: $background-color_2;
+}
+.Dashboard-sidebar-menu-item-icon {
+	width: 22px;
+	height: 25px;
+}
+.divider {
+	padding-bottom: 10px;
+	stroke-width: 0.6px;
+	stroke: #e0e0e0;
+}

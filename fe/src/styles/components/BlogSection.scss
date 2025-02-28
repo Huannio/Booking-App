@@ -1,0 +1,26 @@
+
+.BlogSection-section {
+	display: flex;
+	flex-direction: column;
+	gap: 80px;
+	padding: 80px 32px;
+}
+.BlogSection-action {
+	display: flex;
+	justify-content: center;
+}
+.BlogSection-cardList {
+	display: flex;
+	justify-content: center;
+	gap: 32px;
+	flex-wrap: wrap;
+}
+@media (max-width: 1024px) {
+	.BlogSection-section {
+		padding: 24px;
+		gap: 24px;
+	}
+	.BlogSection-cardList {
+		gap: 16px;
+	}
+}

@@ -1,0 +1,21 @@
+$color_1: var(--gray-900, #101828);
+
+.ReviewQuote-reviewQuote {
+	display: flex;
+	gap: 40px;
+}
+.ReviewQuote-quoteBody {
+	display: none;
+	flex-direction: column;
+	gap: 24px;
+	flex: 1 0;
+	color: $color_1;
+}
+.ReviewQuote-quoteBody.ReviewQuote-quoteBody-active {
+	display: flex;
+}
+.ReviewQuote-quoteContent {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}

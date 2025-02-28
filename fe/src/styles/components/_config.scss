@@ -1,0 +1,306 @@
+$color_1: var(--gray-900, #101828);
+$color_2: var(--gray-600, #475467);
+$color_3: inherit;
+$color_4: var(--gray-700, #344054);
+$color_5: var(--error-base, #f04438);
+
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/*  */
+/* Ẩn mũi tên cho Chrome, Safari, Edge */
+/* Ẩn mũi tên cho Firefox */
+.LayoutAdmin {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+.container {
+	width: 100%;
+	max-width: 1280px;
+	margin: auto;
+}
+h1 {
+	font-weight: 700;
+}
+h2 {
+	font-weight: 700;
+	font-size: 60px;
+	line-height: 72px;
+}
+h3 {
+	font-size: 48px;
+	line-height: 60px;
+	font-weight: 700;
+}
+h4 {
+	font-size: 36px;
+	line-height: 44px;
+	font-weight: 700;
+	color: $color_1;
+}
+h5 {
+	font-weight: 700;
+	color: $color_1;
+	font-size: 30px;
+	line-height: 38px;
+}
+h6 {
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: 700;
+}
+.gap-4 {
+	gap: 4px;
+}
+.gap-6 {
+	gap: 6px;
+}
+.gap-8 {
+	gap: 8px;
+}
+.gap-10 {
+	gap: 10px;
+}
+.gap-12 {
+	gap: 12px;
+}
+.gap-16 {
+	gap: 16px;
+}
+.gap-20 {
+	gap: 20px;
+}
+.gap-24 {
+	gap: 24px;
+}
+.gap-32 {
+	gap: 32px;
+}
+.gap-40 {
+	gap: 40px;
+}
+.gap-80 {
+	gap: 80px;
+}
+.gap-136 {
+	gap: 136px;
+}
+.h-full {
+	height: 100%;
+}
+.grid {
+	display: grid;
+}
+.grid-cols-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+.flex {
+	display: flex;
+}
+.flex-col {
+	flex-direction: column;
+}
+.flex-grow {
+	flex-grow: 1;
+}
+.justify-center {
+	justify-content: center;
+}
+.justify-between {
+	justify-content: space-between;
+}
+.justify-end {
+	justify-content: flex-end;
+}
+.text-center {
+	text-align: center;
+}
+.align-center {
+	align-items: center;
+}
+.align-start {
+	align-items: start;
+}
+.gray-900 {
+	--gray-900: #101828;
+}
+p.lg {
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 28px;
+	color: $color_1;
+}
+p.xl {
+	font-weight: 400;
+}
+p.sm {
+	font-size: 14px;
+	line-height: 20px;
+}
+.p-md {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+}
+.p-sm {
+	font-weight: 400;
+}
+p.md {
+	font-size: 16px;
+	line-height: 24px;
+	color: $color_2;
+}
+a {
+	&:-webkit-any-link {
+		color: $color_3;
+		cursor: pointer;
+		text-decoration: inherit;
+		max-width: 100%;
+	}
+}
+.subheading {
+	color: $color_4;
+}
+.subheading.md {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 700;
+}
+.subheading.sm {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 700;
+}
+.subheading.lg {
+	font-size: 20px;
+	line-height: 30px;
+	font-weight: 700;
+}
+label {
+	cursor: inherit;
+}
+label.md {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 500;
+}
+label.lg {
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: 500;
+}
+label.xs {
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: 500;
+}
+label.sm {
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 500;
+}
+.label.sm {
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 500;
+}
+.label.md {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 500;
+}
+.upper-case {
+	text-transform: uppercase;
+}
+.detail-md {
+	font-size: 16px;
+	line-height: 24px;
+	font-weight: 600;
+}
+.detail-sm {
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 600;
+}
+#features {
+	scroll-margin-top: 150px;
+}
+#intro {
+	scroll-margin-top: 150px;
+}
+#map {
+	scroll-margin-top: 150px;
+}
+#review-submit {
+	scroll-margin-top: 150px;
+}
+#reviews {
+	scroll-margin-top: 150px;
+}
+#rooms {
+	scroll-margin-top: 150px;
+}
+#rules {
+	scroll-margin-top: 150px;
+}
+.section-bg {
+	background-image: url(https://res.cloudinary.com/dhnp8ymxv/image/upload/v1732124410/section-background_ehixei.png);
+	background-repeat: repeat;
+}
+input {
+	&:disabled {
+		cursor: not-allowed;
+	}
+}
+input[type="file"] {
+	display: none;
+}
+input[type="number"] {
+	&::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	-moz-appearance: textfield;
+}
+.app {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+.main {
+	flex-grow: 1;
+}
+.error {
+	margin-top: 6px;
+	margin-left: 6px;
+	color: $color_5;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+}
+.select-input {
+	position: relative;
+	&:focus-within {
+		.dropdown {
+			display: flex;
+		}
+	}
+}
+.w-full {
+	width: 100%;
+}
+@media only screen and (max-width: 1280px) {
+	.container {
+		padding: 0 8px;
+	}
+}

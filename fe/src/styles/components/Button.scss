@@ -1,0 +1,131 @@
+$color_1: #0e4f4f;
+$color_2: #fff;
+$color_3: var(--gray-800);
+$color_4: var(--gray-700);
+$color_5: var(--primary-dark);
+$color_6: var(--primary-base);
+$background-color_1: #77dada;
+$background-color_2: var(--primary-dark);
+$background-color_3: transparent;
+$background-color_4: var(--primary-base);
+
+/* btn */
+button {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.btn {
+	box-shadow: var(--shadow-xs);
+	border-radius: 100rem;
+}
+.btn-btn {
+	height: -moz-fit-content;
+	height: fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.btn-primary {
+	background-color: $background-color_1;
+	border: 1px solid #77dada;
+	color: $color_1;
+	fill: #0e4f4f;
+	&:hover {
+		background-color: $background-color_2;
+		color: $color_2;
+		cursor: pointer;
+		fill: #fff;
+	}
+}
+.btn-outline {
+	background: linear-gradient(0deg, #fff, #fff), linear-gradient(0deg, #eaecf0, #eaecf0);
+	border: 1px solid #eaecf0;
+	color: $color_3;
+	fill: var(--gray-800);
+	&:hover {
+		background: var(--gray-50);
+		color: $color_4;
+		fill: var(--gray-700);
+		cursor: pointer;
+	}
+	>svg {
+		>path {
+			stroke: var(--gray-800);
+		}
+	}
+}
+.btn-normal {
+	padding: 16px 20px;
+	white-space: nowrap;
+	>svg {
+		width: 20px;
+		height: 20px;
+	}
+	>img {
+		width: 20px;
+		height: 20px;
+	}
+}
+.btn-sm {
+	>svg {
+		width: 20px;
+		height: 20px;
+	}
+	>img {
+		width: 20px;
+		height: 20px;
+	}
+	padding: 10px 16px;
+	white-space: nowrap;
+}
+.btn-iconOnly {
+	gap: 0;
+	padding: 8px;
+}
+.btn-link-color {
+	color: $color_5;
+	fill: var(--primary-dark);
+	border: none;
+	background-color: $background-color_3;
+	padding: 0;
+	box-shadow: none;
+	&:hover {
+		color: $color_6;
+		fill: var(--primary-base);
+		cursor: pointer;
+		>svg {
+			>path {
+				stroke: var(--primary-base);
+			}
+		}
+	}
+	>svg {
+		>path {
+			stroke: var(--primary-dark);
+		}
+	}
+}
+.btn-w-full {
+	width: 100%;
+}
+.btn-color {
+	background-color: $background-color_4;
+	border: 1px solid var(--primary-base);
+	color: $color_5;
+	fill: var(--primary-dark);
+	>svg {
+		>path {
+			stroke: var(--primary-dark);
+		}
+	}
+	&:hover {
+		>svg {
+			>path {
+				stroke: var(--base-white);
+			}
+		}
+	}
+}

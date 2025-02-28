@@ -1,0 +1,67 @@
+$color_1: var(--gray-900, #101828);
+$color_2: var(--primary-dark, #0e4f4f);
+
+.RoomPicker-room-picker {
+	position: relative;
+}
+.RoomPicker-room-picker-dropdown {
+	padding-top: 10px;
+	position: absolute;
+	inset: 0 auto auto 0;
+	transform: translate3d(0, 70px, 0);
+	display: none;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+	border-radius: 8px;
+	border: 1px solid var(--gray-100, #f2f4f7);
+	background: var(--base-white, #fff);
+	box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.03), 0 20px 24px -4px rgba(75, 85, 105, 0.08);
+	z-index: 1;
+}
+.RoomPicker-room-picker-dropdown.show {
+	display: flex;
+}
+.RoomPicker-content {
+	padding: 20px 24px;
+}
+.RoomPicker-item {
+	color: $color_1;
+	width: 280px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid var(--gray-100, #f2f4f7);
+	&:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+	.RoomPicker-item-value {
+		color: $color_2;
+	}
+	.RoomPicker-group-btn {
+		display: flex;
+		border-radius: 100px;
+		border: 1px solid var(--gray-200, #eaecf0);
+	}
+	.RoomPicker-minus {
+		border-right: 1px solid var(--gray-200, #eaecf0);
+	}
+	.RoomPicker-item-btn {
+		width: 28px;
+		height: 28px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+	}
+}
+.RoomPicker-actions {
+	width: 100%;
+	padding: 16px;
+	border-top: 1px solid var(--gray-200, #eaecf0);
+	.RoomPicker-action-btn {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}

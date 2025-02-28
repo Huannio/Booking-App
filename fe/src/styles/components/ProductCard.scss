@@ -1,0 +1,116 @@
+$color_1: var(--warning-dark, #7a2e0e);
+$color_2: var(--gray-700, #344054);
+$color_3: var(--gray-900, #101828);
+$color_4: var(--gray-600);
+
+.ProductCard-grid {
+	width: 384px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	cursor: pointer;
+	.ProductCard-imageWrapper {
+		padding-bottom: 0;
+	}
+}
+.ProductCard-imageWrapper {
+	padding: 16px;
+	position: relative;
+}
+.ProductCard-imageWrapper-image {
+	border-radius: 24px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px -2px rgba(16, 24, 40, 0.06), 0 12px 16px -4px rgba(16, 24, 40, 0.1);
+	max-width: 100% !important;
+}
+.ProductCard-imageWrapper-badge {
+	display: flex;
+	padding: 2px 8px 2px 6px;
+	justify-content: center;
+	align-items: center;
+	gap: 4px;
+	position: absolute;
+	left: 28px;
+	top: 28px;
+	color: $color_1;
+}
+.ProductCard-cardContent {
+	flex-grow: 1;
+}
+.ProductCard-body {
+	display: flex;
+	padding: 0 24px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	align-self: stretch;
+}
+.ProductCard-location {
+	color: $color_2;
+	max-width: 100%;
+	>label {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+}
+.ProductCard-title {
+	color: $color_3;
+	max-width: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.ProductCard-description {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	align-self: stretch;
+	color: $color_4;
+	p {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+}
+.ProductCard-footer {
+	padding: 20px 24px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+.ProductCard-list {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 20px;
+	cursor: pointer;
+	.ProductCard-body {
+		padding: 0;
+	}
+	.ProductCard-cardContent {
+		padding-right: 20px;
+	}
+	.ProductCard-tags {
+		margin: 24px 0;
+		padding: 0;
+	}
+	.ProductCard-footer {
+		padding: 20px 0 0;
+		border-top: 1px solid var(--gray-200, #eaecf0);
+	}
+}
+.ProductCard-tags {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	padding: 0 24px;
+}
+@media (max-width: 1024px) {
+	.ProductCard-grid {
+		width: 345px;
+	}
+}

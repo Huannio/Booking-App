@@ -1,0 +1,19 @@
+$color_1: var(--gray-600, #475467);
+
+.RateCard-rateCard {
+	display: flex;
+	padding: 24px;
+	flex-direction: column;
+	gap: 20px;
+	p {
+		color: $color_1;
+	}
+}
+.RateCard-action {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.RateCard-date {
+	color: $color_1;
+}
