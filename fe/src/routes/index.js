@@ -17,6 +17,7 @@ import {
 } from "../pages/User";
 import config from "~/config";
 import BlogPage from "../pages/Blog/Homeblog";
+import BlogDetail from "../pages/Blog/DetailBlog";
 
 export const publicRoutes = [
   {
@@ -38,6 +39,10 @@ export const publicRoutes = [
   {
     path: "/blog",
     component: BlogPage,
+  },
+  {
+    path: "/blog",
+    component: BlogDetail,
   },
 ];
 
