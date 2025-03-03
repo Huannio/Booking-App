@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-@use "./style/banner.module.css";
-@use "./style/button.module.css";
-@use "./style/seach.module.css";
-=======
 @use "./style/banner.module.scss";
 @use "./style/button.module.scss";
 @use "./style/seach.module.scss";
->>>>>>> 0408a149d38ba973e1582b03f8e3636610277de8
 @use "../../components/GlobalStyles/GlobalStyles.scss";
 
 #Home-popularSections {
