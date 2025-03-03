@@ -384,9 +384,9 @@ input:disabled {
   cursor: not-allowed;
 }
 
-input[type="file"] {
-  display: none;
-}
+// input[type="file"] {
+//   display: none;
+// }
 
 /* Ẩn mũi tên cho Chrome, Safari, Edge */
 input[type="number"]::-webkit-outer-spin-button,
@@ -460,17 +460,18 @@ input[type="number"] {
 
 .input-group > input,
 .input-group > textarea {
-  border: none;
+  border: none !important;
   flex-grow: 1;
   width: 0;
   color: var(--gray-800, #1d2939);
   height: 24px;
 }
 
-.input-group > input:focus {
-  outline: none;
-  border: none;
-  box-shadow: none;
+.input-group > input:focus,
+.input-group > textarea:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .input-group > textarea {
@@ -535,4 +536,15 @@ input[type="number"] {
   flex-direction: column;
   gap: 30px;
   flex: 1 0;
+}
+
+.divider {
+  border-bottom: 1px solid #eaecf0;
+  width: 100%;
+}
+
+.ant-upload-list-item-container {
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important  ;
 }

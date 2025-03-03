@@ -19,6 +19,14 @@ import {
   Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
+import {
+  Show as ShowBlog,
+  Create as CreateBlog,
+  CreateDetail as CreateDetailBlog,
+  Update as UpdateBlog,
+  UpdateDetail as UpdateDetailBlog,
+  Delete as DeleteBlog,
+} from "../pages/Blog/BlogAdmin";
 import config from "~/config";
 import BusinessPage from "../pages/business";
 
@@ -140,6 +148,36 @@ export const privateRoutes = [
     layout: AdminLayout,
   },
 
+  {
+    path: config.routes.blogs.index,
+    component: ShowBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.create,
+    component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.update,
+    component: UpdateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.createDetail,
+    component: CreateDetailBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.updateDetail,
+    component: UpdateDetailBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.delete,
+    component: DeleteBlog,
+    layout: AdminLayout,
+  },
 ];
 
 export const authRoutes = [

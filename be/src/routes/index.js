@@ -6,6 +6,8 @@ const uploadRoutes = require("./uploadRoutes");
 const path = require("path");
 
 const userCataloguesRouter = require("./userCatalogues");
+const uploadRouter = require("./upload");
+const blogsRouter = require("./blogs");
 const authorizeJWT = require("../middleware/authorize");
 
 const ShipTypeRouter = require("./ShipType");
@@ -28,6 +30,8 @@ const router = (app) => {
   app.use("/ship-type", ShipTypeRouter);
 
 
+  app.use("/upload", uploadRouter);
+  app.use("/blogs", blogsRouter);
 };
 
 module.exports = router;

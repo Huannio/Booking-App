@@ -3,7 +3,6 @@ import {
   AppstoreOutlined,
   ContainerOutlined,
   DesktopOutlined,
-  MailOutlined,
   PieChartOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -31,15 +30,9 @@ const items = [
     label: <Link to = {config.routes.ships.index}>Quản lý du thuyền</Link>,
   },
   {
-    key: "/navigation1",
-    label: "Navigation One",
-    icon: <MailOutlined />,
-    children: [
-      { key: "/option5", label: "Option 5" },
-      { key: "/option6", label: "Option 6" },
-      { key: "/option7", label: "Option 7" },
-      { key: "/option8", label: "Option 8" },
-    ],
+    key: "/blogs",
+    label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
+    icon: <ContainerOutlined />,
   },
   {
     key: "/navigation2",
