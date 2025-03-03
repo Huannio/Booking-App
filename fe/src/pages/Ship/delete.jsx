@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { notification, Modal } from "antd";
-import { InputField } from "~/components/Input";
 import Button from "~/components/Button";
 import axios from "~/utils/axios.config";
 import { LoadingContext } from "~/components/Loading/Loading";
@@ -13,29 +11,30 @@ function DeleteShip() {
   const { setGlobalLoading } = useContext(LoadingContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [shipTitle, setShipTitle] = useState("");
+  const [shipDataAvailable, setShipDataAvailable] = useState(true);
 
-  const { control, reset, formState: { errors } } = useForm();
-
-  // Lấy thông tin du thuyền theo ID
+  // Fetch ship data
   const getShip = useCallback(async () => {
     setGlobalLoading(true);
     try {
       const response = await axios.get(`/ships/${id}`);
-      reset({ title: response?.data?.title });
+      setShipTitle(response?.data?.title);
     } catch (error) {
+      setShipDataAvailable(false);
       notification.error({
         message: error?.response?.data?.message || "Không thể lấy dữ liệu du thuyền!",
       });
     } finally {
       setGlobalLoading(false);
     }
-  }, [id, reset, setGlobalLoading]);
+  }, [id, setGlobalLoading]);
 
   useEffect(() => {
     getShip();
   }, [getShip]);
 
-  // Xử lý xóa du thuyền
+  // Handle ship deletion
   const handleDeleteShip = async () => {
     setConfirmLoading(true);
     try {
@@ -64,22 +63,29 @@ function DeleteShip() {
             </p>
           </div>
           <div className="form-group">
-            <InputField
-              label="Tên du thuyền"
+            <label>Tên du thuyền</label>
+            <input
               type="text"
-              name="title"
-              placeholder="Nhập tên du thuyền..."
-              control={control}
-              error={errors.title}
+              value={shipTitle}
               disabled
-              inputGroup={false}
+              className="form-control"
             />
           </div>
         </div>
 
-        <Button normal className="align-self-end" onClick={() => setModalVisible(true)}>
-          <span className="label md">Xóa</span>
-        </Button>
+        <div className="flex gap-16">
+          <Button
+            normal
+            className="align-self-end"
+            onClick={() => setModalVisible(true)}
+            disabled={confirmLoading || !shipDataAvailable}
+          >
+            <span className="label md">Xóa</span>
+          </Button>
+          <Button normal className="align-self-end" onClick={() => navigate("/ships")}>
+            <span className="label md">Hủy</span>
+          </Button>
+        </div>
       </div>
 
       <Modal

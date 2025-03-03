@@ -1,23 +1,27 @@
 const { StatusCodes } = require("http-status-codes");
-const FeatureService = require("../services/FeatureService");
+const FeatureCatalogueService = require("../services/FeatureCatalogueService");
 const ApiError = require("../../middleware/ApiError");
 
-class FeatureController {
+class FeatureCatalogueController {
   constructor() {
-    this.featureService = FeatureService;
+    this.featureCatalogueService = FeatureCatalogueService;
   }
 
-  // Tìm kiếm tính năng với phân trang
+  // Tìm kiếm nhóm đặc trưng với phân trang
   search = async (req, res, next) => {
     try {
       const { page = 1, limit = 5, keyword = "" } = req.query;
       const offset = (page - 1) * limit;
 
-      const { features, totalRecords } = await this.featureService.searchFeatures(keyword, offset, limit);
+      const { featureCatalogues, totalRecords } = await this.featureCatalogueService.searchFeatureCatalogues(
+        keyword,
+        offset,
+        limit
+      );
 
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        features,
+        featureCatalogues,
         totalRecords,
         currentPage: parseInt(page),
         totalPages: Math.ceil(totalRecords / limit),
@@ -27,17 +31,20 @@ class FeatureController {
     }
   };
 
-  // Lấy danh sách tất cả các tính năng
+  // Lấy danh sách tất cả các nhóm đặc trưng
   index = async (req, res, next) => {
     try {
       const { page = 1, limit = 5 } = req.query;
       const offset = (page - 1) * limit;
 
-      const { features, totalRecords } = await this.featureService.getAllFeatures(offset, limit);
+      const { featureCatalogues, totalRecords } = await this.featureCatalogueService.getAllFeatureCatalogues(
+        offset,
+        limit
+      );
 
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        features,
+        featureCatalogues,
         totalRecords,
         currentPage: parseInt(page),
         totalPages: Math.ceil(totalRecords / limit),
@@ -47,49 +54,49 @@ class FeatureController {
     }
   };
 
-  // Tạo mới một tính năng
+  // Tạo mới một nhóm đặc trưng
   create = async (req, res, next) => {
     try {
-      const { text, type } = req.body;
-      const newFeature = await this.featureService.createFeature({ text, type });
+      const { name } = req.body;
+      const newFeatureCatalogue = await this.featureCatalogueService.createFeatureCatalogue({ name });
 
       res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,
-        message: "Tạo tính năng thành công!",
-        feature: newFeature,
+        message: "Tạo nhóm đặc trưng thành công!",
+        featureCatalogue: newFeatureCatalogue,
       });
     } catch (error) {
       next(error);
     }
   };
 
-  // Cập nhật thông tin một tính năng
+  // Cập nhật thông tin một nhóm đặc trưng
   update = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { text, type } = req.body;
+      const { name } = req.body;
 
-      const updatedFeature = await this.featureService.updateFeature(id, { text, type });
+      const updatedFeatureCatalogue = await this.featureCatalogueService.updateFeatureCatalogue(id, { name });
 
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        message: "Cập nhật tính năng thành công!",
-        feature: updatedFeature,
+        message: "Cập nhật nhóm đặc trưng thành công!",
+        featureCatalogue: updatedFeatureCatalogue,
       });
     } catch (error) {
       next(error);
     }
   };
 
-  // Xóa một tính năng
+  // Xóa một nhóm đặc trưng
   delete = async (req, res, next) => {
     try {
       const { id } = req.params;
-      await this.featureService.deleteFeature(id);
+      await this.featureCatalogueService.deleteFeatureCatalogue(id);
 
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        message: "Xóa tính năng thành công!",
+        message: "Xóa nhóm đặc trưng thành công!",
       });
     } catch (error) {
       next(error);
@@ -97,4 +104,4 @@ class FeatureController {
   };
 }
 
-module.exports = new FeatureController();
+module.exports = new FeatureCatalogueController();

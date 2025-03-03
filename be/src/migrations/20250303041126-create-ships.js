@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("ships", {
+    await queryInterface.createTable('Ships', {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        autoIncrement: true,
+        type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
         allowNull: false,
       },
       title: {
@@ -15,11 +15,7 @@ module.exports = {
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      shell: {
-        type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       year: {
         type: Sequelize.INTEGER, 
@@ -31,7 +27,7 @@ module.exports = {
       },
       admin: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       map_link: {
         type: Sequelize.TEXT,
@@ -41,9 +37,18 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+      shell: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       schedule: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      active: {
+        type: Sequelize.TINYINT,
+        allowNull: false,
+        defaultValue: 1,
       },
       trip: {
         type: Sequelize.STRING,
@@ -58,30 +63,11 @@ module.exports = {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: "ship_type", 
+          model: "product_type", 
           key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "RESTRICT",
-      },
-      active: {
-        type: Sequelize.TINYINT,
-        allowNull: false,
-        defaultValue: 1,
-      },
-      default_price: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      num_reviews: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      score_review: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
       },
       thumbnail: {
         type: Sequelize.TEXT,
@@ -91,22 +77,14 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      created_at: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
-      updated_at: {
-        type: Sequelize.DATE,
-        allowNull: true,
-      },
-      deleted_at: {
-        type: Sequelize.DATE,
-        allowNull: true,
+      default_price: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false,
       },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("ships");
+    await queryInterface.dropTable("Ships");
   },
 };

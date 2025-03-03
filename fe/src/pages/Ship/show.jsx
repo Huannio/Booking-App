@@ -50,7 +50,7 @@ const columns = [
 ];
 
 function Show() {
-  const [ships, setShips] = useState([]);
+  const [ship, setShips] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
 
@@ -61,12 +61,12 @@ function Show() {
     try {
       const response = await axios.get("/ships");
       
-      const formattedData = response.Ships?.map((ship, index) => ({
-        key: ship.id,
+      const formattedData = response.Ships?.map((product, index) => ({
+        key: product.id,
         STT: index + 1,
-        title: ship.title,
-        address: ship.address,
-        admin: ship.admin,
+        title: product.title,
+        address: product.address,
+        admin: product.admin,
       })) || [];
 
       setShips(formattedData);
@@ -102,7 +102,7 @@ function Show() {
       <Table
         bordered
         columns={columns}
-        dataSource={ships || []}
+        dataSource={ship || []}
         loading={loading}
         pagination={{
           pageSize: 5,

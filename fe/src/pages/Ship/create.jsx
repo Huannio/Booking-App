@@ -1,57 +1,69 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { notification } from "antd";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import {Select, notification } from "antd";
+import { InputField, SelectField } from "~/components/Input";
 import axios from "~/utils/axios.config";
-import { LoadingContext } from "~/components/Loading/Loading";
 import Button from "~/components/Button";
+import { LoadingContext } from "~/components/Loading/Loading";
 
 import classNames from "classnames/bind";
 import styles from "./Ship.module.scss";
 
 const cx = classNames.bind(styles);
 
+const { Option } = Select;
+
+const shipSchema = yup.object().shape({
+  title: yup.string().required("Tiêu đề là bắt buộc"),
+  address: yup.string().required("Địa chỉ là bắt buộc"),
+  shell: yup.string().required("Vật liệu thân vỏ là bắt buộc"),
+  year: yup.number().required("Năm hạ thủy là bắt buộc").positive().integer(),
+  cabin: yup.number().required("Số lượng cabin là bắt buộc").positive().integer(),
+  admin: yup.string().required("Tên công ty điều hành là bắt buộc"),
+  map_link: yup.string().url("Link bản đồ không hợp lệ").required("Link bản đồ là bắt buộc"),
+  map_iframe_link: yup.string().url("Link iframe bản đồ không hợp lệ").required("Link iframe bản đồ là bắt buộc"),
+  schedule: yup.string().required("Lịch trình là bắt buộc"),
+  trip: yup.string().required("Hành trình là bắt buộc"),
+  default_price: yup.number().required("Giá là bắt buộc").positive(),
+  slug: yup.string().required("Slug là bắt buộc"),
+  category: yup.string().required("Danh mục là bắt buộc"),
+});
+
 function Create() {
   const navigate = useNavigate();
-  const { setGlobalLoading } = useContext(LoadingContext);
-  const [shipTypes, setShipTypes] = useState([]); // Danh sách loại tàu
-  const [selectedShipType, setSelectedShipType] = useState("");
-  const [isActive, setIsActive] = useState(false);
-  const [isDropdownActiveOpen, setIsDropdownActiveOpen] = useState(false);
   const [thumbnail, setThumbnail] = useState("");
   const [images, setImages] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [isDropdownCategoryOpen, setIsDropdownCategoryOpen] = useState(false);
+  
+  const { setGlobalLoading } = useContext(LoadingContext);
+  const [ProductType, setProductType] = useState(null);
+  const [CruiseCategory, setCruiseCategory] = useState(null);
 
-  const handleSelectActive = (value) => {
-    setIsActive(value === "Kích hoạt");
-    setIsDropdownActiveOpen(false);
-  };
-
-  const handleSelectCategory = (category) => {
-    setSelectedCategory(category);
-    setIsDropdownCategoryOpen(false);
-  };
-
-  const handleSelectShipType = (type) => {
-    setSelectedShipType(type.name);
-  };
-
-  // Fetch danh sách loại tàu
-  const getShipTypes = async () => {
-    setGlobalLoading(true);
-    try {
-      const { data } = await axios.get("/ships-type");
-      setShipTypes(data || []);
-    } catch {
-      notification.error;
-    } finally {
+  const getProductType = useCallback(async () => {
+      setGlobalLoading(true);
+      const { ProductType } = await axios.get("/product-type");
+      setProductType(ProductType || []);
       setGlobalLoading(false);
-    }
-  };
+    }, [setGlobalLoading]);
+  
+    useEffect(() => {
+  
+      getProductType();
+    }, [getProductType]);
 
-  useEffect(() => {
-    getShipTypes();
-  }, []);
+    const getCruiseCategory = useCallback(async () => {
+      setGlobalLoading(true);
+      const { CruiseCategory } = await axios.get("/cruise-category");
+      setCruiseCategory(CruiseCategory || []);
+      setGlobalLoading(false);
+    }, [setGlobalLoading]);
+  
+    useEffect(() => {
+  
+      getCruiseCategory();
+    }, [getCruiseCategory]);
 
   // Xử lý upload ảnh
   const handleUploadImage = async (file, isThumbnail = false) => {
@@ -59,7 +71,7 @@ function Create() {
     formData.append("image", file);
 
     try {
-      const endpoint = isThumbnail ? "/api/upload-thumbnail" : "/api/upload-ship-images";
+      const endpoint = isThumbnail ? "/upload/thumbnail" : "/upload/ship-images";
       const response = await axios.post(endpoint, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -75,27 +87,41 @@ function Create() {
     }
   };
 
-  // Xử lý submit form
-  const handleCreateShipForm = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    formData.append("ship_type", selectedShipType);
-    formData.append("active", isActive);
-    formData.append("category", selectedCategory);
-
-    try {
-      const response = await axios.post("/ships/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(shipSchema),
+  });
+  console.log("Errors:", errors);
+  const handleCreateShipForm = async (data) => {
+    const response = await axios.post("/ships/create", data);
+    
+    if (response.statusCode === 200) {
+      notification.success({
+        message: response?.data?.message || "Tạo du thuyền thành công!",
       });
-
-      if (response.status === 200) {
-        notification.success({ message: response?.data?.message || "Tạo du thuyền thành công!" });
-        navigate("/ships");
-      }
-    } catch {
-      notification.error;
+      reset();
+      navigate("/ships");
     }
   };
+
+  const typeOptions =
+  ProductType?.map((product_type) => (
+    <Option key={product_type.id} value={product_type.id}>
+      {product_type.name}
+    </Option>
+  )) || [];categoryOptions
+
+  const categoryOptions =
+  CruiseCategory?.map((cruise_category) => (
+    <Option key={cruise_category.id} value={cruise_category.id}>
+      {cruise_category.name}
+    </Option>
+  )) || [];
 
   return (
     <div className={cx("action-page")}>
@@ -104,351 +130,224 @@ function Create() {
         action=""
         id="CruiseCreateForm"
         encType="multipart/form-data"
-        onSubmit={handleCreateShipForm}
+        onSubmit={handleSubmit(handleCreateShipForm)}
       >
         <div className={cx("modal")}>
           <h6>Tạo mới du thuyền</h6>
           <div className={cx("divider")} style={{ borderBottom: "1px solid var(--gray-200, #eaecf0)" }}></div>
 
-          {/* Nhóm thông tin cơ bản */}
           <div className={cx("group-input")}>
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="title" className={cx("input-group")}>
-                  <input
-                    id="title"
-                    className={cx("p-md")}
-                    placeholder="Nhập tiêu đề"
-                    name="title"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Tiêu đề
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
+            <div className={cx("form-group")}> 
+              <InputField
+                label="Tiêu đề"
+                type="title"
+                name="title"
+                placeholder="Nhập tiêu đề"
+                control={control}
+                error={errors.title} 
+                status={errors.title && "error"}
+                inputGroup={false}
+              />
             </div>
 
             <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="address" className={cx("input-group")}>
-                  <input
-                    id="address"
-                    className={cx("p-md")}
-                    placeholder="Nhập địa chỉ"
-                    name="address"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="address" className={cx("sm", "input-required")}>
-                    Địa chỉ
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
+              <InputField
+                label="Địa chỉ"
+                type="address"
+                name="address"
+                placeholder="Nhập địa chỉ"
+                control={control}
+                error={errors.address} 
+                status={errors.address && "error"}
+                inputGroup={false}
+              />
             </div>
           </div>
 
-          {/* Nhóm thông tin kỹ thuật */}
-          <div className={cx("group-input-4")}>
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="shell" className={cx("input-group")}>
-                  <input
-                    id="shell"
-                    className={cx("p-md")}
-                    placeholder="Nhập vật liệu thân vỏ"
-                    name="shell"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Thân vỏ
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="year" className={cx("input-group")}>
-                  <input
-                    id="year"
-                    className={cx("p-md")}
-                    placeholder="Nhập năm hạ thủy"
-                    name="year"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Năm hạ thủy
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="cabin" className={cx("input-group")}>
-                  <input
-                    id="cabin"
-                    className={cx("p-md")}
-                    placeholder="Nhập số lượng cabin"
-                    name="cabin"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                  Cabin
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="admin" className={cx("input-group")}>
-                  <input
-                    id="admin"
-                    className={cx("p-md")}
-                    placeholder="Nhập tên công ty điều hành"
-                    name="admin"
-                    autoComplete="off"
-                  />
-                 <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Tên công ty điều hànhhành
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-          </div>
-
-          {/* Nhóm thông tin bản đồ */}
-          <div className={cx("group-input")}>
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="map_link" className={cx("input-group")}>
-                  <input
-                    id="map_link"
-                    className={cx("p-md")}
-                    placeholder="Nhập link bản đồ google map"
-                    name="map_link"
-                    autoComplete="off"
-                    type="text"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Map LinkLink
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-
-            <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="map_iframe_link" className={cx("input-group")}>
-                  <input
-                    id="map_iframe_link"
-                    className={cx("p-md")}
-                    placeholder="Nhập link nhúng bản đồ google map cho thẻ iframe"
-                    name="map_iframe_link"
-                    autoComplete="off"
-                  />
-                 <label htmlFor="title" className={cx("sm", "input-required")}>
-                  Map Iframe Link
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
-          </div>
-
-          {/* Nhóm thông tin lịch trình và giá */}
           <div className={cx("group-input-3")}>
             <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="schedule" className={cx("input-group")}>
-                  <input
-                    id="schedule"
-                    className={cx("p-md")}
-                    placeholder="Nhập lịch trình. Ví dụ: 2 ngày 1 đêm."
-                    name="schedule"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Lịch trình
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
+              <InputField
+                label="Thân vỏ"
+                type="shell"
+                name="shell"
+                placeholder="Nhập vật liệu thân vỏ"
+                control={control}
+                error={errors.shell} 
+                status={errors.shell && "error"}
+                inputGroup={false}
+              />
             </div>
 
             <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="trip" className={cx("input-group")}>
-                  <input
-                    id="trip"
-                    className={cx("p-md")}
-                    placeholder="Nhập hành trình. Ví dụ: Vịnh Lan Hạ - Bãi tắm Ba Trái Đào - Hang Sáng Tối"
-                    name="trip"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Hành trình
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
+              <InputField
+                label="Năm hạ thủy"
+                type="year"
+                name="year"
+                placeholder="Nhập năm hạ thủy"
+                control={control}
+                error={errors.year} 
+                status={errors.year && "error"}
+                inputGroup={false}
+              />
             </div>
 
+            
+            
             <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="default_price" className={cx("input-group")}>
-                  <input
-                    id="default_price"
-                    className={cx("p-md")}
-                    placeholder="Nhập giá"
-                    name="default_price"
-                    autoComplete="off"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Giá
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
+              <InputField
+                label="Tên công ty điều hành"
+                type="admin"
+                name="admin"
+                placeholder="Nhập tên công ty điều hành"
+                control={control}
+                error={errors.admin} 
+                status={errors.admin && "error"}
+                inputGroup={false}
+              />
             </div>
           </div>
 
-          {/* Nhóm thông tin bổ sung */}
+          <div className={cx("group-input")}>
+            <div className={cx("form-group")}>
+              <InputField
+                label="Map Link"
+                type="map_link"
+                name="map_link"
+                placeholder="Nhập link bản đồ google map"
+                control={control}
+                error={errors.map_link} 
+                status={errors.map_link && "error"}
+                inputGroup={false}
+              />
+            </div>
+
+            <div className={cx("form-group")}>
+              <InputField
+                label="Map Iframe Link"
+                type="map_iframe_link"
+                name="map_iframe_link"
+                placeholder="Nhập link nhúng bản đồ google map cho thẻ iframe"
+                control={control}
+                error={errors.map_iframe_link} 
+                status={errors.map_iframe_link && "error"}
+                inputGroup={false}
+              />
+            </div>
+          </div>
+
+          <div className={cx("group-input-3")}>
+          <div className={cx("form-group")}>
+              <InputField
+                label="Cabin"
+                type="cabin"
+                name="cabin"
+                placeholder="Nhập số lượng cabin"
+                control={control}
+                error={errors.cabin} 
+                status={errors.cabin && "error"}
+                inputGroup={false}
+              />
+            </div>
+            <div className={cx("form-group")}>
+              <InputField
+                label="Lịch trình"
+                type="schedule"
+                name="schedule"
+                placeholder="Nhập lịch trình. Ví dụ: 2 ngày 1 đêm"
+                control={control}
+                error={errors.schedule} 
+                status={errors.schedule && "error"}
+                inputGroup={false}
+              />
+            </div>
+
+            <div className={cx("form-group")}>
+              <InputField
+                label="Hành trình"
+                type="trip"
+                name="trip"
+                placeholder="Nhập hành trình. Ví dụ: Vịnh Lan Hạ - Bãi tắm Ba Trái Đào - Hang Sáng Tối"
+                control={control}
+                error={errors.trip} 
+                status={errors.trip && "error"}
+                inputGroup={false}
+              />
+            </div>
+          </div>
+
+          <div className={cx("group-input-3")}>
+            <div className={cx("form-group")}>
+              <InputField
+                label="Slug"
+                type="slug"
+                name="slug"
+                placeholder="Slug"
+                control={control}
+                error={errors.slug} 
+                status={errors.slug && "error"}
+                inputGroup={false}
+              />
+            </div>
+            <div className={cx("form-group")}>
+              <InputField
+                label="Giá"
+                type="default_price"
+                name="default_price"
+                placeholder="Nhập giá"
+                control={control}
+                error={errors.default_price} 
+                status={errors.default_price && "error"}
+                inputGroup={false}
+              />
+            </div>
+            <div className={cx("form-group")}>
+            <SelectField
+
+              name="category_id"
+              label="Chọn danh mục du thuyền"
+              placeholder="Chọn danh mục du thuyền"
+              control={control}
+              error={errors.category_id}
+              status={errors.category_id && "error"}
+              options={categoryOptions}
+              onChange={(value) => setValue("category_id", value)}
+              loading={!categoryOptions}
+            />
+            </div>
+            
+          </div>
           <div className={cx("group-input-4")}>
             <div className={cx("form-group")}>
-              <div>
-                <label htmlFor="slug" className={cx("input-group")}>
-                  <input
-                    id="slug"
-                    className={cx("p-md")}
-                    placeholder="Slug"
-                    name="slug"
-                    autoComplete="off"
-                    type="text"
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                      Slug
-                  </label>
-                </label>
-              </div>
-              <div className={cx("error")}></div>
-            </div>
+              <SelectField
 
-            <div className={cx("form-group")}>
-              <div className={cx("select-input")}>
-                <label htmlFor="ship_type" className={cx("input-group")}>
-                  <input
-                    id="ship_type"
-                    className={cx("p-md")}
-                    placeholder="Chọn loại tàu"
-                    name="ship_type"
-                    autoComplete="off"
-                    value={selectedShipType}
-                    readOnly
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Loại sản phẩm
-                  </label>
-                </label>
-                <div className={cx("dropdown")}>
-                  {shipTypes.map((type) => (
-                    <div
-                      key={type.id}
-                      className={cx("dropdown-item")}
-                      onClick={() => handleSelectShipType(type)}
-                    >
-                      {type.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className={cx("error")}></div>
+              name="product_type_id"
+              label="Chọn vai trò"
+              placeholder="Chọn một vai trò"
+              control={control}
+              error={errors.product_type_id}
+              status={errors.product_type_id && "error"}
+              options={typeOptions}
+              onChange={(value) => setValue("product_type_id", value)}
+              loading={!typeOptions}
+            />
             </div>
-
+            
             <div className={cx("form-group")}>
-              <div className={cx("select-input")}>
-                <label htmlFor="active" className={cx("input-group")}>
-                  <input
-                    id="active"
-                    className={cx("p-md")}
-                    placeholder="Chọn kích hoạt"
-                    name="active"
-                    autoComplete="off"
-                    value={isActive ? "Kích hoạt" : "Không kích hoạt"}
-                    readOnly
-                    onClick={() => setIsDropdownActiveOpen(!isDropdownActiveOpen)}
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Kích hoạt
-                  </label>
-                </label>
-                {isDropdownActiveOpen && (
-                  <div className={cx("dropdown")}>
-                    <div
-                      className={cx("dropdown-item")}
-                      onClick={() => handleSelectActive("Kích hoạt")}
-                    >
-                      Kích hoạt
-                    </div>
-                    <div
-                      className={cx("dropdown-item")}
-                      onClick={() => handleSelectActive("Không kích hoạt")}
-                    >
-                      Không kích hoạt
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className={cx("error")}></div>
-            </div>
+            <SelectField
 
-            <div className={cx("form-group")}>
-              <div className={cx("select-input")}>
-                <label htmlFor="category" className={cx("input-group")}>
-                  <input
-                    id="category"
-                    className={cx("p-md")}
-                    placeholder="Chọn danh mục du thuyền"
-                    name="category"
-                    autoComplete="off"
-                    value={selectedCategory || "Chọn danh mục"}
-                    readOnly
-                    onClick={() => setIsDropdownCategoryOpen(!isDropdownCategoryOpen)}
-                  />
-                  <label htmlFor="title" className={cx("sm", "input-required")}>
-                    Chọn danh mục du thuyền
-                  </label>
-                </label>
-                {isDropdownCategoryOpen && (
-                  <div className={cx("dropdown")}>
-                    <div
-                      className={cx("dropdown-item")}
-                      onClick={() => handleSelectCategory("Vịnh Lan Hạ")}
-                    >
-                      Vịnh Lan Hạ
-                    </div>
-                    <div
-                      className={cx("dropdown-item")}
-                      onClick={() => handleSelectCategory("Vịnh Hạ Long")}
-                    >
-                      Vịnh Hạ Long
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className={cx("error")}></div>
+              name="active"
+              label="Chọn kích hoạt"
+              placeholder="Chọn kích hoạt"
+              control={control}
+              error={errors.active}
+              status={errors.active && "error"}
+              options={typeOptions}
+              onChange={(value) => setValue("active", value)}
+              loading={!typeOptions}
+            />
             </div>
           </div>
 
-          {/* Nhóm thông tin hình ảnh */}
           <div>
             <div className={cx("form-group")}>
               <label htmlFor="upload-thumbnail" className={cx("sm", "input-required")}>
@@ -483,7 +382,6 @@ function Create() {
                   </div>
                 </label>
               </div>
-              <div className={cx("error")}></div>
             </div>
           </div>
 
@@ -525,13 +423,17 @@ function Create() {
                   </div>
                 </label>
               </div>
-              <div className={cx("error")}></div>
             </div>
           </div>
           <div className={cx("actions")}>
-            <Button type="submit" className={cx("btn", "btn-normal", "btn-primary")}>
-              <div className={cx("label", "md")}>Tạo</div>
-            </Button>
+          <Button
+          primary
+          normal
+          submit
+          className={cx("align-self-end", "interceptor-loading")}
+        >
+          <div className={cx("label md")}>Tạo</div>
+        </Button>
           </div>
         </div>
       </form>

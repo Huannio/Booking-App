@@ -1,51 +1,111 @@
 'use strict';
-const { Model} = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Ships extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // Nếu không có quan hệ với models khác, bạn có thể bỏ qua phần này
-      Ships.belongsTo(models.ShipType, {
-        foreignKey: "type_product",
-        as: "ship_type",
+
+      // Quan hệ nhiều-nhiều với Features thông qua ProductFeature
+      Ships.belongsToMany(models.Features, {
+        through: 'ShipFeature',
+        foreignKey: 'ship_id',
+        as: 'features',
+      });
+
+      // Quan hệ 1-nhiều với Rooms
+      Ships.hasMany(models.Rooms, {
+        foreignKey: 'ship_id',
+        as: 'rooms',
       });
     }
   }
-  
+
   Ships.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
       },
-    title: DataTypes.STRING,
-    address:  DataTypes.STRING,
-    shell:  DataTypes.STRING,
-    year:  DataTypes.INTEGER,
-    cabin:  DataTypes.INTEGER,
-    admin:  DataTypes.STRING,
-    map_link:  DataTypes.TEXT ,
-    map_iframe_link:  DataTypes.TEXT,
-    schedule:  DataTypes.STRING,
-    trip:  DataTypes.STRING,
-    slug:  DataTypes.STRING,
-    type_product:  DataTypes.INTEGER, 
-    active:  DataTypes.TINYINT,
-    default_price:  DataTypes.DECIMAL,
-    num_reviews:  DataTypes.INTEGER,
-    score_review:  DataTypes.FLOAT,
-    thumbnail:  DataTypes.TEXT,
-    images:  DataTypes.TEXT,
-  }, 
-  {
-    sequelize,
-    modelName: 'Ships',  
-  });
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      year: {
+        type: Sequelize.INTEGER, 
+        allowNull: true,
+      },
+      cabin: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      admin: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      map_link: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      map_iframe_link: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      shell: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      schedule: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      active: {
+        type: Sequelize.TINYINT,
+        allowNull: false,
+        defaultValue: 1,
+      },
+      trip: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      slug: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      type_product: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+          model: "product_type", 
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "RESTRICT",
+      },
+      thumbnail: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      images: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      default_price: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Ships",
+    }
+  );
 
   return Ships;
 };
