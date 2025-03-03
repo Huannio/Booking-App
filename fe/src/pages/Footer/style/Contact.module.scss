@@ -1,0 +1,37 @@
+.Contact-contact {
+  position: relative;
+  padding: 0 24px 400px;
+  display: flex;
+  justify-content: center;
+}
+
+.Contact-contact .Contact-contact-card {
+  position: absolute;
+  display: flex;
+  width: 1008px;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 40px 24px 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  top: 400px;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+/* contact */
+@media (max-width: 1024px) {
+  .Contact-contact {
+    padding: 0 8px 800px;
+  }
+
+  .Contact-contact .Contact-contact-card {
+    width: 90%;
+    top: 300px;
+  }
+
+  .Contact-contact .Contact-group-input {
+    grid-template-columns: auto;
+  }
+}
