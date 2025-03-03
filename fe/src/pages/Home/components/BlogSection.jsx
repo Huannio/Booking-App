@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../Home.module.scss";
-import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 
