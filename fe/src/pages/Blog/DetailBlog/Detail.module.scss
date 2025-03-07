@@ -26,7 +26,88 @@
       }
     }
   }
+
+  .BreadCrumbs-breadCrumbsContainer,
+  .BreadCrumbs-breadCrumbs {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .BreadCrumbs-breadCrumb {
+    color: var(--gray-600);
+    fill: #fff;
+    stroke: var(--gray-600);
+    cursor: pointer;
+  }
+
+  .BreadCrumbs-breadCrumbs svg {
+    width: 16px;
+    height: 16px;
+  }
   
+  .BreadCrumbs-breadCrumbs img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .Badge-default {
+    background-color: var(--gray-100, #f2f4f7);
+    color: var(--gray-700, #344054);
+  }
+
+  .Badge-sm {
+    padding: 2px 8px;
+  }
+
+  .Badge-container {
+    border-radius: 16px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1280px;
+    margin: auto;
+  }
+  
+  .flex {
+    display: flex;
+  }
+
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .gap-80 {
+    gap: 80px;
+  }
+
+  .gap-40 {
+    gap: 40px;
+  }
+
+  .gap-16 {
+    gap: 16px;
+  }
+
+  .SectionHeader-sectionHeader {
+    display: flex;
+    flex-grow: 1;
+    gap: 16px;
+  }
+
+  .SectionHeader-sectionHeader{ .SectionHeader-title {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1 0;
+  }}
+
+
   figure {
     max-height: none !important;
   }
