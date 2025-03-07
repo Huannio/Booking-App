@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Select, notification } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "~/utils/axios.config";
-import { InputField, SelectField, UploadField } from "~/components/Input";
+import { InputField, SelectField, UploadImageField } from "~/components/Input";
 import Button from "~/components/Button";
 import config from "~/config";
 import { LoadingContext } from "~/components/Loading/Loading";
@@ -28,17 +28,18 @@ function Create() {
 
   const handleCreateBlogForm = async (data) => {
     console.log(data);
-
+    
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("short_desc", data.short_desc);
     formData.append("type_id", data.type_id);
-    formData.append("thumbnail", data.thumbnail);
+    formData.append("thumbnail", data.thumbnail[0]);
     const response = await axios.post("/blogs/create", formData);
 
     if (response.statusCode === 201) {
       notification.success({
-        message: response?.data?.message || "Tạo thông tin bài viết thành công!",
+        message:
+          response?.data?.message || "Tạo thông tin bài viết thành công!",
       });
       reset();
       navigate("/blogs");
@@ -102,13 +103,12 @@ function Create() {
 
         <div className="group-input">
           <div className="form-group">
-            <UploadField
+            <UploadImageField
               label="Thumbnail"
               name="thumbnail"
               control={control}
               error={errors.thumbnail}
-              inputGroup={true}
-              required
+              status={errors.thumbnail && "error"}
             />
           </div>
 

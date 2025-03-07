@@ -1,6 +1,5 @@
-const AuthService = require("../services/AuthService");
 const { StatusCodes } = require("http-status-codes");
-
+const AuthService = require("../services/AuthService");
 class AuthController {
   constructor() {
     this.authService = AuthService;
@@ -24,6 +23,7 @@ class AuthController {
         sameSite: "strict",
       });
 
+
       res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);
@@ -43,6 +43,7 @@ class AuthController {
         sameSite: "strict",
       });
 
+
       res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);
@@ -52,7 +53,6 @@ class AuthController {
   checkAuth = async (req, res, next) => {
     try {
       const data = await this.authService.checkAuth(req?.cookies?.accessToken);
-
       res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);

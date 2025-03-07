@@ -18,6 +18,7 @@ const columns = [
     key: "email",
   },
   {
+
     title: "Vai trò",
     key: "user_catalogues",
     dataIndex: "user_catalogues",
@@ -53,6 +54,7 @@ function Show() {
     setGlobalLoading(true);
     setLoading(true);
     const response = await axios.get("/users");
+
 
     const formattedData = response.users.map((user) => ({
       key: user.id,

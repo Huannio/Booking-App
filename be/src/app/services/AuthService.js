@@ -10,6 +10,7 @@ class AuthService {
     const user = await Users.findOne({ where: { email } });
 
     if (!user) {
+
       throw new ApiError(StatusCodes.NOT_FOUND, "Email không tồn tại!");
     }
 
@@ -46,7 +47,8 @@ class AuthService {
       const newToken = jwt.sign(
         {
           id: decoded.id,
-        },
+
+        },  
         env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,

@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Select, notification } from "antd";
-import { InputField, SelectField, UploadField } from "~/components/Input";
+import { InputField, SelectField, UploadImageField } from "~/components/Input";
 import Button from "~/components/Button";
 import config from "~/config";
 import axios from "~/utils/axios.config";
@@ -22,7 +22,6 @@ function Update() {
     handleSubmit,
     setValue,
     reset,
-    watch,
     formState: { errors },
   } = useForm({ resolver: yupResolver(config.blogSchema) });
 
@@ -39,18 +38,11 @@ function Update() {
     setGlobalLoading(true);
     const response = await handleGetBlogByIdApi(id);
     setBlog(response);
-    const thumbnailFile = {
-      uid: "-1",
-      name: "thumbnail",
-      status: "done",
-      url: response.thumbnail,
-    };
-
     reset({
       title: response.title,
       short_desc: response.short_desc,
       type_id: response.type.id,
-      thumbnail: [thumbnailFile],
+      thumbnail: response.thumbnail,
     });
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
@@ -72,7 +64,7 @@ function Update() {
     formData.append("title", data.title);
     formData.append("short_desc", data.short_desc);
     formData.append("type_id", data.type_id);
-    formData.append("thumbnail", data.thumbnail);
+    formData.append("thumbnail", data.thumbnail[0]);
     const response = await axios.put(`/blogs/update/${id}`, formData);
     if (response.statusCode === 200) {
       notification.success({
@@ -120,14 +112,12 @@ function Update() {
 
         <div className="group-input">
           <div className="form-group">
-            <UploadField
+            <UploadImageField
               label="Thumbnail"
               name="thumbnail"
               control={control}
               error={errors.thumbnail}
-              inputGroup={true}
-              required
-              value={watch("thumbnail")}
+              status={errors.thumbnail && "error"}
             />
           </div>
 

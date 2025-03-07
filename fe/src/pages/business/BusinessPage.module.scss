@@ -1,0 +1,224 @@
+.section-bg {
+  background-image: url(https://res.cloudinary.com/dhnp8ymxv/image/upload/v1732124410/section-background_ehixei.png);
+  background-repeat: repeat;
+}
+
+
+.gap-24 {
+    gap: 24px;
+}
+
+.align-center {
+    align-items: center;
+}
+.flex {
+    display: flex
+;
+}
+
+.BusinessPage-Wrapper {
+  padding: 80px 32px;
+}
+
+.BusinessPage-search-box {
+  width: 100%;
+}
+
+.BusinessPage-feature-card {
+  width: 488px;
+  border-radius: 24px;
+  border: 1px solid var(--gray-200, #eaecf0);
+  background: var(--base-white, #fff);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 24px 16px 16px;
+}
+
+.BusinessPage-feature-card .BusinessPage-img-Wrapper {
+  width: 120px;
+  min-width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.BusinessPage-customers {
+  padding: 80px 32px;
+  background-color: #f3ffff;
+}
+
+.BusinessPage-customers .BusinessPage-customers-list {
+  overflow-x: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+  .BusinessPage_wrapper {
+    padding: 24px;
+  }
+  .BusinessPage-business-info {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .BusinessPage-contact-btn {
+    display: none;
+  }
+  .BusinessPage-feature-card {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+  .BusinessPage-feature-card .BusinessPage-img-wrapper {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+  }
+  .BusinessPage-feature-card h6 {
+    font-size: 16px;
+  }
+  .BusinessPage-feature-card p {
+    font-size: 12px;
+  }
+  .BusinessPage-customer-list .BusinessPage-customer-img {
+    width: 176px;
+    min-width: 176px;
+    height: 64px;
+  }
+}
+
+.btn-color {
+    background-color: var(--primary-base);
+    border: 1px solid var(--primary-base);
+    color: var(--primary-dark);
+    fill: var(--primary-dark);
+}
+
+.btn-normal {
+    padding: 16px 20px;
+    white-space: nowrap;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* btn */
+
+.btn {
+  box-shadow: var(--shadow-xs);
+  border-radius: 100rem;
+}
+
+.btn-btn {
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: #77dada;
+  border: 1px solid #77dada;
+  color: #0e4f4f;
+  fill: #0e4f4f;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  color: #fff;
+  cursor: pointer;
+  fill: #fff;
+}
+
+.btn-outline {
+  background: linear-gradient(0deg, #fff, #fff),
+    linear-gradient(0deg, #eaecf0, #eaecf0);
+  border: 1px solid #eaecf0;
+  color: var(--gray-800);
+  fill: var(--gray-800);
+}
+
+.btn-outline:hover {
+  background: var(--gray-50);
+  color: var(--gray-700);
+  fill: var(--gray-700);
+  cursor: pointer;
+}
+
+.btn-outline > svg > path {
+  stroke: var(--gray-800);
+}
+
+.btn-normal {
+  padding: 16px 20px;
+  white-space: nowrap;
+}
+
+.btn-normal > svg,
+.btn-sm > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-normal > img,
+.btn-sm > img {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-sm {
+  padding: 10px 16px;
+  white-space: nowrap;
+}
+
+.btn-iconOnly {
+  gap: 0;
+  padding: 8px;
+}
+
+.btn-link-color {
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.btn-link-color:hover {
+  color: var(--primary-base);
+  fill: var(--primary-base);
+  cursor: pointer;
+}
+
+.btn-link-color:hover > svg > path {
+  stroke: var(--primary-base);
+}
+
+.btn-link-color > svg > path {
+  stroke: var(--primary-dark);
+}
+
+.btn-w-full {
+  width: 100%;
+}
+
+.btn-color {
+  background-color: var(--primary-base);
+  border: 1px solid var(--primary-base);
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+}
+
+.btn-color > svg > path {
+  stroke: var(--primary-dark);
+}
+
+.btn-color:hover > svg > path {
+  stroke: var(--base-white);
+}

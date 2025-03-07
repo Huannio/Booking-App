@@ -1,7 +1,7 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CloseOutlined } from "@ant-design/icons";
-import { TextField, ListField, UploadField } from "~/components/Input";
+import { TextField, ListField, UploadImageUseFieldArray } from "~/components/Input";
 import classNames from "classnames/bind";
 import {
   DndContext,
@@ -27,7 +27,7 @@ import { handleGetBlogDescriptionsTypesApi } from "~/api";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { notification } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { handleGetDescriptionsBlogApi } from "../../../api";
+import { handleGetDescriptionsBlogApi } from "~/api";
 
 function UpdateDetail() {
   const { id } = useParams();
@@ -214,7 +214,8 @@ function UpdateDetail() {
     if (response.statusCode === 200) {
       notification.success({
         message:
-          response?.message || "Cập nhật thông tin chi tiết bài viết thành công!",
+          response?.message ||
+          "Cập nhật thông tin chi tiết bài viết thành công!",
       });
       navigate("/blogs");
     }
@@ -325,9 +326,11 @@ function UpdateDetail() {
 
                     {field.type === "Image" && (
                       <div className={cx("custom-image")}>
-                        <UploadField
+                        <UploadImageUseFieldArray
                           control={control}
                           name={`contentBlocks.${index}.file`}
+                          label={`Image`}
+                          placeholder={`Image`}
                           error={errors?.contentBlocks?.[index]?.file}
                           value={[field.file]}
                         />
@@ -347,12 +350,7 @@ function UpdateDetail() {
           </ul>
         </DndContext>
 
-        <Button
-          primary
-          normal
-          submit
-          className="align-self-end"
-        >
+        <Button primary normal submit className="align-self-end">
           <div className="label md">Tạo</div>
         </Button>
       </form>

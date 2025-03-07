@@ -54,3 +54,18 @@ export const blogDetailSchema = yup.object().shape({
     })
   ),
 });
+
+export const cruiseSchema = yup.object().shape({
+  title: yup.string().required("Vui lòng nhập trường này"),
+  address: yup.string().required("Vui lòng nhập trường này"),
+  admin: yup.string().required("Vui lòng nhập trường này"),
+  default_price: yup.number().required("Vui lòng nhập trường này"),
+  schedule: yup.string().required("Vui lòng nhập trường này"),
+  trip: yup.string().required("Vui lòng nhập trường này"),
+  thumbnail: yup.mixed().required("Vui lòng chọn ảnh"),
+  images: yup.array().required("Vui lòng chọn ảnh"),
+  shell: yup.string().required("Vui lòng chọn trường này"),
+  cruise_category: yup.string().required("Vui lòng chọn trường này"),
+  cabin: yup.number().required("Vui lòng nhập trường này"),
+  year: yup.number().required("Vui lòng nhập trường này"),
+});

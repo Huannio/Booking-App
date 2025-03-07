@@ -1,7 +1,7 @@
 const routes = {
   home: "/",
   login: "/login",
-  dashboard: "/dashboard",  
+  dashboard: "/dashboard",
   users: {
     index: "/users",
     create: "/users/create",
@@ -15,7 +15,13 @@ const routes = {
     update: "/blogs/update/:id",
     updateDetail: "/blogs/updateDetail/:id",
     delete: "/blogs/delete/:id",
-  }
+  },
+  ships: {
+    index: "/ships",
+    create: "/ships/create",
+    update: "/ships/update/:slug",
+    delete: "/ships/delete/:slug",
+  },
 };
 
 export default routes;

@@ -1,0 +1,216 @@
+@use "./style/Payment.module.scss";
+@use "./style/AboutUs.module.scss";
+@use "./style/Term.module.scss";
+@use "./style/Privacy.module.scss";
+@use "./style/HowToUse.module.scss";
+@use "./style/Contact.module.scss";
+@use "./style/Rules.module.scss";
+@use "./style/Question.module.scss";
+
+.card {
+  border-radius: 32px;
+  border: 1px solid var(--gray-200, #eaecf0);
+  background-color: var(--base-white, #fff);
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06),
+    0px 1px 3px 0px rgba(16, 24, 40, 0.1);
+}
+
+.Card-card {
+  border-radius: 32px;
+  border: 1px solid var(--gray-200, #eaecf0);
+  background: var(--base-white, #fff);
+  box-shadow: var(--shadow-sm);
+}
+//
+.SectionHeader-column {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.SectionHeader-sectionHeader {
+  display: flex;
+  flex-grow: 1;
+  gap: 16px;
+}
+
+.SectionHeader-sectionHeader .SectionHeader-title {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1 0;
+}
+
+.SectionHeader-title h4 {
+  margin: 0;
+  color: var(--gray-900, #101828);
+}
+
+.SectionHeader-sectionHeader .SectionHeader-description {
+  width: 488px;
+  color: var(--gray-600, #475467);
+  flex-shrink: 0;
+}
+
+.SectionHeader-center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .SectionHeader-sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 24px;
+  }
+
+  .SectionHeader-sectionHeader .SectionHeader-title h4 {
+    font-size: 30px;
+  }
+
+  .SectionHeader-sectionHeader .SectionHeader-description {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+
+// button
+.btn-color {
+    background-color: var(--primary-base);
+    border: 1px solid var(--primary-base);
+    color: var(--primary-dark);
+    fill: var(--primary-dark);
+}
+
+.btn-normal {
+    padding: 16px 20px;
+    white-space: nowrap;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* btn */
+
+.btn {
+  box-shadow: var(--shadow-xs);
+  border-radius: 100rem;
+}
+
+.btn-btn {
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: #77dada;
+  border: 1px solid #77dada;
+  color: #0e4f4f;
+  fill: #0e4f4f;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  color: #fff;
+  cursor: pointer;
+  fill: #fff;
+}
+
+.btn-outline {
+  background: linear-gradient(0deg, #fff, #fff),
+    linear-gradient(0deg, #eaecf0, #eaecf0);
+  border: 1px solid #eaecf0;
+  color: var(--gray-800);
+  fill: var(--gray-800);
+}
+
+.btn-outline:hover {
+  background: var(--gray-50);
+  color: var(--gray-700);
+  fill: var(--gray-700);
+  cursor: pointer;
+}
+
+.btn-outline > svg > path {
+  stroke: var(--gray-800);
+}
+
+.btn-normal {
+  padding: 16px 20px;
+  white-space: nowrap;
+}
+
+.btn-normal > svg,
+.btn-sm > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-normal > img,
+.btn-sm > img {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-sm {
+  padding: 10px 16px;
+  white-space: nowrap;
+}
+
+.btn-iconOnly {
+  gap: 0;
+  padding: 8px;
+}
+
+.btn-link-color {
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.btn-link-color:hover {
+  color: var(--primary-base);
+  fill: var(--primary-base);
+  cursor: pointer;
+}
+
+.btn-link-color:hover > svg > path {
+  stroke: var(--primary-base);
+}
+
+.btn-link-color > svg > path {
+  stroke: var(--primary-dark);
+}
+
+.btn-w-full {
+  width: 100%;
+}
+
+.btn-color {
+  background-color: var(--primary-base);
+  border: 1px solid var(--primary-base);
+  color: var(--primary-dark);
+  fill: var(--primary-dark);
+}
+
+.btn-color > svg > path {
+  stroke: var(--primary-dark);
+}
+
+.btn-color:hover > svg > path {
+  stroke: var(--base-white);
+}

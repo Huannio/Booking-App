@@ -6,6 +6,7 @@ import {
   loginSchema,
   blogSchema,
   blogDetailSchema,
+  cruiseSchema,
 } from "./validationSchema";
 const config = {
   routes,
@@ -15,6 +16,7 @@ const config = {
   loginSchema,
   blogSchema,
   blogDetailSchema,
+  cruiseSchema,
 };
 
 export default config;

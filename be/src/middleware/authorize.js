@@ -1,3 +1,4 @@
+
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const env = require("../config/environment");
@@ -9,6 +10,7 @@ const authorizeJWT = async (req, res, next) => {
   }
 
   try {
+
     const jwtDecoded = await jwt.verify(token, env.ACCESS_TOKEN_SECRET);
     req.jwtDecoded = jwtDecoded;
 
@@ -16,6 +18,7 @@ const authorizeJWT = async (req, res, next) => {
   } catch (error) {
     // Trả về mã 403 (Khi access token hết hạn)
     if (error.message?.includes("jwt expired")) {
+
       next({
         statusCode: StatusCodes.FORBIDDEN,
         message: "Access token has expired",
