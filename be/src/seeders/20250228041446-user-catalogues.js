@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-
+    
     const userCatalogues = [
       {
         name: "Quản trị viên",
