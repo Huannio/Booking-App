@@ -2,91 +2,24 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import {Select, notification } from "antd";
-import { InputField, SelectField } from "~/components/Input";
+import { InputField, SelectField, UploadField, OptionField } from "~/components/Input";
 import axios from "~/utils/axios.config";
 import Button from "~/components/Button";
+import config from "~/config";
 import { LoadingContext } from "~/components/Loading/Loading";
-
+import { handleGetShipTypesApi, handleGetCruiseCategoryApi } from "~/api";
 import classNames from "classnames/bind";
 import styles from "./Ship.module.scss";
-
 const cx = classNames.bind(styles);
 
 const { Option } = Select;
 
-const shipSchema = yup.object().shape({
-  title: yup.string().required("Tiêu đề là bắt buộc"),
-  address: yup.string().required("Địa chỉ là bắt buộc"),
-  shell: yup.string().required("Vật liệu thân vỏ là bắt buộc"),
-  year: yup.number().required("Năm hạ thủy là bắt buộc").positive().integer(),
-  cabin: yup.number().required("Số lượng cabin là bắt buộc").positive().integer(),
-  admin: yup.string().required("Tên công ty điều hành là bắt buộc"),
-  map_link: yup.string().url("Link bản đồ không hợp lệ").required("Link bản đồ là bắt buộc"),
-  map_iframe_link: yup.string().url("Link iframe bản đồ không hợp lệ").required("Link iframe bản đồ là bắt buộc"),
-  schedule: yup.string().required("Lịch trình là bắt buộc"),
-  trip: yup.string().required("Hành trình là bắt buộc"),
-  default_price: yup.number().required("Giá là bắt buộc").positive(),
-  slug: yup.string().required("Slug là bắt buộc"),
-  category: yup.string().required("Danh mục là bắt buộc"),
-});
-
 function Create() {
   const navigate = useNavigate();
-  const [thumbnail, setThumbnail] = useState("");
-  const [images, setImages] = useState([]);
-  
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [ProductType, setProductType] = useState(null);
-  const [CruiseCategory, setCruiseCategory] = useState(null);
-
-  const getProductType = useCallback(async () => {
-      setGlobalLoading(true);
-      const { ProductType } = await axios.get("/product-type");
-      setProductType(ProductType || []);
-      setGlobalLoading(false);
-    }, [setGlobalLoading]);
   
-    useEffect(() => {
   
-      getProductType();
-    }, [getProductType]);
-
-    const getCruiseCategory = useCallback(async () => {
-      setGlobalLoading(true);
-      const { CruiseCategory } = await axios.get("/cruise-category");
-      setCruiseCategory(CruiseCategory || []);
-      setGlobalLoading(false);
-    }, [setGlobalLoading]);
-  
-    useEffect(() => {
-  
-      getCruiseCategory();
-    }, [getCruiseCategory]);
-
-  // Xử lý upload ảnh
-  const handleUploadImage = async (file, isThumbnail = false) => {
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const endpoint = isThumbnail ? "/upload/thumbnail" : "/upload/ship-images";
-      const response = await axios.post(endpoint, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (isThumbnail) {
-        setThumbnail(response.data.imageUrl);
-      } else {
-        setImages((prev) => [...prev, response.data.imageUrl]);
-      }
-      notification.success({ message: "Upload ảnh thành công!" });
-    } catch {
-      notification.error;
-    }
-  };
-
   const {
     control,
     handleSubmit,
@@ -94,42 +27,75 @@ function Create() {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(shipSchema),
+    resolver: yupResolver(config.shipSchema),
   });
-  console.log("Errors:", errors);
+  
   const handleCreateShipForm = async (data) => {
-    const response = await axios.post("/ships/create", data);
-    
-    if (response.statusCode === 200) {
+    console.log(data);
+
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("address", data.address);
+    formData.append("map_link", data.map_link);
+    formData.append("map_iframe_link", data.map_iframe_link);
+    formData.append("default_price", data.default_price);
+    formData.append("slug", data.slug);
+    formData.append("schedule", data.schedule);
+    formData.append("thumbnail", data.thumbnail);
+    formData.append("images", data.images);
+    formData.append("type_product", data.type_product);
+    formData.append("active", data.active);
+    const response = await axios.post("/ships/create", formData);
+
+    if (response.statusCode === 201) {
       notification.success({
-        message: response?.data?.message || "Tạo du thuyền thành công!",
+        message: response?.data?.message || "Tạo thông tin du thuyền thành công!",
       });
       reset();
       navigate("/ships");
     }
   };
 
-  const typeOptions =
-  ProductType?.map((product_type) => (
-    <Option key={product_type.id} value={product_type.id}>
-      {product_type.name}
-    </Option>
-  )) || [];categoryOptions
+  const [shipTypes, setShipTypes] = useState(null);
+  const getShipTypes = useCallback(async () => {
+    setGlobalLoading(true);
+    const shipTypes = await handleGetShipTypesApi();
+    setShipTypes(shipTypes);
+    setGlobalLoading(false);
+  }, [setGlobalLoading]);
 
-  const categoryOptions =
-  CruiseCategory?.map((cruise_category) => (
-    <Option key={cruise_category.id} value={cruise_category.id}>
-      {cruise_category.name}
+  useEffect(() => {
+    getShipTypes();
+  }, [getShipTypes]);
+    
+  const shipTypesOptions = shipTypes?.map((shipType) => (
+    <Option key={shipType.id} value={shipType.id}>
+      {shipType.name}
+    </Option>
+  )) || [];
+
+  const [cruiseCategory, setCruiseCategory] = useState(null);
+  const getCruiseCategory = useCallback(async () => {
+    setGlobalLoading(true);
+    const cruiseCategory = await handleGetCruiseCategoryApi();
+    setCruiseCategory(cruiseCategory);
+    setGlobalLoading(false);
+  }, [setGlobalLoading]);
+
+  useEffect(() => {
+    getCruiseCategory();
+  }, [getCruiseCategory]);
+    
+  const cruiseCategoryOptions = cruiseCategory?.map((cruiseCategory) => (
+    <Option key={cruiseCategory.id} value={cruiseCategory.id}>
+      {cruiseCategory.name}
     </Option>
   )) || [];
 
   return (
     <div className={cx("action-page")}>
       <form
-        method="post"
-        action=""
-        id="CruiseCreateForm"
-        encType="multipart/form-data"
+        className={cx("flex flex-col gap-32")}
         onSubmit={handleSubmit(handleCreateShipForm)}
       >
         <div className={cx("modal")}>
@@ -146,7 +112,6 @@ function Create() {
                 control={control}
                 error={errors.title} 
                 status={errors.title && "error"}
-                inputGroup={false}
               />
             </div>
 
@@ -159,7 +124,6 @@ function Create() {
                 control={control}
                 error={errors.address} 
                 status={errors.address && "error"}
-                inputGroup={false}
               />
             </div>
           </div>
@@ -174,7 +138,6 @@ function Create() {
                 control={control}
                 error={errors.shell} 
                 status={errors.shell && "error"}
-                inputGroup={false}
               />
             </div>
 
@@ -187,7 +150,6 @@ function Create() {
                 control={control}
                 error={errors.year} 
                 status={errors.year && "error"}
-                inputGroup={false}
               />
             </div>
 
@@ -202,7 +164,6 @@ function Create() {
                 control={control}
                 error={errors.admin} 
                 status={errors.admin && "error"}
-                inputGroup={false}
               />
             </div>
           </div>
@@ -217,7 +178,6 @@ function Create() {
                 control={control}
                 error={errors.map_link} 
                 status={errors.map_link && "error"}
-                inputGroup={false}
               />
             </div>
 
@@ -230,7 +190,6 @@ function Create() {
                 control={control}
                 error={errors.map_iframe_link} 
                 status={errors.map_iframe_link && "error"}
-                inputGroup={false}
               />
             </div>
           </div>
@@ -245,7 +204,6 @@ function Create() {
                 control={control}
                 error={errors.cabin} 
                 status={errors.cabin && "error"}
-                inputGroup={false}
               />
             </div>
             <div className={cx("form-group")}>
@@ -257,7 +215,6 @@ function Create() {
                 control={control}
                 error={errors.schedule} 
                 status={errors.schedule && "error"}
-                inputGroup={false}
               />
             </div>
 
@@ -270,7 +227,6 @@ function Create() {
                 control={control}
                 error={errors.trip} 
                 status={errors.trip && "error"}
-                inputGroup={false}
               />
             </div>
           </div>
@@ -285,7 +241,6 @@ function Create() {
                 control={control}
                 error={errors.slug} 
                 status={errors.slug && "error"}
-                inputGroup={false}
               />
             </div>
             <div className={cx("form-group")}>
@@ -297,7 +252,6 @@ function Create() {
                 control={control}
                 error={errors.default_price} 
                 status={errors.default_price && "error"}
-                inputGroup={false}
               />
             </div>
             <div className={cx("form-group")}>
@@ -309,122 +263,71 @@ function Create() {
               control={control}
               error={errors.category_id}
               status={errors.category_id && "error"}
-              options={categoryOptions}
+              options={cruiseCategoryOptions}
               onChange={(value) => setValue("category_id", value)}
-              loading={!categoryOptions}
+              loading={!cruiseCategoryOptions}
             />
             </div>
             
           </div>
           <div className={cx("group-input-4")}>
             <div className={cx("form-group")}>
-              <SelectField
-
-              name="product_type_id"
+            <SelectField
               label="Chọn vai trò"
-              placeholder="Chọn một vai trò"
+              name="type_product"
+              placeholder="Chọn vai trò..."
               control={control}
-              error={errors.product_type_id}
-              status={errors.product_type_id && "error"}
-              options={typeOptions}
-              onChange={(value) => setValue("product_type_id", value)}
-              loading={!typeOptions}
+              error={errors.type_product}
+              status={errors.type_product && "error"}
+              options={shipTypesOptions}
+              loading={!shipTypesOptions}
+              onChange={(value) => setValue("type_product", value)}
+              required
             />
             </div>
             
             <div className={cx("form-group")}>
-            <SelectField
+            <OptionField
+                label="Chọn kích hoạt"
+                type="active"
+                name="active"
+                placeholder="Chọn trạng thái"
+                control={control}
+                error={errors.active} 
+                options={[
+                  { value: "true", label: "Kích hoạt" },
+                  { value: "false", label: "Không kích hoạt" },
+                ]}
+                defaultValue="true"
+                required
+              />
+            </div>
+          </div>
 
-              name="active"
-              label="Chọn kích hoạt"
-              placeholder="Chọn kích hoạt"
+          <div className="group-input">
+          <div className="form-group">
+            <UploadField
+              label="Thumbnail"
+              name="thumbnail"
               control={control}
-              error={errors.active}
-              status={errors.active && "error"}
-              options={typeOptions}
-              onChange={(value) => setValue("active", value)}
-              loading={!typeOptions}
+              error={errors.thumbnail}
+              inputGroup={true}
+              required
             />
-            </div>
           </div>
 
-          <div>
-            <div className={cx("form-group")}>
-              <label htmlFor="upload-thumbnail" className={cx("sm", "input-required")}>
-                Chọn thumbnail
-              </label>
-              <div>
-                <label htmlFor="upload-thumbnail" className={cx("flex", "align-center")}>
-                  <div className={cx("flex", "align-center", "gap-16")}>
-                    <input type="file" id="upload-thumbnail" name="thumbnail[]" onChange={(e) => handleUploadImage(e.target.files[0], true)} />
-                    <label htmlFor="upload-thumbnail" className={cx("upload-thumb-btn", "btn", "btn-primary", "btn-normal")}>
-                      Choose file
-                    </label>
-                    <div className={cx("preview-thumb")}>
-                      {thumbnail && <img src={thumbnail} alt="Thumbnail" width="100" />}
-                      <div className={cx("temp-thumb")}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-                          <rect width="100" height="100" rx="5" fill="#E2E6EC" />
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M28.6667 37C28.6667 34.6068 30.6068 32.6667 33.0001 32.6667H67.0001C69.3933 32.6667 71.3334 34.6068 71.3334 37V63.6667C71.3334 66.0599 69.3933 68 67.0001 68H33.0001C30.6068 68 28.6667 66.0599 28.6667 63.6667V37ZM33.0001 34.6667C31.7114 34.6667 30.6667 35.7113 30.6667 37V63.6667C30.6667 64.9553 31.7114 66 33.0001 66H67.0001C68.2887 66 69.3334 64.9553 69.3334 63.6667V37C69.3334 35.7113 68.2887 34.6667 67.0001 34.6667H33.0001Z"
-                            fill="#B2B9C4"
-                          />
-                          <ellipse cx="38.6668" cy="42" rx="4.33333" ry="4.33333" fill="#B2B9C4" />
-                          <path
-                            d="M34.3335 60.3333V58.357C34.3335 57.915 34.5091 57.4911 34.8217 57.1785L40.2098 51.7904C40.8389 51.1613 41.8511 51.1372 42.5094 51.7357L43.8407 52.946C44.4923 53.5383 45.4923 53.5216 46.1236 52.9077L55.8219 43.4789C56.4753 42.8436 57.5178 42.851 58.1622 43.4954L65.8453 51.1785C66.1579 51.4911 66.3335 51.915 66.3335 52.357V60.3333C66.3335 61.2538 65.5873 62 64.6668 62H36.0002C35.0797 62 34.3335 61.2538 34.3335 60.3333Z"
-                            fill="#B2B9C4"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </div>
+          <div className="form-group">
+            <UploadField
+              label="images"
+              name="images"
+              control={control}
+              error={errors.images}
+              inputGroup={true}
+              required
+            />
           </div>
-
-          <div>
-            <div className={cx("form-group")}>
-              <label htmlFor="upload-image" className={cx("sm", "input-required")}>
-                Chọn album ảnh (tối đa 10 ảnh)
-              </label>
-              <div>
-                <label htmlFor="upload-image" className={cx("flex", "align-center")}>
-                  <div className={cx("flex", "align-center", "gap-16")}>
-                    <input type="file" id="upload-image" name="images[]" multiple onChange={(e) => {
-                      Array.from(e.target.files).forEach((file) => handleUploadImage(file));
-                    }} />
-                    <label htmlFor="upload-image" className={cx("upload-images-btn", "btn", "btn-primary", "btn-normal")}>
-                      Choose file
-                    </label>
-                    <div className={cx("preview-image")}>
-                      {images.map((img, index) => (
-                        <img key={index} src={img} alt={`Ảnh ${index}`} width="100" />
-                      ))}
-                      <div className={cx("temp-thumb")}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-                          <rect width="100" height="100" rx="5" fill="#E2E6EC" />
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M28.6667 37C28.6667 34.6068 30.6068 32.6667 33.0001 32.6667H67.0001C69.3933 32.6667 71.3334 34.6068 71.3334 37V63.6667C71.3334 66.0599 69.3933 68 67.0001 68H33.0001C30.6068 68 28.6667 66.0599 28.6667 63.6667V37ZM33.0001 34.6667C31.7114 34.6667 30.6667 35.7113 30.6667 37V63.6667C30.6667 64.9553 31.7114 66 33.0001 66H67.0001C68.2887 66 69.3334 64.9553 69.3334 63.6667V37C69.3334 35.7113 68.2887 34.6667 67.0001 34.6667H33.0001Z"
-                            fill="#B2B9C4"
-                          />
-                          <ellipse cx="38.6668" cy="42" rx="4.33333" ry="4.33333" fill="#B2B9C4" />
-                          <path
-                            d="M34.3335 60.3333V58.357C34.3335 57.915 34.5091 57.4911 34.8217 57.1785L40.2098 51.7904C40.8389 51.1613 41.8511 51.1372 42.5094 51.7357L43.8407 52.946C44.4923 53.5383 45.4923 53.5216 46.1236 52.9077L55.8219 43.4789C56.4753 42.8436 57.5178 42.851 58.1622 43.4954L65.8453 51.1785C66.1579 51.4911 66.3335 51.915 66.3335 52.357V60.3333C66.3335 61.2538 65.5873 62 64.6668 62H36.0002C35.0797 62 34.3335 61.2538 34.3335 60.3333Z"
-                            fill="#B2B9C4"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </div>
           </div>
+          
           <div className={cx("actions")}>
           <Button
           primary

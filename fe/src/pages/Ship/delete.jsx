@@ -1,104 +1,95 @@
-import { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { notification, Modal } from "antd";
+import { InputField } from "~/components/Input";
 import Button from "~/components/Button";
 import axios from "~/utils/axios.config";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
+import { handleGetShipByIdApi } from "~/api";
 
-function DeleteShip() {
+function Delete() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [shipTitle, setShipTitle] = useState("");
-  const [shipDataAvailable, setShipDataAvailable] = useState(true);
 
-  // Fetch ship data
+  const {
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
+
   const getShip = useCallback(async () => {
     setGlobalLoading(true);
-    try {
-      const response = await axios.get(`/ships/${id}`);
-      setShipTitle(response?.data?.title);
-    } catch (error) {
-      setShipDataAvailable(false);
-      notification.error({
-        message: error?.response?.data?.message || "Không thể lấy dữ liệu du thuyền!",
-      });
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [id, setGlobalLoading]);
+    const response = await handleGetShipByIdApi(id);
+    reset({ title: response?.title });
+    setGlobalLoading(false);
+  }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
     getShip();
   }, [getShip]);
 
-  // Handle ship deletion
-  const handleDeleteShip = async () => {
+  const deleteShip = async () => {
     setConfirmLoading(true);
-    try {
-      await axios.delete(`/ships/delete/${id}`);
-      notification.success({ message: "Xóa du thuyền thành công!" });
+    const response = await axios.delete(`/ships/delete/${id}`);
+    if (response.statusCode === 200) {
+      notification.success({ message: response?.message });
       navigate("/ships");
-    } catch (error) {
-      notification.error({
-        message: error?.response?.data?.message || "Lỗi khi xóa du thuyền!",
-      });
-    } finally {
-      setConfirmLoading(false);
-      setModalVisible(false);
     }
+    setConfirmLoading(false);
+    setModalVisible(false);
   };
 
   return (
-    <div className="flex w-full flex-col gap-16">
-      <h6>Xóa du thuyền</h6>
+    <>
+      <div className="flex w-full flex-col gap-16">
+        <h6>Xóa du thuyền</h6>
 
-      <div className="flex flex-col gap-32">
-        <div className="group-input">
-          <div className="warning-title">
-            <p className="subheading lg" style={{ color: "red" }}>
-              Lưu ý: Một khi xóa sẽ không thể khôi phục, hãy cân nhắc trước khi xóa!
-            </p>
+        <div className="flex flex-col gap-32">
+          <div className="group-input">
+            <div className="warning-title">
+              <p className="subheading lg" style={{ color: "red" }}>
+                Lưu ý: Một khi xóa sẽ không thể khôi phục, hãy cân nhắc trước
+                khi xóa!
+              </p>
+            </div>
+            <div className="form-group">
+              <InputField
+                label="Title"
+                type="text"
+                name="title"
+                control={control}
+                error={errors.title}
+                disabled
+                inputGroup={false}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Tên du thuyền</label>
-            <input
-              type="text"
-              value={shipTitle}
-              disabled
-              className="form-control"
-            />
-          </div>
-        </div>
 
-        <div className="flex gap-16">
           <Button
             normal
-            className="align-self-end"
+            className="align-self-end interceptor-loading"
             onClick={() => setModalVisible(true)}
-            disabled={confirmLoading || !shipDataAvailable}
           >
             <span className="label md">Xóa</span>
-          </Button>
-          <Button normal className="align-self-end" onClick={() => navigate("/ships")}>
-            <span className="label md">Hủy</span>
           </Button>
         </div>
       </div>
 
       <Modal
-        title="Xóa du thuyền"
+        title="Xóa người dùng"
         open={modalVisible}
-        onOk={handleDeleteShip}
+        onOk={deleteShip}
         confirmLoading={confirmLoading}
         onCancel={() => setModalVisible(false)}
       >
-        <p>Bạn có chắc chắn muốn xóa du thuyền này?</p>
+        <p>Bạn có chắc chắn muốn xóa?</p>
       </Modal>
-    </div>
+    </>
   );
 }
 
-export default DeleteShip;
+export default Delete;

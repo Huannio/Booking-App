@@ -16,7 +16,7 @@ import {
 import {
   Show as ShowShip,
   Create as CreateShip,
-  Update as UpdateShip,
+  // Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
 import {
@@ -137,11 +137,11 @@ export const privateRoutes = [
     component: CreateShip,
     layout: AdminLayout,
   },
-  {
-    path: config.routes.ships.update,
-    component: UpdateShip,
-    layout: AdminLayout,
-  },
+  // {
+  //   path: config.routes.ships.update,
+  //   component: UpdateShip,
+  //   layout: AdminLayout,
+  // },
   {
     path: config.routes.ships.delete,
     component: DeleteShip,

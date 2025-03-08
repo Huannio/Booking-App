@@ -1,114 +1,98 @@
 const { StatusCodes } = require("http-status-codes");
+const cloudinary = require("../../config/cloudinary");
 const ShipService = require("../services/ShipService");
+const uploadToCloudinary = require("../../utils/cloudinary");
 
 class ShipController {
   constructor() {
-    this.shipService = ShipService; // Sử dụng biến viết thường để tuân thủ quy ước
+    this.shipService = ShipService; 
   }
 
-  // Lấy thông tin một du thuyền cụ thể
   index = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const ship = await this.shipService.getShipById(id);
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ship });
+      const data = await this.shipService.getShipById(req.params.id);
+      res.status(StatusCodes.OK).json(data);
     } catch (error) {
       next(error);
     }
   };
 
-  // Lấy danh sách tất cả các du thuyền
   show = async (req, res, next) => {
     try {
-      const { page = 1, limit = 5, keyword = '' } = req.query;
-      const offset = (page - 1) * limit;
-
-      const ships = await this.shipService.getAllShips(offset, limit, keyword);
-      const totalShips = await this.shipService.countAllShips(keyword);
-      const totalPages = Math.ceil(totalShips / limit);
-
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        ships,
-        totalShips,
-        totalPages,
-        currentPage: parseInt(page),
-      });
+      const data = await this.shipService.getAllShip();
+      return res.status(StatusCodes.OK).json(data);
     } catch (error) {
       next(error);
     }
   };
 
-  // Tạo mới một du thuyền
   create = async (req, res, next) => {
     try {
-      const shipData = req.body;
-
-      // Xử lý file upload nếu có
-      if (req.file) {
-        shipData.thumbnail = `/uploads/${req.file.filename}`;
-      }
-
-      const newShip = await this.shipService.createShip(shipData);
-
-      res.status(StatusCodes.CREATED).json({
-        statusCode: StatusCodes.CREATED, // Sửa thành CREATED để phản ánh đúng mã trạng thái
-        newShip,
+      const data = await this.shipService.createShip(req.body, req.file);
+      return res.status(StatusCodes.CREATED).json({
+        statusCode: StatusCodes.CREATED,
+        message: "Tạo du thuyền mới thành công",
+        data,
       });
     } catch (error) {
       next(error);
     }
   };
 
-  // Cập nhật thông tin một du thuyền
   update = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const updateData = req.body;
-
-      const updatedShip = await this.shipService.updateShip(id, updateData);
-
-      res.status(StatusCodes.OK).json({
+      const data = await this.shipService.updateShip(
+        req.body,
+        req.file,
+        req.params.id
+      );
+      return res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        updatedShip,
+        message: "Cập nhật du thuyền thành công",
+        data,
       });
     } catch (error) {
       next(error);
     }
   };
 
-  // Xóa một du thuyền
   delete = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const deleteResult = await this.shipService.deleteShip(id);
-
-      res.status(StatusCodes.OK).json({
+      const data = await this.shipService.deleteShip(req.params.id);
+      return res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        deleteResult,
         message: "Xóa thành công!",
+        data,
       });
     } catch (error) {
       next(error);
     }
   };
-
-  // Cập nhật tính năng của du thuyền
-  updateFeatures = async (req, res, next) => {
+  
+  getTypes = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const { features } = req.body;
-
-      const updateResult = await this.shipService.updateShipFeatures(id, features);
-
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        updateResult,
-      });
+      const shipTypes = await this.shipService.getTypes();
+      return res.status(StatusCodes.OK).json(shipTypes);
     } catch (error) {
       next(error);
     }
   };
+
+  // updateFeatures = async (req, res, next) => {
+  //   try {
+  //     const updateFeatures = await this.shipService.updateFeatures(
+  //       req.body,
+  //       req.files
+  //     );
+  //     return res.status(StatusCodes.OK).json({
+  //       statusCode: StatusCodes.OK,
+  //       message: "Cập nhật chức năng thành công",
+  //       updateFeatures,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // };
 }
 
 module.exports = new ShipController();

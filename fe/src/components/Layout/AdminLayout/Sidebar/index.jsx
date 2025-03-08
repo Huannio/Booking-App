@@ -34,6 +34,11 @@ const items = [
     label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
     icon: <ContainerOutlined />,
   },
+  // {
+  //   key: "/feature",
+  //   label: <Link to={config.routes.feature.index}>Quản lý đặc trưng</Link>,
+  //   icon: <ContainerOutlined />,
+  // },
   {
     key: "/navigation2",
     label: "Navigation Two",

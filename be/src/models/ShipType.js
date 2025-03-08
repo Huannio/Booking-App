@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Định nghĩa các quan hệ ở đây (nếu cần)
+      ShipType.hasMany(models.Ships, {
+        foreignKey: "type_product",
+        as: "products",
+      });
     }
   }
 
@@ -18,17 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      name:DataTypes.STRING,
     },
     {
       sequelize,
       modelName: 'ShipType', 
-      tableName: 'ship_type', 
+      tableName: 'product_type', 
     }
   );
 

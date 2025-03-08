@@ -19,6 +19,38 @@ export const loginSchema = yup.object({
   password: yup.string().required("Vui lòng nhập trường này"),
 });
 
+export const shipSchema = yup.object({
+  title: yup.string().required("Vui lòng nhập trường này"),
+  address: yup.string().required("Vui lòng nhập trường này"),
+  shell: yup.string().required("Vui lòng nhập trường này"),
+  map_link: yup.string().url("Link bản đồ không hợp lệ").required("Vui lòng nhập trường này"),
+  map_iframe_link: yup.string().url("Link iframe bản đồ không hợp lệ").required("Vui lòng nhập trường này"),
+  admin: yup.string().required("Vui lòng nhập trường này"),
+  trip: yup.string().required("Vui lòng nhập trường này"),
+  default_price: yup
+    .number()
+    .typeError("Giá phải là một số") 
+    .positive("Giá phải là số dương") 
+    .required("Vui lòng nhập trường này"),
+  slug: yup.string().required("Vui lòng nhập trường này"),
+  schedule: yup.string().required("Vui lòng nhập trường này"),
+  thumbnail: yup.mixed().required("Vui lòng chọn ảnh"),
+  images: yup.array().of(yup.mixed()).required("Vui lòng chọn ảnh"),
+  year: yup
+    .number()
+    .typeError("Năm hạ thủy phải là một số") 
+    .integer("Năm hạ thủy phải là số nguyên") 
+    .required("Vui lòng nhập trường này"),
+  cabin: yup
+    .number()
+    .typeError("Số cabin phải là một số") 
+    .integer("Số cabin phải là số nguyên") 
+    .positive("Số cabin phải là số dương") 
+    .required("Vui lòng nhập trường này"),
+  type_product: yup.string().required("Vui lòng nhập trường này"),
+  category_id: yup.string().required("Vui lòng nhập trường này"),
+});
+
 export const blogSchema = yup.object({
   title: yup.string().required("Vui lòng nhập trường này"),
   short_desc: yup.string().required("Vui lòng nhập trường này"),

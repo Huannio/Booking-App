@@ -1,87 +1,128 @@
 const env = require("../../config/environment");
 const { StatusCodes } = require("http-status-codes");
-const { Ships, Cruise } = require("../../models");
-const { Op } = require("sequelize");
+const { Ships, Cruise, CruiseCategory, ShipType } = require("../../models");
+const slugify = require("../../utils/slugify");
+const uploadToCloudinary = require("../../utils/cloudinary");
 const ApiError = require("../../middleware/ApiError");
 
 class ShipService {
-  // Lấy danh sách tất cả các du thuyền
-  async getAllShips() {
+  async getAllShip() {
     try {
       return await Ships.findAll({
-        attributes: ["id", "title", "address", "admin", "slug"],
+        attributes: ["id", "title", "address", "map_link", "map_iframe_link", "default_price", "slug", "num_reviews", "score_review", "schedule", "thumbnail", "images", "active"],
+        include: [
+        {
+          model: ShipType,
+          as: "product_type",
+          attributes: ["name"],
+        },
+        {
+          model: Cruise,
+          as: "cruise",
+          attributes: ["admin"],
+        }
+      ],
       });
     } catch (error) {
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Lỗi khi lấy danh sách du thuyền");
+      throw error;
     }
   }
 
-  // Lấy thông tin một du thuyền cụ thể
   async getShipById(id) {
     try {
       const ship = await Ships.findOne({
-        attributes: ["id", "title", "address", "admin", "slug"],
+        where: { id },
+        attributes: ["id", "title", "address", "map_link", "map_iframe_link", "default_price", "slug", "num_reviews", "score_review", "schedule", "thumbnail", "images", "active"],
+        include: [
+          {
+            model: ShipType,
+            as: "product_type",
+            attributes: ["id","name"],
+          },
+        ],
       });
-
-      if (!ship) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "Du thuyền không tồn tại!");
-      }
-
-      return ship;
     } catch (error) {
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Lỗi khi lấy thông tin du thuyền");
+      throw error;
     }
   }
 
-  // Tạo mới một du thuyền
-  async createShip(data) {
+  async createShip(reqBody, reqFile) {
     try {
-      const shipExists = await Ships.findOne({ where: { slug: data.slug } });
-      if (shipExists) {
-        throw new ApiError(StatusCodes.CONFLICT, "Slug đã tồn tại!");
-      }
-
-      const shipData = {
-        ...data,
-        type_product: env.TYPE_PRODUCT.SHIP, 
+      const { title, address, map_link, map_iframe_link, default_price, schedule,num_reviews, score_review, active, type_product } = reqBody;
+      const data = {
+        title,
+        address,
+        map_link,
+        map_iframe_link,
+        default_price,
+        schedule,
+        num_reviews,
+        score_review,
+        active,
+        type_product,
+        slug: slugify(title),
       };
-
-      const newShip = await Ships.create(shipData);
-      return newShip;
-    } catch (error) {
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Lỗi khi tạo du thuyền");
-    }
-  }
-
-  // Cập nhật thông tin một du thuyền
-  async updateShip(id, data) {
-    try {
-      const ship = await this.getShipById(id);
-
-      if (data.slug) {
-        const checkSlug = await Ships.findOne({
-          where: { slug: data.slug, id: { [Op.ne]: id } },
-        });
-        if (checkSlug) {
-          throw new ApiError(StatusCodes.CONFLICT, "Slug đã tồn tại!");
-        }
+      if (reqFile) {
+        const uploadImage = await uploadToCloudinary(
+          reqFile.buffer,
+          "thumbnail",
+          "images"
+        )
+        data.thumbnail = uploadImage.url
+        data.images = uploadImage.url
       }
 
-      const updatedShip = await ship.update(data);
-      return updatedShip;
+      return await Ships.create(data);
     } catch (error) {
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Lỗi khi cập nhật du thuyền");
+      throw error;
     }
   }
 
-  // Xóa một du thuyền
+  async updateShip(reqBody, reqFile, id) {
+    try {
+      const { title, address, map_link, map_iframe_link, default_price, schedule,num_reviews, score_review, active, type_product } = reqBody;
+      const data = {
+        title,
+        address,
+        map_link,
+        map_iframe_link,
+        default_price,
+        schedule,
+        num_reviews,
+        score_review,
+        active,
+        type_product,
+      };
+      if (reqFile) {
+        const uploadImage = await uploadToCloudinary(
+          reqFile.buffer,
+          "thumbnail",
+          "images"
+        )
+        data.thumbnail = uploadImage.url
+        data.images = uploadImage.url
+      }
+      
+      return await Ships.update(data, { where: { id } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async deleteShip(id) {
     try {
-      const ship = await this.getShipById(id);
-      await ship.destroy();
-      return true;
+      return await Ships.destroy({ where: { id } });
     } catch (error) {
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Lỗi khi xóa du thuyền");
+      throw error;
+    }
+  }
+  async getTypes() {
+    try {
+      return await ShipType.findAll({
+        attributes: ["id", "name"],
+      });
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { Input, Space, Table } from "antd";
+import { Button, Input, Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-import axios from "~/utils/axios.config";
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
+import { handleGetShipsApi } from "~/api";
 
 const columns = [
   {
@@ -50,32 +49,25 @@ const columns = [
 ];
 
 function Show() {
-  const [ship, setShips] = useState([]);
+  const [ships, setShips] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
 
   const getShips = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
+    const response = await handleGetShipsApi();
 
-    try {
-      const response = await axios.get("/ships");
-      
-      const formattedData = response.Ships?.map((product, index) => ({
-        key: product.id,
-        STT: index + 1,
-        title: product.title,
-        address: product.address,
-        admin: product.admin,
-      })) || [];
-
-      setShips(formattedData);
-    } catch (error) {
-      console.error("Error fetching ships:", error);
-    } finally {
-      setGlobalLoading(false);
-      setLoading(false);
-    }
+    const formattedData = response.map((Products, index) => ({
+      STT: index + 1,
+      key: Products.id,
+      title: Products.title,
+      admin: Products.cruise.admin,
+      address: Products.address
+    }));
+    setShips(formattedData);
+    setGlobalLoading(false);
+    setLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
@@ -102,7 +94,7 @@ function Show() {
       <Table
         bordered
         columns={columns}
-        dataSource={ship || []}
+        dataSource={ships || []}
         loading={loading}
         pagination={{
           pageSize: 5,

@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 import styles from "./InputField.module.scss";
 const cx = classNames.bind(styles);
 
-function SelectField({
+function OptionField({
   name,
   label,
   placeholder,
@@ -53,7 +53,7 @@ function SelectField({
   );
 }
 
-SelectField.propTypes = {
+OptionField.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
@@ -67,4 +67,4 @@ SelectField.propTypes = {
   defaultValue: PropTypes.string,
 };
 
-export default SelectField;
+export default OptionField;

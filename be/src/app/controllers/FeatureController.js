@@ -1,100 +1,83 @@
-const { StatusCodes } = require("http-status-codes");
-const FeatureService = require("../services/FeatureService");
-const ApiError = require("../../middleware/ApiError");
+// const { StatusCodes } = require("http-status-codes");
+// const cloudinary = require("../../config/cloudinary");
+// const FeatureService = require("../services/FeatureService");
+// const uploadToCloudinary = require("../../utils/cloudinary");
 
-class FeatureController {
-  constructor() {
-    this.featureService = FeatureService;
-  }
+// class FeatureController {
+//   constructor() {
+//     this.featureService = FeatureService; 
+//   }
 
-  // Tìm kiếm tính năng với phân trang
-  search = async (req, res, next) => {
-    try {
-      const { page = 1, limit = 5, keyword = "" } = req.query;
-      const offset = (page - 1) * limit;
+//   index = async (req, res, next) => {
+//     try {
+//       const data = await this.featureService.getFeatureById(req.params.id);
+//       res.status(StatusCodes.OK).json(data);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-      const { features, totalRecords } = await this.featureService.searchFeatures(keyword, offset, limit);
+//   show = async (req, res, next) => {
+//     try {
+//       const data = await this.featureService.getAllFeature();
+//       return res.status(StatusCodes.OK).json(data);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        features,
-        totalRecords,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalRecords / limit),
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
+//   create = async (req, res, next) => {
+//     try {
+//       const data = await this.shipService.createFeature(req.body, req.file);
+//       return res.status(StatusCodes.CREATED).json({
+//         statusCode: StatusCodes.CREATED,
+//         message: "Tạo đặc trưng thành công",
+//         data,
+//       });
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-  // Lấy danh sách tất cả các tính năng
-  index = async (req, res, next) => {
-    try {
-      const { page = 1, limit = 5 } = req.query;
-      const offset = (page - 1) * limit;
+//   update = async (req, res, next) => {
+//     try {
+//       const data = await this.featureService.updateShip(
+//         req.body,
+//         req.file,
+//         req.params.id
+//       );
+//       return res.status(StatusCodes.OK).json({
+//         statusCode: StatusCodes.OK,
+//         message: "Cập nhật đặc trưng thành công",
+//         data,
+//       });
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-      const { features, totalRecords } = await this.featureService.getAllFeatures(offset, limit);
+//   delete = async (req, res, next) => {
+//     try {
+//       const data = await this.shipService.deleteFeature(req.params.id);
+//       return res.status(StatusCodes.OK).json({
+//         statusCode: StatusCodes.OK,
+//         message: "Xóa thành công!",
+//         data,
+//       });
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
+  
+//   getTypes = async (req, res, next) => {
+//     try {
+//       const featureTypes = await this.featureService.getTypes();
+//       return res.status(StatusCodes.OK).json(featureTypes);
+//     } catch (error) {
+//       next(error);
+//     }
+//   };
 
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        features,
-        totalRecords,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalRecords / limit),
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
+// }
 
-  // Tạo mới một tính năng
-  create = async (req, res, next) => {
-    try {
-      const { text, type } = req.body;
-      const newFeature = await this.featureService.createFeature({ text, type });
-
-      res.status(StatusCodes.CREATED).json({
-        statusCode: StatusCodes.CREATED,
-        message: "Tạo tính năng thành công!",
-        feature: newFeature,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  // Cập nhật thông tin một tính năng
-  update = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const { text, type } = req.body;
-
-      const updatedFeature = await this.featureService.updateFeature(id, { text, type });
-
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        message: "Cập nhật tính năng thành công!",
-        feature: updatedFeature,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  // Xóa một tính năng
-  delete = async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await this.featureService.deleteFeature(id);
-
-      res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        message: "Xóa tính năng thành công!",
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-}
-
-module.exports = new FeatureController();
+// module.exports = new FeatureController();

@@ -4,6 +4,7 @@ import intro from "./intro";
 import {
   userSchema,
   loginSchema,
+  shipSchema,
   blogSchema,
   blogDetailSchema,
 } from "./validationSchema";
@@ -13,6 +14,7 @@ const config = {
   intro,
   userSchema,
   loginSchema,
+  shipSchema,
   blogSchema,
   blogDetailSchema,
 };

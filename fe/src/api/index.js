@@ -13,6 +13,21 @@ export const handleCheckAuthApi = async () => {
   return await axios.get("/auth/check-auth");
 };
 
+export const handleGetCruiseCategoryApi = async () => {
+  return await axios.get("/cruise/cruise-category");
+}
+
+export const handleGetShipTypesApi = async () => {
+  return await axios.get("/ships/types");
+};
+
+export const handleGetShipsApi = async () => {
+  return await axios.get("/ships");
+}
+
+export const handleGetShipByIdApi = async (id) => {
+  return await axios.get(`/ships/${id}`);
+}
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
 };

@@ -1,31 +1,33 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import axios from "~/utils/axios.config";
 import classNames from "classnames/bind"; 
 import Button from "~/components/Button";
 import styles from '../Home.module.scss';
+import { handleGetCruiseCategoryApi } from "~/api";
 
 const cx = classNames.bind(styles); 
 
 const HomeSection = () => {
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [cruiseCategories, setCruiseCategories] = useState([]);
+  const [cruiseCategories, setCruiseCategory] = useState([]);
 
   
-  const getCruiseCategories = useCallback(async () => {
-    
-      setGlobalLoading(true);
-      const { CruiseCategory } = await axios.get("/cruise-category");
-      
-      setCruiseCategories(CruiseCategory || []);
+  const getCruiseCategory = useCallback(async () => {
+    setGlobalLoading(true);
+    try {
+      const response = await handleGetCruiseCategoryApi();
+      setCruiseCategory(response || []); 
+    } catch (error) {
+      console.error("Lỗi khi lấy danh mục du thuyền:", error);
+    } finally {
       setGlobalLoading(false);
-    }, [setGlobalLoading]);
-  
-    useEffect(() => {
-  
-      getCruiseCategories();
-    }, [getCruiseCategories]);
+    }
+  }, [setGlobalLoading]);
 
+  useEffect(() => {
+    getCruiseCategory();
+  }, [getCruiseCategory]);
+  
   return (
     <section className={cx("container", "home-section")}>
       <div className={cx("SectionHeader-sectionHeader", "SectionHeader-center")}>
@@ -51,7 +53,7 @@ const HomeSection = () => {
 
       <div className={cx("home-cardList")}>
         {cruiseCategories.map((cruiseCategory) => (
-          <a href="#" key={cruiseCategory.id}>
+          <a href={`/tim-du-thuyen/search?keyword=${cruiseCategory.name}`} key={cruiseCategory.id}>
             <div className={cx("card", "CategoryCard-categoryCard")}>
               <div className={cx("CategoryCard-imageWrapper")}>
                 <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
