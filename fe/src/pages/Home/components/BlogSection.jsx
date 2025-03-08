@@ -9,7 +9,8 @@ function BlogSection() {
   const [shipBlog, setShipBlog] = useState([]);
 
   useEffect(() => {
-    fetch("/blogs")
+
+    fetch("/api/blogs")
       .then((res) => res.json())
       .then((data) => setShipBlog(data))
       .catch((error) => console.error("Error fetching blogs:", error));

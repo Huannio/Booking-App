@@ -1,17 +1,27 @@
 const { StatusCodes } = require("http-status-codes");
-const cloudinary = require("../../config/cloudinary");
 const ShipService = require("../services/ShipService");
-const uploadToCloudinary = require("../../utils/cloudinary");
-
 class ShipController {
   constructor() {
-    this.shipService = ShipService; 
+    this.ShipService = ShipService;
   }
+
+  getCruiseCategory = async (req, res, next) => {
+    try {
+      const cruiseCategory = await this.ShipService.getCruiseCategory();
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, cruiseCategory });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   index = async (req, res, next) => {
     try {
-      const data = await this.shipService.getShipById(req.params.id);
-      res.status(StatusCodes.OK).json(data);
+      const { slug } = req.params;
+      console.log(slug);
+      const ship = await this.ShipService.getShipBySlug(slug);
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ship });
     } catch (error) {
       next(error);
     }
@@ -19,8 +29,8 @@ class ShipController {
 
   show = async (req, res, next) => {
     try {
-      const data = await this.shipService.getAllShip();
-      return res.status(StatusCodes.OK).json(data);
+      const ships = await this.ShipService.getAllShips();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ships });
     } catch (error) {
       next(error);
     }
@@ -28,11 +38,11 @@ class ShipController {
 
   create = async (req, res, next) => {
     try {
-      const data = await this.shipService.createShip(req.body, req.file);
-      return res.status(StatusCodes.CREATED).json({
+      const createShip = await this.ShipService.createShip(req.body, req.files);
+      res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,
-        message: "Tạo du thuyền mới thành công",
-        data,
+        message: "Tạo thông tin du thuyền thành công!",
+        createShip,
       });
     } catch (error) {
       next(error);
@@ -41,16 +51,15 @@ class ShipController {
 
   update = async (req, res, next) => {
     try {
-      const data = await this.shipService.updateShip(
+      const { slug } = req.params;
+      const updateShip = await this.ShipService.updateShip(
+        slug,
         req.body,
-        req.file,
-        req.params.id
+        req.files
       );
-      return res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        message: "Cập nhật du thuyền thành công",
-        data,
-      });
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateShip });
     } catch (error) {
       next(error);
     }
@@ -58,41 +67,17 @@ class ShipController {
 
   delete = async (req, res, next) => {
     try {
-      const data = await this.shipService.deleteShip(req.params.id);
-      return res.status(StatusCodes.OK).json({
+      const { slug } = req.params;
+      const deleteShip = await this.ShipService.deleteShip(slug);
+      res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
+        deleteShip,
         message: "Xóa thành công!",
-        data,
       });
     } catch (error) {
       next(error);
     }
   };
-  
-  getTypes = async (req, res, next) => {
-    try {
-      const shipTypes = await this.shipService.getTypes();
-      return res.status(StatusCodes.OK).json(shipTypes);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  // updateFeatures = async (req, res, next) => {
-  //   try {
-  //     const updateFeatures = await this.shipService.updateFeatures(
-  //       req.body,
-  //       req.files
-  //     );
-  //     return res.status(StatusCodes.OK).json({
-  //       statusCode: StatusCodes.OK,
-  //       message: "Cập nhật chức năng thành công",
-  //       updateFeatures,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
 }
 
 module.exports = new ShipController();

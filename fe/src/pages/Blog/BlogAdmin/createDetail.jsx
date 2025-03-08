@@ -1,7 +1,7 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CloseOutlined } from "@ant-design/icons";
-import { TextField, ListField, UploadField } from "~/components/Input";
+import { TextField, ListField, UploadImageField } from "~/components/Input";
 import classNames from "classnames/bind";
 import {
   DndContext,
@@ -145,6 +145,8 @@ function CreateDetail() {
   const navigate = useNavigate();
 
   const handleCreateBlogForm = async (data) => {
+    console.log(data);
+
     const formData = new FormData();
     const contentBlocks = data.contentBlocks.map((block) => {
       if (block.type === "Image") {
@@ -157,7 +159,7 @@ function CreateDetail() {
 
     data.contentBlocks.forEach((block) => {
       if (block.type === "Image") {
-        formData.append("images", block.file);
+        formData.append("images", block.file[0]);
       }
     });
 
@@ -181,48 +183,58 @@ function CreateDetail() {
         onSubmit={handleSubmit(handleCreateBlogForm)}
       >
         <div
-          className="flex gap-12"
+          className="flex align-center justify-between"
           style={{
             position: "sticky",
             top: 0,
             backgroundColor: "#fff",
-            zIndex: 20,
+            zIndex: 40,
           }}
         >
-          <Button
-            normal
-            primary
-            onClick={() =>
-              handleAddParagraph({
-                content: "",
-              })
-            }
-          >
-            Tạo paragraph
-          </Button>
+          <div className="flex align-center gap-12">
+            <Button
+              normal
+              primary
+              onClick={() =>
+                handleAddParagraph({
+                  content: "",
+                })
+              }
+            >
+              Tạo paragraph
+            </Button>
 
-          <Button
-            normal
-            primary
-            onClick={() =>
-              handleAddList({
-                content: "",
-              })
-            }
-          >
-            Tạo list
-          </Button>
+            <Button
+              normal
+              primary
+              onClick={() =>
+                handleAddList({
+                  content: "",
+                })
+              }
+            >
+              Tạo list
+            </Button>
 
+            <Button
+              normal
+              primary
+              onClick={() =>
+                handleAddImage({
+                  content: "",
+                })
+              }
+            >
+              Tạo hình ảnh
+            </Button>
+          </div>
           <Button
-            normal
             primary
-            onClick={() =>
-              handleAddImage({
-                content: "",
-              })
-            }
+            normal
+            submit
+            className="align-self-end interceptor-loading"
           >
-            Tạo hình ảnh
+            <div className="label md">Tạo</div>
           </Button>
         </div>
 
@@ -276,10 +288,13 @@ function CreateDetail() {
 
                     {field.type === "Image" && (
                       <div className={cx("custom-image")}>
-                        <UploadField
+                        <UploadImageField
                           control={control}
                           name={`contentBlocks.${index}.file`}
+                          label={`Image`}
+                          placeholder={`Image`}
                           error={errors?.contentBlocks?.[index]?.file}
+                          className="optional-height"
                         />
                         <button
                           type="button"
@@ -296,15 +311,6 @@ function CreateDetail() {
             </SortableContext>
           </ul>
         </DndContext>
-
-        <Button
-          primary
-          normal
-          submit
-          className="align-self-end interceptor-loading"
-        >
-          <div className="label md">Tạo</div>
-        </Button>
       </form>
     </div>
   );

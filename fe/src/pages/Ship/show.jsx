@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
-import { Button, Input, Space, Table } from "antd";
+import { Input, Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { Button } from "antd";
+import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { handleGetShipsApi } from "~/api";
 
 const columns = [
   {
     title: "STT",
-    dataIndex: "STT",
-    key: "STT",
+    dataIndex: "index",
+    key: "index",
   },
   {
     title: "Tên du thuyền",
@@ -22,24 +23,17 @@ const columns = [
     key: "address",
   },
   {
-    title: "Công ty điều hành",
-    dataIndex: "admin",
-    key: "admin",
-  },
-  {
     title: "Tùy chọn",
     key: "action",
     render: (_, record) => (
       <Space size="middle">
-        <Link to={`/ships/update/${record.key}`}>
+        <Link to={`/ships/update/${record.slug}`}>
           <EditOutlined
-            type="edit"
             style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
           />
         </Link>
-        <Link to={`/ships/delete/${record.key}`}>
+        <Link to={`/ships/delete/${record.slug}`}>
           <DeleteOutlined
-            type="delete"
             style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
           />
         </Link>
@@ -57,13 +51,12 @@ function Show() {
     setGlobalLoading(true);
     setLoading(true);
     const response = await handleGetShipsApi();
-
-    const formattedData = response.map((Products, index) => ({
-      STT: index + 1,
-      key: Products.id,
-      title: Products.title,
-      admin: Products.cruise.admin,
-      address: Products.address
+    const formattedData = response.ships.map((ship, index) => ({
+      index: index + 1,
+      slug: ship.slug,
+      key: ship.id,
+      title: ship.title,
+      address: ship.address,
     }));
     setShips(formattedData);
     setGlobalLoading(false);
@@ -94,7 +87,7 @@ function Show() {
       <Table
         bordered
         columns={columns}
-        dataSource={ships || []}
+        dataSource={ships}
         loading={loading}
         pagination={{
           pageSize: 5,

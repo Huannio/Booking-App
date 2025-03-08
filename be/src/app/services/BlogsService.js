@@ -83,7 +83,7 @@ class BlogsService {
       if (reqFile) {
         const uploadImage = await uploadToCloudinary(
           reqFile.buffer,
-          "thumbnail"
+          // "thumbnail"
         );
         data.thumbnail = uploadImage.url;
       }

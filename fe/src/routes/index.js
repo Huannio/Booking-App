@@ -7,16 +7,19 @@ import {
 } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+
 import {
   Show as ShowUser,
   Create as CreateUser,
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
+
+
 import {
   Show as ShowShip,
   Create as CreateShip,
-  // Update as UpdateShip,
+  Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
 import {
@@ -137,17 +140,19 @@ export const privateRoutes = [
     component: CreateShip,
     layout: AdminLayout,
   },
-  // {
-  //   path: config.routes.ships.update,
-  //   component: UpdateShip,
-  //   layout: AdminLayout,
-  // },
+  {
+    path: config.routes.ships.update,
+    component: UpdateShip,
+    layout: AdminLayout,
+  },
   {
     path: config.routes.ships.delete,
     component: DeleteShip,
     layout: AdminLayout,
   },
 
+
+  // Blog
   {
     path: config.routes.blogs.index,
     component: ShowBlog,

@@ -1,3 +1,74 @@
 .inputCustom {
   width: 100%;
 }
+
+.upload-hidden {
+  display: none;
+}
+
+.upload-select {
+  width: 100%;
+  height: 200px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border: 1px dashed #d9d9d9;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.preview-container-list {
+  width: auto;
+  height: auto;
+}
+
+.preview-container {
+  position: relative;
+  border: 1px solid #d9d9d9;
+  z-index: 31;
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.optional-height {
+  .preview-container-list {
+    width: 100%;
+    height: 100%;
+
+    .preview-container {
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+      }
+    }
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}

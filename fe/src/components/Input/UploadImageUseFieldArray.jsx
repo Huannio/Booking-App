@@ -6,7 +6,7 @@ import classNames from "classnames/bind";
 import styles from "./InputField.module.scss";
 const cx = classNames.bind(styles);
 
-function UploadField({
+function UploadImageUseFieldArray({
   control,
   name,
   error,
@@ -15,6 +15,7 @@ function UploadField({
   required = false,
   inputGroup = true,
   value = [],
+  accept = "image/*",
   ...passProps
 }) {
   const [fileList, setFileList] = useState([]);
@@ -91,6 +92,7 @@ function UploadField({
               onChange={(file) => onChange(file, field)}
               onPreview={onPreview}
               originFileObj={fileList}
+              accept={accept}
               {...passProps}
             >
               {fileList.length < 1 && "+ Upload"}
@@ -111,7 +113,7 @@ function UploadField({
   );
 }
 
-UploadField.propTypes = {
+UploadImageUseFieldArray.propTypes = {
   control: Proptypes.object,
   name: Proptypes.string,
   error: Proptypes.object,
@@ -120,6 +122,7 @@ UploadField.propTypes = {
   required: Proptypes.bool,
   inputGroup: Proptypes.bool,
   value: Proptypes.array,
+  accept: Proptypes.string,
 };
 
-export default UploadField;
+export default UploadImageUseFieldArray;

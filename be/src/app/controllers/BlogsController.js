@@ -63,7 +63,7 @@ class BlogsController {
         req.files
       );
       return res.status(StatusCodes.CREATED).json({
-        statusCode: StatusCodes.OK,
+        statusCode: StatusCodes.CREATED,
         message: "Tạo chi tiết bài viết thành công",
         createBlogDetails,
       });
