@@ -1,0 +1,104 @@
+.Pagination {
+  padding: 12px 24px 16px;
+  border-top: 1px solid var(--gray-200, #eaecf0);
+
+  &-link {
+    padding: 12px;
+    color: var(--gray-700, #344054);
+  }
+
+  &-previous-link,
+  &-next-link {
+    padding: 10px 16px;
+    color: var(--gray-700, #344054);
+  }
+
+  label,
+  p {
+    color: var(--gray-700, #344054);
+  }
+
+  & &-page-size {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--gray-300, #d0d5dd);
+    background: var(--base-white, #fff);
+    box-shadow: var(--shadow-xs);
+
+    & > input[type="number"] {
+      border: none;
+      outline: none;
+      width: 30px;
+      height: 24px;
+      color: var(--gray-900, #101828);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+    }
+  }
+
+  .Pagination-container .Pagination-item.Pagination-disabled {
+    pointer-events: none;
+  }
+
+  .Pagination-container .Pagination-item:last-child {
+    border-right: none;
+  }
+
+  &-container {
+    display: flex;
+    list-style-type: none;
+    border-radius: 100px;
+    border: 1px solid var(--gray-300, #d0d5dd);
+    box-shadow: var(--shadow-xs);
+    width: -moz-fit-content;
+    width: fit-content;
+    overflow: hidden;
+
+    & .Pagination-item {
+      display: flex;
+      width: 40px;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid var(--gray-300, #d0d5dd);
+      background: var(--base-white, #fff);
+      color: var(--gray-800, #1d2939);
+      cursor: pointer;
+    }
+
+    & .Pagination-item:last-child,
+    .Pagination-item:first-child {
+      gap: 8px;
+      width: -moz-fit-content;
+      width: fit-content;
+    }
+
+    & .Pagination-item.Pagination-selected {
+      background: var(--gray-50, #f9fafb);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .Pagination {
+    padding: 12px 0;
+    margin: auto;
+    justify-content: center;
+
+    &-left,
+    &-right,
+    &-container &-left-item,
+    &-container &-right-item {
+      display: none;
+    }
+
+    &-container &-item {
+      width: 35px;
+    }
+  }
+}

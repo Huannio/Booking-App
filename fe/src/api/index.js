@@ -25,6 +25,10 @@ export const handleGetBlogsApi = async () => {
   return await axios.get("/blogs");
 };
 
+export const handleGetBlogPaginationApi = async (page = 0, limit = 6, blogTypeId = null) => {
+  return await axios.get(`/blogs/pagination?page=${page}&limit=${limit}&blogTypeId=${blogTypeId}`);
+}
+
 export const handleGetBlogByIdApi = async (id) => {
   return await axios.get(`/blogs/${id}`);
 };
@@ -36,6 +40,10 @@ export const handleGetBlogDescriptionsTypesApi = async () => {
 export const handleGetDescriptionsBlogApi = async (id) => {
   return await axios.get(`/blogs/descriptions/${id}`);
 };
+
+export const handleGetBlogByTypeIdApi = async (id) => {
+  return await axios.get(`/blogs/types/${id}`);
+}
 
 // Ship
 export const handleGetShipsApi = async () => {

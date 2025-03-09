@@ -36,7 +36,15 @@ class BlogsService {
   async getAllBlog() {
     try {
       return await Blog.findAll({
-        attributes: ["id", "title", "short_desc", "thumbnail", "slug"],
+        attributes: [
+          "id",
+          "title",
+          "short_desc",
+          "thumbnail",
+          "slug",
+          "createdAt",
+          "updatedAt",
+        ],
         include: {
           model: BlogType,
           as: "type",
@@ -82,7 +90,7 @@ class BlogsService {
 
       if (reqFile) {
         const uploadImage = await uploadToCloudinary(
-          reqFile.buffer,
+          reqFile.buffer
           // "thumbnail"
         );
         data.thumbnail = uploadImage.url;
@@ -215,6 +223,57 @@ class BlogsService {
       return await BlogType.findAll({
         attributes: ["id", "type"],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getBlogByTypeId(id) {
+    try {
+      return await Blog.findAll({
+        where: { type_id: id },
+        attributes: ["id", "title", "short_desc", "thumbnail", "slug"],
+        include: {
+          model: BlogType,
+          as: "type",
+          attributes: ["type"],
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getBlogPagination(limit, offset, blogTypeId) {
+    try {
+      const where = blogTypeId ? { type_id: blogTypeId } : null;
+      const totalPages = await Blog.count({ where });
+      const blogs = await Blog.findAndCountAll({
+        where,
+        limit,
+        offset,
+        attributes: [
+          "id",
+          "title",
+          "short_desc",
+          "thumbnail",
+          "slug",
+          "createdAt",
+          "updatedAt",
+        ],
+        include: {
+          model: BlogType,
+          as: "type",
+          attributes: ["type"],
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      return {
+        total: blogs.count,
+        blogs: blogs.rows,
+        totalPages: Math.ceil(totalPages / limit),
+      };
     } catch (error) {
       throw error;
     }

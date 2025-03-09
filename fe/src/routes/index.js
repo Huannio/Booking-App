@@ -33,6 +33,10 @@ import {
 import config from "~/config";
 import BusinessPage from "../pages/business";
 
+// Blog
+import BlogPage from "../pages/Blog/Homeblog";
+import BlogDetail from "../pages/Blog/DetailBlog";
+
 // Footer
 import {
   AboutUs,
@@ -100,6 +104,16 @@ export const publicRoutes = [
     path: '/cau-hoi-thuong-gap',
     component: Question,
   },
+
+  // Blog
+  {
+    path: "/blog",
+    component: BlogPage,
+  },
+  {
+    path: "/blog:slug",
+    component: BlogDetail,
+  },
 ];
 
 export const privateRoutes = [
@@ -152,7 +166,7 @@ export const privateRoutes = [
   },
 
 
-  // Blog
+  // Blogs
   {
     path: config.routes.blogs.index,
     component: ShowBlog,

@@ -48,7 +48,7 @@ const [blogs, setBlogs] = useState([]);
     setLoading(true);
     const response = await handleGetBlogsApi();
 
-    const formattedData = response.map((blog) => ({
+    const formattedData = response.data.map((blog) => ({
       key: blog.id,
       title: blog.title,
       type: blog.type.type

@@ -20,7 +20,10 @@ class BlogsController {
   show = async (req, res, next) => {
     try {
       const data = await this.blogsService.getAllBlog();
-      return res.status(StatusCodes.OK).json(data);
+      return res.status(StatusCodes.OK).json({
+        data: data,
+        statusCode: StatusCodes.OK,
+      });
     } catch (error) {
       next(error);
     }
@@ -126,6 +129,38 @@ class BlogsController {
     try {
       const blogTypes = await this.blogsService.getTypes();
       return res.status(StatusCodes.OK).json(blogTypes);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getBlogByTypeId = async (req, res, next) => {
+    try {
+      const blogByTypeId = await this.blogsService.getBlogByTypeId(
+        req.params.id
+      );
+      return res.status(StatusCodes.OK).json(blogByTypeId);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getBlogPagination = async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 0;
+      const limit = parseInt(req.query.limit) || 6;
+      const blogTypeId = parseInt(req.query.blogTypeId) || null;
+      const offset = page * limit;
+      const { total, blogs, totalPages } =
+        await this.blogsService.getBlogPagination(limit, offset, blogTypeId);
+
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        total,
+        blogs,
+        totalPages,
+        records: blogs.length,
+      });
     } catch (error) {
       next(error);
     }
