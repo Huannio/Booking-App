@@ -30,6 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       thumbnail: DataTypes.TEXT,
       type_id: DataTypes.INTEGER,
       slug: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
