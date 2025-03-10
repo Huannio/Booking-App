@@ -278,6 +278,42 @@ class BlogsService {
       throw error;
     }
   }
+
+  async getBlogBySlug(slug) {
+    try {
+      return await Blog.findOne({
+        where: { slug },
+        attributes: [
+          "id",
+          "title",
+          "short_desc",
+          "thumbnail",
+          "slug",
+          "createdAt",
+          "updatedAt",
+        ],
+        include: [
+          {
+            model: BlogType,
+            as: "type",
+            attributes: ["id", "type"],
+          },
+          {
+            model: LongDescBlog,
+            as: "long_desc",
+            attributes: ["id", "type_id", "text", "blog_id", "image_url"],
+            include: {
+              model: LongDescType,
+              as: "type",
+              attributes: ["id", "type"],
+            },
+          },
+        ],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new BlogsService();

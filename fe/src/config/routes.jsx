@@ -22,6 +22,10 @@ const routes = {
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
   },
+  blog: {
+    index: "/blog",
+    detail: "/blog-detail/:slug",
+  }
 };
 
 export default routes;

@@ -165,6 +165,15 @@ class BlogsController {
       next(error);
     }
   };
+
+  getBlogBySlug = async (req, res, next) => {
+    try {
+      const blog = await this.blogsService.getBlogBySlug(req.params.slug);
+      return res.status(StatusCodes.OK).json(blog);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 module.exports = new BlogsController();

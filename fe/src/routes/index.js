@@ -35,7 +35,7 @@ import BusinessPage from "../pages/business";
 
 // Blog
 import BlogPage from "../pages/Blog/Homeblog";
-import BlogDetail from "../pages/Blog/DetailBlog";
+import DetailBlog from "../pages/Blog/DetailBlog";
 
 // Footer
 import {
@@ -107,12 +107,12 @@ export const publicRoutes = [
 
   // Blog
   {
-    path: "/blog",
+    path: config.routes.blog.index,
     component: BlogPage,
   },
   {
-    path: "/blog:slug",
-    component: BlogDetail,
+    path: config.routes.blog.detail,
+    component: DetailBlog,
   },
 ];
 
