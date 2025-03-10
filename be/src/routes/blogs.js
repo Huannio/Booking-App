@@ -47,6 +47,9 @@ router.put("/update/:id", upload.single("thumbnail"), BlogsController.update);
 // DELETE /blogs/delete/:id
 router.delete("/delete/:id", BlogsController.delete);
 
+// GET /blogs/:slug
+router.get("/:slug", BlogsController.getBlogBySlug);
+
 // GET /blogs/:id
 router.get("/:id", BlogsController.index);
 

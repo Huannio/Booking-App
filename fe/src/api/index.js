@@ -13,6 +13,7 @@ export const handleCheckAuthApi = async () => {
   return await axios.get("/auth/check-auth");
 };
 
+// Blog
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
 };
@@ -28,6 +29,10 @@ export const handleGetBlogPaginationApi = async (page = 0, limit = 6, blogTypeId
 export const handleGetBlogByIdApi = async (id) => {
   return await axios.get(`/blogs/${id}`);
 };
+
+export const handleGetBlogBySlugApi = async (slug) => {
+  return await axios.get(`/blogs/${slug}`);
+}
 
 export const handleGetBlogDescriptionsTypesApi = async () => {
   return await axios.get("/blogs/descriptions/types");
