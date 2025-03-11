@@ -16,6 +16,13 @@ import {
 } from "../pages/User";
 
 import {
+  Show as ShowUserCatalogues,
+  Create as CreateUserCatalogues,
+  Update as UpdateUserCatalogues,
+  Delete as DeleteUserCatalogues,
+} from "../pages/UserCatalogues";
+
+import {
   Show as ShowShip,
   Create as CreateShip,
   Update as UpdateShip,
@@ -142,6 +149,29 @@ export const privateRoutes = [
     component: DeleteUser,
     layout: AdminLayout,
   },
+
+  // User Catalogues
+  {
+    path: config.routes.users.catalogues.index,
+    component: ShowUserCatalogues,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.users.catalogues.create,
+    component: CreateUserCatalogues,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.users.catalogues.update,
+    component: UpdateUserCatalogues,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.users.catalogues.delete,
+    component: DeleteUserCatalogues,
+    layout: AdminLayout,
+  },
+
   // Ship
   {
     path: config.routes.ships.index,

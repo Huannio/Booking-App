@@ -14,6 +14,17 @@ export const userSchema = yup.object({
   user_catalogues_id: yup.string().required("Vui lòng chọn trường này"),
 });
 
+export const usersCataloguesSchema = yup.object({
+  name: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+  description: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+});
+
 export const loginSchema = yup.object({
   email: emailYup,
   password: yup.string().required("Vui lòng nhập trường này"),

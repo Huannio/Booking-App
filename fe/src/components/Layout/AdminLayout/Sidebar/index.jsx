@@ -1,6 +1,5 @@
 import config from "~/config";
 import {
-  AppstoreOutlined,
   ContainerOutlined,
   DesktopOutlined,
   PieChartOutlined,
@@ -22,34 +21,46 @@ const items = [
   {
     key: "/users",
     icon: <DesktopOutlined />,
-    label: <Link to={config.routes.users.index}>Quản lý người dùng</Link>,
+    label: "Người dùng",
+    children: [
+      {
+        key: "/users/index",
+        label: <Link to={config.routes.users.index}>Quản lý người dùng</Link>,
+      },
+      {
+        key: "/users-catalogues",
+        label: (
+          <Link to={config.routes.users.catalogues.index}>Quản lý vai trò</Link>
+        ),
+      },
+    ],
   },
   {
-    key: "/option3",
+    key: "/permissions",
     icon: <ContainerOutlined />,
-    label: <Link to = {config.routes.ships.index}>Quản lý du thuyền</Link>,
+    label: "Quản lý quyền hạn",
+    children: [
+      {
+        key: "/permissions/index",
+        label: <Link to={config.routes.permissions.index}>Quản lý quyền</Link>,
+      },
+      {
+        key: "/users/permissions",
+        label: (
+          <Link to={config.routes.users.permissions.index}>Phân quyền</Link>
+        ),
+      },
+    ],
+  },
+  {
+    key: "/ships",
+    icon: <ContainerOutlined />,
+    label: <Link to={config.routes.ships.index}>Quản lý du thuyền</Link>,
   },
   {
     key: "/blogs",
     label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
     icon: <ContainerOutlined />,
-  },
-  {
-    key: "/navigation2",
-    label: "Navigation Two",
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: "/option9", label: "Option 9" },
-      { key: "/option10", label: "Option 10" },
-      {
-        key: "/submenu",
-        label: "Submenu",
-        children: [
-          { key: "/option11", label: "Option 11" },
-          { key: "/option12", label: "Option 12" },
-        ],
-      },
-    ],
   },
 ];
 
@@ -70,8 +81,16 @@ const Sidebar = () => {
 
   return (
     <div style={{ width: 300, height: "100vh" }}>
-      <Link to={config.routes.home} style={{ padding: "12px", display: "block" }}>
-        <ImageWrapper src={images.logo} alt="mixivivu" widthSvgWrapperImage={156} heightSvgWrapperImage={42} />
+      <Link
+        to={config.routes.home}
+        style={{ padding: "12px", display: "block" }}
+      >
+        <ImageWrapper
+          src={images.logo}
+          alt="mixivivu"
+          widthSvgWrapperImage={156}
+          heightSvgWrapperImage={42}
+        />
       </Link>
 
       <Menu
