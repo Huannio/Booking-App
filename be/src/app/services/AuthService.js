@@ -4,13 +4,30 @@ const jwt = require("jsonwebtoken");
 const env = require("../../config/environment");
 const ApiError = require("../../middleware/ApiError");
 const { StatusCodes } = require("http-status-codes");
+const getPermissionsByUserCatalogueId = require("../../utils/getPermissionsByUserCatalogueId");
 
 class AuthService {
+  async me(jwtDecoded) {
+    try {
+      const permissions = await getPermissionsByUserCatalogueId(
+        jwtDecoded.user_catalogues_id
+      );
+
+      return {
+        user: {
+          id: jwtDecoded.id,
+          permissions,
+        },
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async login(email, password) {
     const user = await Users.findOne({ where: { email } });
 
     if (!user) {
-
       throw new ApiError(StatusCodes.NOT_FOUND, "Email không tồn tại!");
     }
 
@@ -30,15 +47,23 @@ class AuthService {
       user_catalogues_id: user.user_catalogues_id,
     };
 
+    const permissions = await getPermissionsByUserCatalogueId(
+      payload.user_catalogues_id
+    );
+
     const accessToken = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
       expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
     });
 
-    const refreshToken = jwt.sign({ id: user.id }, env.REFRESH_TOKEN_SECRET, {
-      expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
-    });
+    const refreshToken = jwt.sign(
+      { id: user.id, user_catalogues_id: user.user_catalogues_id },
+      env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: env.REFRESH_TOKEN_EXPIRES_IN,
+      }
+    );
 
-    return { accessToken, refreshToken, user: payload };
+    return { accessToken, refreshToken, user: payload, permissions };
   }
 
   async refreshToken(refreshToken) {
@@ -47,8 +72,8 @@ class AuthService {
       const newToken = jwt.sign(
         {
           id: decoded.id,
-
-        },  
+          user_catalogues_id: decoded.user_catalogues_id,
+        },
         env.ACCESS_TOKEN_SECRET,
         {
           expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
@@ -59,20 +84,6 @@ class AuthService {
     } catch (error) {
       throw error;
     }
-  }
-
-  async checkAuth(accessToken) {
-    if (!accessToken) {
-      throw new ApiError(StatusCodes.UNAUTHORIZED, "Chưa đăng nhập!");
-    }
-
-    const decoded = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET);
-
-    if (!decoded) {
-      throw new ApiError(StatusCodes.UNAUTHORIZED, "Invalid token!");
-    }
-
-    return { user: decoded };
   }
 }
 

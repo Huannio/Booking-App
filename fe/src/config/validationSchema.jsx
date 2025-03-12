@@ -80,3 +80,8 @@ export const cruiseSchema = yup.object().shape({
   cabin: yup.number().required("Vui lòng nhập trường này"),
   year: yup.number().required("Vui lòng nhập trường này"),
 });
+
+export const permissionSchema = yup.object({
+  name: yup.string().required("Vui lòng nhập trường này"),
+  canonical: yup.string().required("Vui lòng nhập trường này"),
+});

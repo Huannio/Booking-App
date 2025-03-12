@@ -27,8 +27,6 @@ function Create() {
   });
 
   const handleCreateBlogForm = async (data) => {
-    console.log(data);
-    
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("short_desc", data.short_desc);

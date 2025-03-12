@@ -190,15 +190,13 @@ class ShipService {
         throw new ApiError(StatusCodes.CONFLICT, "Tên du thuyền đã tồn tại!");
       }
 
-      console.log(checkShip);
-
       let imageLinkList = [];
       let thumbnailLink = null;
       if (reqFiles) {
         if (reqFiles.thumbnail) {
           const thumbnail = await uploadToCloudinary(
-            reqFiles.thumbnail[0].buffer
-            // "thumbnail"
+            reqFiles.thumbnail[0].buffer,
+            "thumbnail"
           );
           thumbnailLink = thumbnail.url;
         }
@@ -207,8 +205,8 @@ class ShipService {
           imageLinkList = await Promise.all(
             reqFiles.images.map(async (image) => {
               const uploadedImage = await uploadToCloudinary(
-                image.buffer
-                // slug
+                image.buffer,
+                slug
               );
               return uploadedImage.url;
             })

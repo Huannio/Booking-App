@@ -1,0 +1,128 @@
+import { Table, Checkbox, Button, Space, notification } from "antd";
+import axios from "~/utils/axios.config";
+import { useEffect, useState, useContext, useCallback } from "react";
+import { LoadingContext } from "~/components/Loading/Loading";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUserInfoApi } from "~/redux/user/userSlice";
+function Update() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [data, setData] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const { setGlobalLoading } = useContext(LoadingContext);
+  const { id } = useParams();
+
+  const getData = useCallback(async () => {
+    setGlobalLoading(true);
+    const [permissionsRes, selectedRes] = await Promise.all([
+      axios.get("/permissions-management"),
+      axios.get(`/users-permissions/${id}`),
+    ]);
+
+    const selectedPermissions = selectedRes?.data || [];
+
+    const formattedData = permissionsRes?.data?.map((item) => ({
+      key: item.id,
+      name: item.name,
+      action: selectedPermissions.includes(item.id),
+    }));
+
+    // Set trạng thái "chọn tất cả" nếu tất cả đều đã được chọn
+    const isAllSelected =
+      formattedData.length > 0 &&
+      formattedData.every((item) => item.action === true);
+
+    setSelectAll(isAllSelected);
+    setData(formattedData);
+    setGlobalLoading(false);
+  }, [id, setGlobalLoading]);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
+  const handleCheckboxChange = (key, action, checked) => {
+    const newData = data.map((row) =>
+      row.key === key ? { ...row, [action]: checked } : row
+    );
+    const isAllSelected = newData.every((item) => item[action] === true);
+    setSelectAll(isAllSelected);
+    setData(newData);
+  };
+
+  const handleSelectAll = () => {
+    const newSelectAll = !selectAll;
+    const updatedData = data.map((item) => ({
+      ...item,
+      action: newSelectAll,
+    }));
+    setSelectAll(newSelectAll);
+    setData(updatedData);
+  };
+
+  const handleSubmit = async () => {
+    const selectedPermissions = data
+      .filter((item) => item.action)
+      .map((item) => item.key);
+
+    const response = await axios.post("/users-permissions/update", {
+      permissions: selectedPermissions,
+      userCatalogueId: id,
+    });
+
+    if (response.statusCode === 200) {
+      await dispatch(getUserInfoApi());
+      notification.success({
+        message: response?.message || "Cập nhật thành công",
+      });
+      navigate("/users-permissions");
+    }
+  };
+
+  const columns = [
+    {
+      title: "Tên",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: (
+        <Checkbox checked={selectAll} onChange={handleSelectAll}>
+          Chọn tất cả
+        </Checkbox>
+      ),
+      dataIndex: "action",
+      key: "action",
+      render: (_, record) => (
+        <Checkbox
+          checked={record.action}
+          onChange={(e) =>
+            handleCheckboxChange(record.key, "action", e.target.checked)
+          }
+        />
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <Space style={{ marginBottom: 16 }}>
+        <Button type="primary" onClick={handleSubmit}>
+          Cập nhật
+        </Button>
+      </Space>
+
+      <Table
+        rowKey="key"
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        bordered
+      />
+    </div>
+  );
+}
+
+export default Update;

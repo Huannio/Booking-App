@@ -5,6 +5,15 @@ class AuthController {
     this.authService = AuthService;
   }
 
+  me = async (req, res, next) => {
+    try {
+      const data = await this.authService.me(req.jwtDecoded);
+      res.status(StatusCodes.OK).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
@@ -22,7 +31,6 @@ class AuthController {
         secure: req.secure || req.headers["x-forwarded-proto"] === "https",
         sameSite: "strict",
       });
-
 
       res.status(StatusCodes.OK).json({ data });
     } catch (error) {
@@ -44,15 +52,6 @@ class AuthController {
       });
 
 
-      res.status(StatusCodes.OK).json({ data });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  checkAuth = async (req, res, next) => {
-    try {
-      const data = await this.authService.checkAuth(req?.cookies?.accessToken);
       res.status(StatusCodes.OK).json({ data });
     } catch (error) {
       next(error);

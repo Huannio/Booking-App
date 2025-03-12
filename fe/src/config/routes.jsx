@@ -18,13 +18,13 @@ const routes = {
     permissions: {
       index: "/users-permissions",
       update: "/users-permissions/update/:id",
-    }
+    },
   },
   permissions: {
-    index: "/permissions",
-    create: "/permissions/create",
-    update: "/permissions/update/:id",
-    delete: "/permissions/delete/:id",
+    create: "/permissions-management/create",
+    update: "/permissions-management/update/:id",
+    delete: "/permissions-management/delete/:id",
+    index: "/permissions-management",
   },
   blogs: {
     index: "/blogs",
