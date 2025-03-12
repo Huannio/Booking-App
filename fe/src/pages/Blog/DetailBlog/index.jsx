@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import classNames from "classnames/bind";
 import styles from "./Detail.module.scss";
 import { useParams } from "react-router-dom";
@@ -6,17 +6,22 @@ import SectionHeader from "../../../components/SectionHeader/SectionHeader";
 import Badge from "../../../components/Badge/Badge";
 import { handleGetBlogBySlugApi } from "~/api";
 import BreadCrumb from "../../../components/BreadCrumb/BreadCrumb";
+import { LoadingContext } from "../../../components/Loading/Loading";
 
 const cx = classNames.bind(styles);
 
 function DetailBlog() {
+  const { setGlobalLoading } = useContext(LoadingContext);
+
   const [blog, setBlog] = useState({});
   const { slug } = useParams();
 
   const getBlogBySlug = useCallback(async () => {
+    setGlobalLoading(true);
     const res = await handleGetBlogBySlugApi(slug);
     setBlog(res);
-  }, [slug]);
+    setGlobalLoading(false);
+  }, [slug, setGlobalLoading]);
 
   useEffect(() => {
     getBlogBySlug();

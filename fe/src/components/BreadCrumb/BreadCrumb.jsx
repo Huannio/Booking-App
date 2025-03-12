@@ -7,8 +7,6 @@ import config from "~/config";
 const cx = classNames.bind(styles);
 
 function BreadCrumb({ option = "ship", linkSlug, content }) {
-    console.log(linkSlug);
-    
   return (
     <div className={cx("BreadCrumbs-breadCrumbsContainer")}>
       <Link to={config.routes.home} className={cx("BreadCrumbs-breadCrumb")}>

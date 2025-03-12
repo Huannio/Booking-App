@@ -7,6 +7,24 @@ const routes = {
     create: "/users/create",
     update: "/users/update/:id",
     delete: "/users/delete/:id",
+
+    catalogues: {
+      index: "/users-catalogues",
+      create: "/users-catalogues/create",
+      update: "/users-catalogues/update/:id",
+      delete: "/users-catalogues/delete/:id",
+    },
+
+    permissions: {
+      index: "/users-permissions",
+      update: "/users-permissions/update/:id",
+    },
+  },
+  permissions: {
+    create: "/permissions-management/create",
+    update: "/permissions-management/update/:id",
+    delete: "/permissions-management/delete/:id",
+    index: "/permissions-management",
   },
   blogs: {
     index: "/blogs",
@@ -25,7 +43,7 @@ const routes = {
   blog: {
     index: "/blog",
     detail: "/blog-detail/:slug",
-  }
+  },
 };
 
 export default routes;

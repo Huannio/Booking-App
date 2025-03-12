@@ -8,20 +8,25 @@ import {
 import { publicRoutes, privateRoutes, authRoutes } from "./routes";
 import { ClientLayout } from "./components/Layout";
 import { Fragment } from "react";
-import { AuthProvider } from "./context/AuthContext";
 import { LoadingProvider } from "./components/Loading/Loading";
+import NotFound from "./pages/NotFound";
+import AccessDenied from "./pages/AccessDenied";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "~/redux/user/userSlice";
+import RbacRoute from "./components/Core/RbacRoute";
+import PropTypes from "prop-types";
 
-const ProtectedRoute = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return user ? <Outlet /> : <Navigate to="/login" />;
+const ProtectedRoute = ({ currentUser }) => {
+  return currentUser ? <Outlet /> : <Navigate to="/login" replace={true} />;
 };
 
-const AuthorizedRoute = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return user ? <Navigate to="/dashboard" /> : <Outlet />;
+const AuthorizedRoute = ({ currentUser }) => {
+  return currentUser ? <Navigate to="/dashboard" replace={true} /> : <Outlet />;
 };
 
 function App() {
+  const currentUser = useSelector(selectCurrentUser);
+
   return (
     <Router>
       <LoadingProvider>
@@ -50,13 +55,7 @@ function App() {
           })}
 
           {/* Private Routes */}
-          <Route
-            element={
-              <AuthProvider>
-                <ProtectedRoute />
-              </AuthProvider>
-            }
-          >
+          <Route element={<ProtectedRoute currentUser={currentUser} />}>
             {privateRoutes.map((route, index) => {
               let Layout = ClientLayout;
               if (route.layout) {
@@ -71,9 +70,11 @@ function App() {
                   key={index}
                   path={route.path}
                   element={
+                    <RbacRoute requiredPermission={route.requiredPermission}>
                     <Layout>
                       <Page />
                     </Layout>
+                    </RbacRoute>
                   }
                 />
               );
@@ -81,13 +82,7 @@ function App() {
           </Route>
 
           {/* Authorized Routes */}
-          <Route
-            element={
-              <AuthProvider>
-                <AuthorizedRoute />
-              </AuthProvider>
-            }
-          >
+          <Route element={<AuthorizedRoute currentUser={currentUser} />}>
             {authRoutes.map((route, index) => {
               let Layout = ClientLayout;
               if (route.layout) {
@@ -110,10 +105,21 @@ function App() {
               );
             })}
           </Route>
+
+          <Route path="/access-denied" element={<AccessDenied />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </LoadingProvider>
     </Router>
   );
 }
+
+ProtectedRoute.propTypes = {
+  currentUser: PropTypes.object,
+};
+
+AuthorizedRoute.propTypes = {
+  currentUser: PropTypes.object,
+};
 
 export default App;

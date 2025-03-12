@@ -5,44 +5,57 @@ import { Button } from "antd";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { handleGetShipsApi } from "~/api";
+import { useSelector } from "react-redux";
+import { selectCurrentPermission } from "~/redux/user/userSlice";
 
-const columns = [
-  {
-    title: "STT",
-    dataIndex: "index",
-    key: "index",
-  },
-  {
-    title: "Tên du thuyền",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "Địa chỉ",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tùy chọn",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <Link to={`/ships/update/${record.slug}`}>
-          <EditOutlined
-            style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
-          />
-        </Link>
-        <Link to={`/ships/delete/${record.slug}`}>
-          <DeleteOutlined
-            style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
-          />
-        </Link>
-      </Space>
-    ),
-  },
-];
+const shipsColumn = (permissions) => {
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "index",
+      key: "index",
+    },
+    {
+      title: "Tên du thuyền",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+  ];
+
+  if (
+    permissions.includes("ships.update") &&
+    permissions.includes("ships.delete")
+  ) {
+    columns.push({
+      title: "Tùy chọn",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Link to={`/ships/update/${record.slug}`}>
+            <EditOutlined
+              style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
+            />
+          </Link>
+          <Link to={`/ships/delete/${record.slug}`}>
+            <DeleteOutlined
+              style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
+            />
+          </Link>
+        </Space>
+      ),
+    });
+  }
+  return columns;
+};
 
 function Show() {
+  const permissions = useSelector(selectCurrentPermission);
+
   const [ships, setShips] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
@@ -78,15 +91,17 @@ function Show() {
             style={{ width: "300px" }}
           />
         </div>
-        <Link to="/ships/create">
-          <Button type="primary" style={{ marginBottom: "20px" }}>
-            Thêm mới du thuyền
-          </Button>
-        </Link>
+        {permissions.includes("ships.create") && (
+          <Link to="/ships/create">
+            <Button type="primary" style={{ marginBottom: "20px" }}>
+              Thêm mới du thuyền
+            </Button>
+          </Link>
+        )}
       </div>
       <Table
         bordered
-        columns={columns}
+        columns={shipsColumn(permissions)}
         dataSource={ships}
         loading={loading}
         pagination={{

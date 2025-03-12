@@ -14,6 +14,17 @@ export const userSchema = yup.object({
   user_catalogues_id: yup.string().required("Vui lòng chọn trường này"),
 });
 
+export const usersCataloguesSchema = yup.object({
+  name: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+  description: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+});
+
 export const loginSchema = yup.object({
   email: emailYup,
   password: yup.string().required("Vui lòng nhập trường này"),
@@ -68,4 +79,9 @@ export const cruiseSchema = yup.object().shape({
   cruise_category: yup.string().required("Vui lòng chọn trường này"),
   cabin: yup.number().required("Vui lòng nhập trường này"),
   year: yup.number().required("Vui lòng nhập trường này"),
+});
+
+export const permissionSchema = yup.object({
+  name: yup.string().required("Vui lòng nhập trường này"),
+  canonical: yup.string().required("Vui lòng nhập trường này"),
 });

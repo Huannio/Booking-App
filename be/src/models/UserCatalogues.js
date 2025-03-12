@@ -13,6 +13,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_catalogues_id",
         as: "users",
       });
+
+      UserCatalogues.belongsToMany(models.Permissions, {
+        through: models.UserCataloguePermission,
+        foreignKey: "user_catalogue_id",
+        otherKey: "permission_id",
+        as: "permissions",
+      });
     }
   }
   UserCatalogues.init(
