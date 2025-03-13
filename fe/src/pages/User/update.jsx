@@ -16,6 +16,7 @@ function Update() {
   const { id } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
 
+
   const {
     control,
     handleSubmit,
@@ -23,6 +24,7 @@ function Update() {
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(config.userSchema) });
+
 
   const [userCatalogues, setUserCatalogues] = useState(null);
 
@@ -37,6 +39,7 @@ function Update() {
     setGlobalLoading(true);
     const response = await axios.get(`/users/${id}`);
     reset({
+
       name: response.user.name,
       email: response.user.email,
       user_catalogues_id: response.user.user_catalogues.id,
@@ -45,6 +48,7 @@ function Update() {
   }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
+
     getUserCatalogues();
     getOneUser();
   }, [getUserCatalogues, getOneUser]);
@@ -110,6 +114,7 @@ function Update() {
         <div className="group-input">
           <div className="form-group">
             <SelectField
+
               name="user_catalogues_id"
               label="Chọn vai trò"
               placeholder="Chọn một vai trò"
@@ -122,6 +127,7 @@ function Update() {
             />
           </div>
         </div>
+
 
         <Button
           primary

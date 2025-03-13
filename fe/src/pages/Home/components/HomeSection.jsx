@@ -1,26 +1,24 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import classNames from "classnames/bind";
+import classNames from "classnames/bind"; 
 import Button from "~/components/Button";
 import styles from '../Home.module.scss';
 import { handleGetCruiseCategoryApi } from "~/api";
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(styles); 
 
 const HomeSection = () => {
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [cruiseCategories, setCruiseCategories] = useState([]);
+  const [cruiseCategories, setCruiseCategories] = useState([]); // Sửa tên setter cho đồng nhất
 
   const getCruiseCategory = useCallback(async () => {
     setGlobalLoading(true);
     try {
       const response = await handleGetCruiseCategoryApi();
       console.log("Full response:", response);
-
-      // Lấy dữ liệu từ response.cruiseCategory
+      
       const categoryData = response?.cruiseCategory || [];
-      console.log("Category data:", categoryData);
-
+      
       setCruiseCategories(categoryData);
     } catch (error) {
       console.error("Lỗi khi lấy danh mục du thuyền:", error);
@@ -33,7 +31,7 @@ const HomeSection = () => {
   useEffect(() => {
     getCruiseCategory();
   }, [getCruiseCategory]);
-
+  
   return (
     <section className={cx("container", "home-section")}>
       <div className={cx("SectionHeader-sectionHeader", "SectionHeader-center")}>
@@ -44,17 +42,17 @@ const HomeSection = () => {
           Khám phá vẻ đẹp tuyệt vời của Du thuyền Hạ Long: Hành trình đến thiên đường thiên nhiên
         </label>
         <div>
-          <span style={{ boxSizing: "border-box", display: "inline-block", overflow: "hidden", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, position: "relative", maxWidth: "100%", }} >
-            <span style={{ boxSizing: "border-box", display: "block", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, maxWidth: "100%", }} >
-              <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2780%27%20height=%278%27/%3e" style={{ display: "block", maxWidth: "100%", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, }} />
+            <span style = {{boxSizing: "border-box",display: "inline-block",overflow: "hidden",width: "initial",height: "initial",background: "none",opacity: 1,border: 0,margin: 0,padding: 0,position: "relative",maxWidth: "100%",}} >
+              <span style = {{boxSizing: "border-box", display: "block", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, maxWidth: "100%",}} >
+                <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2780%27%20height=%278%27/%3e" style={{display: "block", maxWidth: "100%", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0,}} />
+              </span>  
+                <img 
+                  srcSet="/src/assets/images/heading-border.webp 1x, /src/assets/images/heading-border.webp 2x"
+                  src="/src/assets/images/heading-border.webp"
+                  alt="Heading Border"
+                  style={{ position: "absolute", inset: 0, boxSizing: "border-box", padding: 0, border: "none", margin: "auto", display: "block", width: 0, height: 0, minWidth: "100%", maxWidth: "100%", minHeight: "100%", maxHeight: "100%",}} />
             </span>
-            <img
-              srcSet="/src/assets/images/heading-border.webp 1x, /src/assets/images/heading-border.webp 2x"
-              src="/src/assets/images/heading-border.webp"
-              alt="Heading Border"
-              style={{ position: "absolute", inset: 0, boxSizing: "border-box", padding: 0, border: "none", margin: "auto", display: "block", width: 0, height: 0, minWidth: "100%", maxWidth: "100%", minHeight: "100%", maxHeight: "100%", }} />
-          </span>
-        </div>
+          </div>
       </div>
 
       <div className={cx("home-cardList")}>

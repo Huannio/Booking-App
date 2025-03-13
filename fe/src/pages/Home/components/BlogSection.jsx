@@ -9,6 +9,7 @@ function BlogSection() {
   const [shipBlog, setShipBlog] = useState([]);
 
   useEffect(() => {
+
     fetch("/api/blogs")
       .then((res) => res.json())
       .then((data) => setShipBlog(data))

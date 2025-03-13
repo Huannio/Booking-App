@@ -8,6 +8,7 @@ const routes = {
     update: "/users/update/:id",
     delete: "/users/delete/:id",
   },
+
   blogs: {
     index: "/blogs",
     create: "/blogs/create",
@@ -21,6 +22,12 @@ const routes = {
     create: "/ships/create",
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
+  },
+  features: {
+    index: "/features",
+    create: "/features/create",
+    update: "/features/update/:id",
+    delete: "/features/delete/:id",
   },
 };
 

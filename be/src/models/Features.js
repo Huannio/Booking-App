@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Cruise extends Model {
+  class Feature extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,44 +9,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Cruise.belongsTo(models.CruiseCategory, {
-        foreignKey: "category_id",
-        as: "cruise_category",
+      Feature.belongsTo(models.FeatureTypes, {
+        foreignKey: "type",
+        as: "types",
       });
 
-      Cruise.hasMany(models.Products, {
-        foreignKey: "id",
-        as: "product",
-      });
+    //   Feature.hasMany(models.Products, {
+    //     foreignKey: "id",
+    //     as: "product",
+    //   });
     }
   }
-  Cruise.init(
+  Feature.init(
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-
         allowNull: false,
+        autoIncrement: true,
       },
-      category_id: {
+      icon: DataTypes.TEXT,
+      text: DataTypes.STRING,
+      type: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "cruise_category",
+          model: "feature_types",
           key: "id",
         },
       },
-      year: DataTypes.INTEGER,
-      cabin: DataTypes.STRING,
-      shell: DataTypes.STRING,
-      trip: DataTypes.STRING,
-      admin: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "Cruise",
-      tableName: "cruise",
+      modelName: "Features",
+      tableName: "features",
     }
   );
-  return Cruise;
+  return Feature;
 };

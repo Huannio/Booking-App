@@ -15,6 +15,7 @@ import {
   Delete as DeleteUser,
 } from "../pages/User";
 
+
 import {
 
   Show as ShowShip,
@@ -22,6 +23,12 @@ import {
   Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
+import {
+  Show as ShowFeature,
+  Create as CreateFeature,
+  // Update as UpdateFeature,
+  // Delete as DeleteFeature,
+} from "../pages/Feature";
 
 import {
   Show as ShowBlog,
@@ -75,35 +82,35 @@ export const publicRoutes = [
 
   // Footer
   {
-    path: "/ve-chung-toi",
+    path: '/ve-chung-toi',
     component: AboutUs,
   },
   {
-    path: "/dieu-khoan-va-dieu-kien",
+    path: '/dieu-khoan-va-dieu-kien',
     component: Terms,
   },
   {
-    path: "/chinh-sach-rieng-tu",
+    path: '/chinh-sach-rieng-tu',
     component: Privacy,
   },
   {
-    path: "/huong-dan-su-dung",
+    path: '/huong-dan-su-dung',
     component: HowToUse,
   },
   {
-    path: "/hinh-thuc-thanh-toan",
+    path: '/hinh-thuc-thanh-toan',
     component: Payment,
   },
   {
-    path: "/lien-he",
+    path: '/lien-he',
     component: Contact,
   },
   {
-    path: "/quy-dinh-chung-va-luu-y",
+    path: '/quy-dinh-chung-va-luu-y',
     component: Rules,
   },
   {
-    path: "/cau-hoi-thuong-gap",
+    path: '/cau-hoi-thuong-gap',
     component: Question,
   },
 
@@ -144,6 +151,7 @@ export const privateRoutes = [
     component: DeleteUser,
     layout: AdminLayout,
   },
+
   // Ship
   {
     path: config.routes.ships.index,
@@ -165,6 +173,28 @@ export const privateRoutes = [
     component: DeleteShip,
     layout: AdminLayout,
   },
+
+  // Feature
+  {
+    path: config.routes.features.index,
+    component: ShowFeature,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.features.create,
+    component: CreateFeature,
+    layout: AdminLayout,
+  },
+  // {
+  //   path: config.routes.features.update,
+  //   component: UpdateFeature,
+  //   layout: AdminLayout,
+  // },
+  // {
+  //   path: config.routes.features.delete,
+  //   component: DeleteFeature,
+  //   layout: AdminLayout,
+  // },
 
   // Blogs
   {

@@ -2,6 +2,8 @@
 @use "./style/button.module.scss";
 @use "./style/seach.module.scss";
 @use "./style/section.module.scss";
+
+@use "./style/PopularSections.module.scss";
 @use "../../components/GlobalStyles/GlobalStyles.scss";
 
 #Home-popularSections {
