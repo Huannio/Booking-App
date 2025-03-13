@@ -1,40 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const ShipController = require("../app/controllers/ShipController");
-const upload = require("../middleware/upload");
 
-// POST /ship/create
+const ShipsValidation = require("../validations/ShipsValidation");
+const upload = require("../middleware/upload");
+const ShipController = require("../app/controllers/ShipController");
+
+// GET /ships
+router.get("/", ShipController.show);
+
+// POST /ships/create
 router.post(
   "/create",
-  upload.fields([
-    { name: "thumbnail", maxCount: 1 },
-    { name: "images", maxCount: 10 },
-  ]),
+  upload.single("thumbnail"),
+  upload.array("images"),
+  ShipsValidation.createShip,
   ShipController.create
 );
 
-// PUT /ship/update/:slug
-router.put(
-  "/update/:slug",
-  upload.fields([
-    { name: "thumbnail", maxCount: 1 },
-    { name: "images", maxCount: 10 },
-  ]),
-  ShipController.update
-);
+// GET /ships/types
+router.get("/types", ShipController.getTypes);
 
-// DELETE /ship/delete/:slug
-router.delete("/delete/:slug", ShipController.delete);
+// GET /ships/:id
+router.get("/:id", ShipController.index);
 
-// GET /ship/cruise-category
-router.get("/cruise-category", ShipController.getCruiseCategory);
 
-//
-// router.get("/cruise", ShipController.getCruise);
+// PUT /ships/update/:id
+router.put("/update/:id", upload.single("thumbnail"), upload.array("images"), ShipController.update);
 
-// GET /ship/:slug
-router.get("/:slug", ShipController.index);
+// DELETE /ships/delete/:id
+router.delete("/delete/:id", ShipController.delete);
 
-// GET /ship
-router.get("/", ShipController.show);
+// PUT /ships/:id/features
+// router.put("/:id/features", ShipController.updateFeatures);
+
 module.exports = router;
