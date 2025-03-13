@@ -10,7 +10,7 @@ class AuthController {
       const { email, password } = req.body;
       const data = await this.authService.login(email, password);
       res.cookie("accessToken", data.accessToken, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7d
+        expires: new Date(Date.now() + 60 * 60 * 1000), // 1h
         httpOnly: true,
         secure: req.secure || req.headers["x-forwarded-proto"] === "https",
         sameSite: "strict",
@@ -37,7 +37,7 @@ class AuthController {
       );
 
       res.cookie("accessToken", data.accessToken, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7d
+        expires: new Date(Date.now() + 60 * 60 * 1000), // 1h
         httpOnly: true,
         secure: req.secure || req.headers["x-forwarded-proto"] === "https",
         sameSite: "strict",

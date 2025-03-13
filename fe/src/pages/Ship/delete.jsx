@@ -6,30 +6,28 @@ import { InputField } from "~/components/Input";
 import Button from "~/components/Button";
 import axios from "~/utils/axios.config";
 import { LoadingContext } from "~/components/Loading/Loading";
+import { handleGetShipBySlugApi } from "../../api";
 
 function DeleteShip() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { slug } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const { control, reset, formState: { errors } } = useForm();
+  const {
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   // Lấy thông tin du thuyền theo ID
   const getShip = useCallback(async () => {
     setGlobalLoading(true);
-    try {
-      const response = await axios.get(`/ships/${id}`);
-      reset({ title: response?.data?.title });
-    } catch (error) {
-      notification.error({
-        message: error?.response?.data?.message || "Không thể lấy dữ liệu du thuyền!",
-      });
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [id, reset, setGlobalLoading]);
+    const response = await handleGetShipBySlugApi(slug);
+    reset({ title: response?.ship?.title });
+    setGlobalLoading(false);
+  }, [setGlobalLoading, slug, reset]);
 
   useEffect(() => {
     getShip();
@@ -38,18 +36,13 @@ function DeleteShip() {
   // Xử lý xóa du thuyền
   const handleDeleteShip = async () => {
     setConfirmLoading(true);
-    try {
-      await axios.delete(`/ships/delete/${id}`);
+    const response = await axios.delete(`/ships/delete/${slug}`);
+    if (response.statusCode === 200) {
       notification.success({ message: "Xóa du thuyền thành công!" });
       navigate("/ships");
-    } catch (error) {
-      notification.error({
-        message: error?.response?.data?.message || "Lỗi khi xóa du thuyền!",
-      });
-    } finally {
-      setConfirmLoading(false);
-      setModalVisible(false);
     }
+    setConfirmLoading(false);
+    setModalVisible(false);
   };
 
   return (
@@ -57,10 +50,11 @@ function DeleteShip() {
       <h6>Xóa du thuyền</h6>
 
       <div className="flex flex-col gap-32">
-        <div className="group-input">
+        <div className="group-input" style={{ gridTemplateColumns: "1fr 1fr" }}>
           <div className="warning-title">
             <p className="subheading lg" style={{ color: "red" }}>
-              Lưu ý: Một khi xóa sẽ không thể khôi phục, hãy cân nhắc trước khi xóa!
+              Lưu ý: Một khi xóa sẽ không thể khôi phục, hãy cân nhắc trước khi
+              xóa!
             </p>
           </div>
           <div className="form-group">
@@ -77,7 +71,11 @@ function DeleteShip() {
           </div>
         </div>
 
-        <Button normal className="align-self-end" onClick={() => setModalVisible(true)}>
+        <Button
+          normal
+          className="align-self-end"
+          onClick={() => setModalVisible(true)}
+        >
           <span className="label md">Xóa</span>
         </Button>
       </div>

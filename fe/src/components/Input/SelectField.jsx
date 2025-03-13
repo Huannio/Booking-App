@@ -17,6 +17,7 @@ function SelectField({
   required = false,
   status,
   defaultValue,
+  ...passProps
 }) {
   return (
     <>
@@ -32,6 +33,7 @@ function SelectField({
               onChange={onChange}
               {...field}
               status={status}
+              {...passProps}
             >
               {options}
             </Select>

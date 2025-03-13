@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 import { Input, Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import axios from "~/utils/axios.config";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
+import { handleGetShipsApi } from "~/api";
 
 const columns = [
   {
     title: "STT",
-    dataIndex: "STT",
-    key: "STT",
+    dataIndex: "index",
+    key: "index",
   },
   {
     title: "Tên du thuyền",
@@ -23,21 +23,16 @@ const columns = [
     key: "address",
   },
   {
-    title: "Công ty điều hành",
-    dataIndex: "admin",
-    key: "admin",
-  },
-  {
     title: "Tùy chọn",
     key: "action",
     render: (_, record) => (
       <Space size="middle">
-        <Link to={`/ships/update/${record.key}`}>
+        <Link to={`/ships/update/${record.slug}`}>
           <EditOutlined
             style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
           />
         </Link>
-        <Link to={`/ships/delete/${record.key}`}>
+        <Link to={`/ships/delete/${record.slug}`}>
           <DeleteOutlined
             style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
           />
@@ -55,22 +50,17 @@ function Show() {
   const getShips = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
-    try {
-      const response = await axios.get("/ships");
-      const formattedData = response.ships.map((ship, index) => ({
-        key: ship.id,
-        STT: index + 1,
-        title: ship.title,
-        address: ship.address,
-        admin: ship.admin,
-      }));
-      setShips(formattedData);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setGlobalLoading(false);
-      setLoading(false);
-    }
+    const response = await handleGetShipsApi();
+    const formattedData = response.ships.map((ship, index) => ({
+      index: index + 1,
+      slug: ship.slug,
+      key: ship.id,
+      title: ship.title,
+      address: ship.address,
+    }));
+    setShips(formattedData);
+    setGlobalLoading(false);
+    setLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {

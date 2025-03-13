@@ -5,11 +5,23 @@ class ShipController {
     this.ShipService = ShipService;
   }
 
+  getCruiseCategory = async (req, res, next) => {
+    try {
+      const cruiseCategory = await this.ShipService.getCruiseCategory();
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, cruiseCategory });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   index = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const Ship = await this.ShipService.getShipById(id);
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, Ship });
+      const { slug } = req.params;
+      console.log(slug);
+      const ship = await this.ShipService.getShipBySlug(slug);
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ship });
     } catch (error) {
       next(error);
     }
@@ -17,8 +29,8 @@ class ShipController {
 
   show = async (req, res, next) => {
     try {
-      const Ships = await this.ShipService.getAllShips();
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, Ships });
+      const ships = await this.ShipService.getAllShips();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ships });
     } catch (error) {
       next(error);
     }
@@ -26,11 +38,12 @@ class ShipController {
 
   create = async (req, res, next) => {
     try {
-      const ShipData = req.body;
-      const createShip = await this.ShipService.createShip(ShipData);
-      res
-        .status(StatusCodes.CREATED)
-        .json({ statusCode: StatusCodes.OK, createShip });
+      const createShip = await this.ShipService.createShip(req.body, req.files);
+      res.status(StatusCodes.CREATED).json({
+        statusCode: StatusCodes.CREATED,
+        message: "Tạo thông tin du thuyền thành công!",
+        createShip,
+      });
     } catch (error) {
       next(error);
     }
@@ -38,8 +51,12 @@ class ShipController {
 
   update = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const updateShip = await this.ShipService.updateShip(id, req.body);
+      const { slug } = req.params;
+      const updateShip = await this.ShipService.updateShip(
+        slug,
+        req.body,
+        req.files
+      );
       res
         .status(StatusCodes.OK)
         .json({ statusCode: StatusCodes.OK, updateShip });
@@ -50,15 +67,13 @@ class ShipController {
 
   delete = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const deleteShip = await this.ShipService.deleteShip(id);
-      res
-        .status(StatusCodes.OK)
-        .json({
-          statusCode: StatusCodes.OK,
-          deleteShip,
-          message: "Xóa thành công!",
-        });
+      const { slug } = req.params;
+      const deleteShip = await this.ShipService.deleteShip(slug);
+      res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        deleteShip,
+        message: "Xóa thành công!",
+      });
     } catch (error) {
       next(error);
     }

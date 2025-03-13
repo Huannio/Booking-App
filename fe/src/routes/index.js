@@ -7,12 +7,14 @@ import {
 } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+
 import {
   Show as ShowUser,
   Create as CreateUser,
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
+
 import {
 
   Show as ShowShip,
@@ -20,8 +22,21 @@ import {
   Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
+
+import {
+  Show as ShowBlog,
+  Create as CreateBlog,
+  CreateDetail as CreateDetailBlog,
+  Update as UpdateBlog,
+  UpdateDetail as UpdateDetailBlog,
+  Delete as DeleteBlog,
+} from "../pages/Blog/BlogAdmin";
 import config from "~/config";
 import BusinessPage from "../pages/business";
+
+// Blog
+import BlogPage from "../pages/Blog/Homeblog";
+import BlogDetail from "../pages/Blog/DetailBlog";
 
 // Footer
 import {
@@ -60,36 +75,46 @@ export const publicRoutes = [
 
   // Footer
   {
-    path: '/ve-chung-toi',
+    path: "/ve-chung-toi",
     component: AboutUs,
   },
   {
-    path: '/dieu-khoan-va-dieu-kien',
+    path: "/dieu-khoan-va-dieu-kien",
     component: Terms,
   },
   {
-    path: '/chinh-sach-rieng-tu',
+    path: "/chinh-sach-rieng-tu",
     component: Privacy,
   },
   {
-    path: '/huong-dan-su-dung',
+    path: "/huong-dan-su-dung",
     component: HowToUse,
   },
   {
-    path: '/hinh-thuc-thanh-toan',
+    path: "/hinh-thuc-thanh-toan",
     component: Payment,
   },
   {
-    path: '/lien-he',
+    path: "/lien-he",
     component: Contact,
   },
   {
-    path: '/quy-dinh-chung-va-luu-y',
+    path: "/quy-dinh-chung-va-luu-y",
     component: Rules,
   },
   {
-    path: '/cau-hoi-thuong-gap',
+    path: "/cau-hoi-thuong-gap",
     component: Question,
+  },
+
+  // Blog
+  {
+    path: "/blog",
+    component: BlogPage,
+  },
+  {
+    path: "/blog:slug",
+    component: BlogDetail,
   },
 ];
 
@@ -119,7 +144,6 @@ export const privateRoutes = [
     component: DeleteUser,
     layout: AdminLayout,
   },
-
   // Ship
   {
     path: config.routes.ships.index,
@@ -142,6 +166,37 @@ export const privateRoutes = [
     layout: AdminLayout,
   },
 
+  // Blogs
+  {
+    path: config.routes.blogs.index,
+    component: ShowBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.create,
+    component: CreateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.update,
+    component: UpdateBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.createDetail,
+    component: CreateDetailBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.updateDetail,
+    component: UpdateDetailBlog,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.blogs.delete,
+    component: DeleteBlog,
+    layout: AdminLayout,
+  },
 ];
 
 export const authRoutes = [
