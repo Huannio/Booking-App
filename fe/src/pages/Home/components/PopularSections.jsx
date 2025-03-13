@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import axios from "~/utils/axios.config";
 import classNames from "classnames/bind";
 import Button from "~/components/Button";
 import styles from '../Home.module.scss';
+import { handleGetShipsApi } from "~/api";
 
 const cx = classNames.bind(styles);
 
@@ -11,12 +11,11 @@ const CruiseSection = () => {
   const { setGlobalLoading } = useContext(LoadingContext);
   const [cruises, setCruises] = useState([]);
 
-  // Hàm lấy dữ liệu từ API
   const getCruises = useCallback(async () => {
     setGlobalLoading(true);
     try {
-      const { data } = await axios.get("/cruise"); 
-      setCruises(data || []);
+      const { data } = await handleGetShipsApi(); // Gọi API từ hàm handleGetShipsApi
+      setCruises(data || []); // Đảm bảo data không bị undefined/null
     } catch (error) {
       console.error("Error fetching cruises:", error);
     } finally {
@@ -24,7 +23,7 @@ const CruiseSection = () => {
     }
   }, [setGlobalLoading]);
 
-    useEffect(() => {
+  useEffect(() => {
     getCruises();
   }, [getCruises]);
 
@@ -38,15 +37,11 @@ const CruiseSection = () => {
           Tận hưởng sự xa hoa và đẳng cấp tối đa trên du thuyền mới nhất và phổ biến nhất.
         </label>
         <div>
-          <span style={{ boxSizing: "border-box", display: "inline-block", overflow: "hidden", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, position: "relative", maxWidth: "100%" }}>
-            <span style={{ boxSizing: "border-box", display: "block", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, maxWidth: "100%" }}>
-              <img alt="" aria-hidden="true" src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2780%27%20height=%278%27/%3e" style={{ display: "block", maxWidth: "100%", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0 }} />
-            </span>
-            <img
-              srcSet="/src/assets/images/heading-border.webp 1x, /src/assets/images/heading-border.webp 2x"
-              src="/src/assets/images/heading-border.webp"
-              alt="Heading Border"
-              style={{ position: "absolute", inset: 0, boxSizing: "border-box", padding: 0, border: "none", margin: "auto", display: "block", width: 0, height: 0, minWidth: "100%", maxWidth: "100%", minHeight: "100%", maxHeight: "100%" }}
+          <span style={{ display: "inline-block", position: "relative", maxWidth: "100%" }}>
+            <img srcSet="/src/assets/images/heading-border.webp 1x, /src/assets/images/heading-border.webp 2x"
+                 src="/src/assets/images/heading-border.webp"
+                 alt="Heading Border"
+                 style={{ display: "block", width: "100%" }}
             />
           </span>
         </div>
@@ -57,24 +52,20 @@ const CruiseSection = () => {
           <a href={`/cruise/${cruise.slug}`} key={cruise.id}>
             <div className={cx("card", "CategoryCard-categoryCard")}>
               <div className={cx("CategoryCard-imageWrapper")}>
-                <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
-                  <img
-                    alt={cruise.name}
-                    src={cruise.thumbnail}
-                    width="100%"
-                    height="100%"
-                    loading="lazy"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
+                <img
+                  alt={cruise.name}
+                  src={cruise.thumbnail}
+                  width="100%"
+                  height="100%"
+                  loading="lazy"
+                  style={{ objectFit: "cover" }}
+                />
               </div>
               <div className={cx("CategoryCard-body")}>
                 <h6>{cruise.name}</h6>
-                <div className={cx("CategoryCard-description")}>
-                  <p className={cx("sm")}>
-                    Hạ thuỷ {cruise.year} - Tàu vỏ {cruise.shell} - {cruise.cabin} phòng
-                  </p>
-                </div>
+                <p className={cx("sm")}>
+                  Hạ thuỷ {cruise.year} - Tàu vỏ {cruise.shell} - {cruise.cabin} phòng
+                </p>
               </div>
               <div className={cx("CategoryCard-footer")}>
                 <Button type="button" className={cx("btn", "btn-sm", "btn-outline")}>
