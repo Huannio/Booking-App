@@ -9,16 +9,20 @@ const cx = classNames.bind(styles);
 
 const HomeSection = () => {
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [cruiseCategories, setCruiseCategory] = useState([]);
+  const [cruiseCategories, setCruiseCategories] = useState([]); // Sửa tên setter cho đồng nhất
 
-  
   const getCruiseCategory = useCallback(async () => {
     setGlobalLoading(true);
     try {
       const response = await handleGetCruiseCategoryApi();
-      setCruiseCategory(response || []); 
+      console.log("Full response:", response);
+      
+      const categoryData = response?.cruiseCategory || [];
+      
+      setCruiseCategories(categoryData);
     } catch (error) {
       console.error("Lỗi khi lấy danh mục du thuyền:", error);
+      setCruiseCategories([]);
     } finally {
       setGlobalLoading(false);
     }
@@ -52,7 +56,8 @@ const HomeSection = () => {
       </div>
 
       <div className={cx("home-cardList")}>
-        {cruiseCategories.map((cruiseCategory) => (
+        {/* Thêm kiểm tra là Array trước khi map */}
+        {Array.isArray(cruiseCategories) && cruiseCategories.map((cruiseCategory) => (
           <a href={`/tim-du-thuyen/search?keyword=${cruiseCategory.name}`} key={cruiseCategory.id}>
             <div className={cx("card", "CategoryCard-categoryCard")}>
               <div className={cx("CategoryCard-imageWrapper")}>

@@ -23,6 +23,13 @@ import {
   Delete as DeleteShip,
 } from "../pages/Ship";
 import {
+  Show as ShowFeature,
+  Create as CreateFeature,
+  // Update as UpdateFeature,
+  // Delete as DeleteFeature,
+} from "../pages/Feature";
+
+import {
   Show as ShowBlog,
   Create as CreateBlog,
   CreateDetail as CreateDetailBlog,
@@ -165,6 +172,27 @@ export const privateRoutes = [
     layout: AdminLayout,
   },
 
+  // Feature
+  {
+    path: config.routes.features.index,
+    component: ShowFeature,
+    layout: AdminLayout,
+  },
+  {
+    path: config.routes.features.create,
+    component: CreateFeature,
+    layout: AdminLayout,
+  },
+  // {
+  //   path: config.routes.features.update,
+  //   component: UpdateFeature,
+  //   layout: AdminLayout,
+  // },
+  // {
+  //   path: config.routes.features.delete,
+  //   component: DeleteFeature,
+  //   layout: AdminLayout,
+  // },
 
   // Blogs
   {

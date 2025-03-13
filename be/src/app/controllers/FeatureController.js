@@ -5,13 +5,14 @@ const uploadToCloudinary = require("../../utils/cloudinary");
 
 class FeatureController {
   constructor() {
-    this.featureService = FeatureService; 
+    this.FeatureService = FeatureService; 
   }
 
   index = async (req, res, next) => {
     try {
-      const data = await this.featureService.getFeatureById(req.params.id);
-      res.status(StatusCodes.OK).json(data);
+      const { id } = req.params;
+      const feature = await this.FeatureService.getFeatureById(id);
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, feature });
     } catch (error) {
       next(error);
     }
@@ -19,8 +20,8 @@ class FeatureController {
 
   show = async (req, res, next) => {
     try {
-      const data = await this.featureService.getAllFeature();
-      return res.status(StatusCodes.OK).json(data);
+      const features = await this.FeatureService.getAllFeature();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, features });
     } catch (error) {
       next(error);
     }
@@ -28,12 +29,10 @@ class FeatureController {
 
   create = async (req, res, next) => {
     try {
-      const data = await this.shipService.createFeature(req.body, req.file);
-      return res.status(StatusCodes.CREATED).json({
-        statusCode: StatusCodes.CREATED,
-        message: "Tạo đặc trưng thành công",
-        data,
-      });
+      const data = await this.FeatureService.createFeature(req.body, req.file);
+      return res
+        .status(StatusCodes.CREATED)
+        .json({ statusCode: StatusCodes.CREATED, message: "Tạo thông tin đặc trưng", data });
     } catch (error) {
       next(error);
     }
@@ -41,16 +40,15 @@ class FeatureController {
 
   update = async (req, res, next) => {
     try {
-      const data = await this.featureService.updateFeature(
+      const { id } = req.params;
+      const updateFeature = await this.FeatureService.updateFeature(
+        id,
         req.body,
         req.file,
-        req.params.id
       );
-      return res.status(StatusCodes.OK).json({
-        statusCode: StatusCodes.OK,
-        message: "Cập nhật đặc trưng thành công",
-        data,
-      });
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateFeature });
     } catch (error) {
       next(error);
     }
@@ -58,11 +56,12 @@ class FeatureController {
 
   delete = async (req, res, next) => {
     try {
-      const data = await this.shipService.deleteFeature(req.params.id);
-      return res.status(StatusCodes.OK).json({
+      const { id } = req.params;
+      const deleteFeature = await this.FeatureService.deleteFeature(id);
+      res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
+        deleteFeature,
         message: "Xóa thành công!",
-        data,
       });
     } catch (error) {
       next(error);
@@ -71,7 +70,7 @@ class FeatureController {
   
   getTypes = async (req, res, next) => {
     try {
-      const featureTypes = await this.featureService.getTypes();
+      const featureTypes = await this.FeatureService.getTypes();
       return res.status(StatusCodes.OK).json(featureTypes);
     } catch (error) {
       next(error);

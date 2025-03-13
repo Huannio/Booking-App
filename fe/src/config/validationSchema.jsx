@@ -70,3 +70,9 @@ export const cruiseSchema = yup.object().shape({
   cabin: yup.number().required("Vui lòng nhập trường này"),
   year: yup.number().required("Vui lòng nhập trường này"),
 });
+
+export const featureSchema = yup.object().shape({
+  text: yup.string().required("Vui lòng nhập trường này"),
+  type: yup.string().required("Vui lòng chọn trường này"),
+  icon: yup.mixed().required("Vui lòng chọn ảnh"),
+});

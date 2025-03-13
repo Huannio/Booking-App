@@ -57,3 +57,16 @@ export const handleGetCruiseCategoryApi = async () => {
 export const handleGetShipBySlugApi = async (slug) => {
   return await axios.get(`/ships/${slug}`);
 };
+
+// Feature
+export const handleGetFeaturesApi = async () => {
+  return await axios.get("/features");
+};
+export const handleGetFeatureByIdApi = async (id) => {
+  return await axios.get(`/features/${id}`);
+};
+
+export const handleGetFeatureTypesApi = async () => {
+  return await axios.get("/features/types");
+};
+

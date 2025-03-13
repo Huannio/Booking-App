@@ -84,7 +84,7 @@ class ShipService {
   async getCruiseCategory() {
     try {
       return await CruiseCategory.findAll({
-        attributes: ["id", "name"],
+        attributes: ["id", "name", "image"],
       });
     } catch (error) {
       throw error;

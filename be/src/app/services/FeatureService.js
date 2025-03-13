@@ -1,7 +1,8 @@
-const env = require("../../config/environment");
 const { StatusCodes } = require("http-status-codes");
 const { Features, FeatureTypes } = require("../../models");
 const ApiError = require("../../middleware/ApiError");
+const uploadToCloudinary = require("../../utils/cloudinary");
+const { where } = require("sequelize");
 
 class FeatureService {
   async getAllFeature() {
@@ -18,6 +19,7 @@ class FeatureService {
   async getFeatureById(id) {
     try {
       return await Features.findOne({
+        where: { id },
         attributes: ["id", "icon", "text", "type"],
         where: { id },
         include: [{ model: FeatureTypes, as: "types", attributes: ["name", "id"] }],
@@ -29,13 +31,19 @@ class FeatureService {
 
   async createFeature(reqBody, reqFile) {
     try {
-      const { icon, text, type } = reqBody;
+      const { text, type } = reqBody;
       const data = {
-        icon,
         text,
         type,
       };
-
+      if (reqFile) {
+        const uploadImage = await uploadToCloudinary(
+          reqFile.buffer,
+          "icon"
+        );
+        data.icon = uploadImage.url;
+      }
+      
       return await Features.create(data);
     } catch (error) {
       throw error;
@@ -44,12 +52,18 @@ class FeatureService {
 
   async updateFeature(reqBody, reqFile, id) {
     try {
-       const { icon, text, type } = reqBody;
+       const { text, type } = reqBody;
       const data = {
-        icon,
         text,
         type,
       };
+      if (reqFile) {
+        const uploadImage = await uploadToCloudinary(
+          reqFile.buffer,
+          // "icon"
+        );
+        data.icon = uploadImage.url;
+      }
 
       return await Features.update(data, { where: { id } });
     } catch (error) {

@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Feature.belongsTo(models.FeatureType, {
-        foreignKey: "feature_types_id",
+      Feature.belongsTo(models.FeatureTypes, {
+        foreignKey: "type",
         as: "types",
       });
 

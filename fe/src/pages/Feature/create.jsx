@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { Select, notification } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "~/utils/axios.config";
-import { InputField, SelectField, UploadField } from "~/components/Input";
+import { InputField, SelectField, UploadImageField } from "~/components/Input";
 import Button from "~/components/Button";
 import config from "~/config";
 import { LoadingContext } from "~/components/Loading/Loading";
-import { handleGetBlogTypesApi } from "~/api";
+import { handleGetFeatureTypesApi } from "~/api";
 
 const { Option } = Select;
 
@@ -23,107 +23,93 @@ function Create() {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(config.blogSchema),
+    resolver: yupResolver(config.featureSchema),
   });
 
-  const handleCreateBlogForm = async (data) => {
+  const handleCreateFeatureForm = async (data) => {
     console.log(data);
-
+    
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("short_desc", data.short_desc);
-    formData.append("type_id", data.type_id);
-    formData.append("thumbnail", data.thumbnail);
-    const response = await axios.post("/blogs/create", formData);
+    formData.append("text", data.text);
+    formData.append("type", data.type);
+    formData.append("icon", data.icon[0]);
+    const response = await axios.post("/features/create", formData);
 
     if (response.statusCode === 201) {
       notification.success({
-        message: response?.data?.message || "Tạo thông tin bài viết thành công!",
+        message:
+          response?.data?.message || "Tạo thông tin đặc trưng thành công!",
       });
       reset();
-      navigate("/blogs");
+      navigate("/features");
     }
   };
 
-  const [blogTypes, setBlogTypes] = useState(null);
-  const getBlogTypes = useCallback(async () => {
+  const [featureTypes, setFeaturesTypes] = useState(null);
+  const getFeaturesTypes = useCallback(async () => {
     setGlobalLoading(true);
-    const blogTypes = await handleGetBlogTypesApi();
-    setBlogTypes(blogTypes);
+    const featureTypes = await handleGetFeatureTypesApi();
+    setFeaturesTypes(featureTypes);
     setGlobalLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
-    getBlogTypes();
-  }, [getBlogTypes]);
-
-  const blogTypesOptions =
-    blogTypes?.map((blogType) => (
-      <Option key={blogType.id} value={blogType.id}>
-        {blogType.type}
+    getFeaturesTypes();
+  }, [getFeaturesTypes]);
+  
+  const featureTypesOptions =
+  featureTypes?.map((featureType) => (
+      <Option key={featureType.id} value={featureType.id}>
+        {featureType.name}
       </Option>
     )) || [];
 
   return (
     <div className="flex w-full flex-col gap-16">
-      <h6>Tạo mới người dùng</h6>
+      <h6>Tạo mới đặc trưng</h6>
 
       <form
         className="flex flex-col gap-32"
-        onSubmit={handleSubmit(handleCreateBlogForm)}
+        onSubmit={handleSubmit(handleCreateFeatureForm)}
       >
         <div className="group-input">
           <div className="form-group">
             <InputField
-              label="Tiêu đề"
+              label="Tên đặc trưng"
               type="text"
-              name="title"
-              placeholder="Nhập tiêu đề bài viết..."
+              name="text"
+              placeholder="Nhập tên đặc trưng..."
               control={control}
-              error={errors.title}
-              status={errors.title && "error"}
+              error={errors.text}
+              status={errors.text && "error"}
               inputGroup={false}
             />
           </div>
 
           <div className="form-group">
-            <InputField
-              label="Mô tả ngắn"
-              type="text"
-              name="short_desc"
-              placeholder="Nhập mô tả ngắn bài viết..."
+            <SelectField
+              label="Chọn loại đặc trưng"
+              name="type"
+              placeholder="Chọn loại đặc trưng..."
               control={control}
-              error={errors.short_desc}
-              status={errors.short_desc && "error"}
-              inputGroup={false}
+              error={errors.type}
+              status={errors.type && "error"}
+              options={featureTypesOptions}
+              loading={!featureTypesOptions}
+              onChange={(value) => setValue("type", value)}
+              required
             />
           </div>
         </div>
 
         <div className="group-input">
           <div className="form-group">
-            <UploadField
-              label="Thumbnail"
-              name="thumbnail"
+            <UploadImageField
+              label="icon"
+              name="icon"
               control={control}
-              error={errors.thumbnail}
-              inputGroup={true}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <SelectField
-              label="Chọn loại bài viết"
-              name="type_id"
-              placeholder="Chọn loại bài viết..."
-              control={control}
-              error={errors.type_id}
-              status={errors.type_id && "error"}
-              options={blogTypesOptions}
-              loading={!blogTypesOptions}
-              onChange={(value) => setValue("type_id", value)}
-              required
+              error={errors.icon}
+              status={errors.icon && "error"}
             />
           </div>
         </div>

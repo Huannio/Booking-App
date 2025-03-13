@@ -23,6 +23,12 @@ const routes = {
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
   },
+  features: {
+    index: "/features",
+    create: "/features/create",
+    update: "/features/update/:id",
+    delete: "/features/delete/:id",
+  },
 };
 
 export default routes;
