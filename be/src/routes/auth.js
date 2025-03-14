@@ -4,10 +4,11 @@ const AuthController = require("../app/controllers/AuthController");
 const AuthValidation = require("../validations/AuthValidation");
 const authorizeJWT = require("../middleware/authorize");
 
+// GET /auth/me
+router.get("/me", authorizeJWT, AuthController.me);
+
 // POST /auth/login
 router.post("/login", AuthValidation.login, AuthController.login);
-// GET /auth/check-auth
-router.get("/check-auth", authorizeJWT, AuthController.checkAuth);
 
 // POST /auth/logout
 router.post("/logout", AuthController.logout);

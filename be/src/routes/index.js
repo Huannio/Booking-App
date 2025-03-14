@@ -9,10 +9,11 @@ const cruises = require("./cruise");
 
 const userCataloguesRouter = require("./userCatalogues");
 const blogsRouter = require("./blogs");
-const authorizeJWT = require("../middleware/authorize");
+const permissionManagementRouter = require("./permissionManagement");
+const userPermissionRouter = require("./userPermission");
 
 const router = (app) => {
-  app.use("/users", authorizeJWT, userRouter);
+  app.use("/users", userRouter);
   app.use("/users-catalogues", userCataloguesRouter);
   app.use("/auth", authRouter);
   
@@ -20,6 +21,8 @@ const router = (app) => {
   app.use("/features", FeatureRouter);
   app.use("/blogs", blogsRouter);
   app.use("/cruises", cruises);
+  app.use("/permissions-management", permissionManagementRouter);
+  app.use("/users-permissions", userPermissionRouter)
 };
 
 module.exports = router;

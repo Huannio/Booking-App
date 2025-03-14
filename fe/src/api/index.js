@@ -1,10 +1,5 @@
 import axios from "~/utils/axios.config";
 
-export const handleLogoutApi = async () => {
-  localStorage.removeItem("user");
-  return await axios.post("/auth/logout");
-};
-
 export const handleRefreshTokenApi = async () => {
   return await axios.post("/auth/refresh-token");
 };
@@ -14,9 +9,7 @@ export const handleCheckAuthApi = async () => {
 };
 
 
-export const handleGetShipByIdApi = async (id) => {
-  return await axios.get(`/ships/${id}`);
-}
+// Blog
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
 };
@@ -32,6 +25,10 @@ export const handleGetBlogPaginationApi = async (page = 0, limit = 6, blogTypeId
 export const handleGetBlogByIdApi = async (id) => {
   return await axios.get(`/blogs/${id}`);
 };
+
+export const handleGetBlogBySlugApi = async (slug) => {
+  return await axios.get(`/blogs/${slug}`);
+}
 
 export const handleGetBlogDescriptionsTypesApi = async () => {
   return await axios.get("/blogs/descriptions/types");

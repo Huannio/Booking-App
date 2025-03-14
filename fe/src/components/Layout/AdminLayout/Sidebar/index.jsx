@@ -1,6 +1,5 @@
 import config from "~/config";
 import {
-  AppstoreOutlined,
   ContainerOutlined,
   DesktopOutlined,
   PieChartOutlined,
@@ -10,73 +9,102 @@ import { Menu, notification } from "antd";
 import ImageWrapper from "~/components/ImageWrapper";
 import images from "~/assets/images";
 import Button from "~/components/Button";
-import { handleLogoutApi } from "~/api";
 import { useState, useEffect } from "react";
-
-const items = [
-  {
-    key: "/dashboard",
-    icon: <PieChartOutlined />,
-    label: <Link to={config.routes.dashboard}>Dashboard</Link>,
-  },
-  {
-    key: "/users",
-    icon: <DesktopOutlined />,
-    label: <Link to={config.routes.users.index}>Quản lý người dùng</Link>,
-  },
-  {
-    key: "/option3",
-    icon: <ContainerOutlined />,
-    label: <Link to = {config.routes.ships.index}>Quản lý du thuyền</Link>,
-  },
-  {
-    key: "/features",
-    label: <Link to={config.routes.features.index}>Quản lý đặc trưng</Link>,
-    icon: <ContainerOutlined />,
-  },
-  {
-    key: "/blogs",
-    label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
-    icon: <ContainerOutlined />,
-  },
-  {
-    key: "/navigation2",
-    label: "Navigation Two",
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: "/option9", label: "Option 9" },
-      { key: "/option10", label: "Option 10" },
-      {
-        key: "/submenu",
-        label: "Submenu",
-        children: [
-          { key: "/option11", label: "Option 11" },
-          { key: "/option12", label: "Option 12" },
-        ],
-      },
-    ],
-  },
-];
-
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUserApi, selectCurrentUser } from "~/redux/user/userSlice";
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const [selectedKeys, setSelectedKeys] = useState([location.pathname]);
+  const selector = useSelector(selectCurrentUser);
+  const permissions = selector?.permissions || [];
+
+  const items = [
+    permissions.includes("dashboard.index") && {
+      key: "/dashboard",
+      icon: <PieChartOutlined />,
+      label: <Link to={config.routes.dashboard}>Dashboard</Link>,
+    },
+    permissions.includes("users.index") && {
+      key: "/users",
+      icon: <DesktopOutlined />,
+      label: "Người dùng",
+      children: [
+        permissions.includes("users.index") && {
+          key: "/users/index",
+          label: <Link to={config.routes.users.index}>Quản lý người dùng</Link>,
+        },
+        permissions.includes("users-catalogues.index") && {
+          key: "/users-catalogues",
+          label: (
+            <Link to={config.routes.users.catalogues.index}>
+              Quản lý vai trò
+            </Link>
+          ),
+        },
+      ],
+    },
+    permissions.includes("permissions-management.index") && {
+      key: "/permissions",
+      icon: <ContainerOutlined />,
+      label: "Quản lý quyền hạn",
+      children: [
+        {
+          key: "/permissions-management",
+          label: (
+            <Link to={config.routes.permissions.index}>Quản lý quyền</Link>
+          ),
+        },
+        {
+          key: "/users/permissions",
+          label: (
+            <Link to={config.routes.users.permissions.index}>Phân quyền</Link>
+          ),
+        },
+      ],
+    },
+    permissions.includes("ships.index") && {
+      key: "/ships",
+      icon: <ContainerOutlined />,
+      label: <Link to={config.routes.ships.index}>Quản lý du thuyền</Link>,
+    },
+    permissions.includes("blogs.index") && {
+      key: "/blogs",
+      label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
+      icon: <ContainerOutlined />,
+    },
+    permissions.includes("features.index") && {
+      key: "/features",
+      label: <Link to={config.routes.features.index}>Quản lý đặc trưng</Link>,
+      icon: <ContainerOutlined />,
+    },
+  ];
 
   useEffect(() => {
     setSelectedKeys([location.pathname]);
   }, [location.pathname]);
 
   const handleLogout = async () => {
-    await handleLogoutApi();
-    notification.success({ message: "Đăng xuất thành công!" });
-    navigate("/login");
+    const res = await dispatch(logoutUserApi());
+    if (!res.error) {
+      notification.success({ message: "Đăng xuất thành công!" });
+      navigate("/login");
+    }
   };
 
   return (
     <div style={{ width: 300, height: "100vh" }}>
-      <Link to={config.routes.home} style={{ padding: "12px", display: "block" }}>
-        <ImageWrapper src={images.logo} alt="mixivivu" widthSvgWrapperImage={156} heightSvgWrapperImage={42} />
+      <Link
+        to={config.routes.home}
+        style={{ padding: "12px", display: "block" }}
+      >
+        <ImageWrapper
+          src={images.logo}
+          alt="mixivivu"
+          widthSvgWrapperImage={156}
+          heightSvgWrapperImage={42}
+        />
       </Link>
 
       <Menu

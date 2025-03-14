@@ -14,6 +14,17 @@ export const userSchema = yup.object({
   user_catalogues_id: yup.string().required("Vui lòng chọn trường này"),
 });
 
+export const usersCataloguesSchema = yup.object({
+  name: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+  description: yup
+    .string()
+    .transform((value) => value.trim())
+    .required("Vui lòng nhập trường này"),
+});
+
 export const loginSchema = yup.object({
   email: emailYup,
   password: yup.string().required("Vui lòng nhập trường này"),
@@ -75,4 +86,8 @@ export const featureSchema = yup.object().shape({
   text: yup.string().required("Vui lòng nhập trường này"),
   type: yup.string().required("Vui lòng chọn trường này"),
   icon: yup.mixed().required("Vui lòng chọn ảnh"),
+});
+export const permissionSchema = yup.object({
+  name: yup.string().required("Vui lòng nhập trường này"),
+  canonical: yup.string().required("Vui lòng nhập trường này"),
 });

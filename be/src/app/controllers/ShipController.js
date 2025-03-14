@@ -19,7 +19,6 @@ class ShipController {
   index = async (req, res, next) => {
     try {
       const { slug } = req.params;
-      console.log(slug);
       const ship = await this.ShipService.getShipBySlug(slug);
       res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, ship });
     } catch (error) {
