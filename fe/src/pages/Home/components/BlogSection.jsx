@@ -1,20 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useContext, useState } from "react";
+import { LoadingContext } from "~/components/Loading/Loading";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../Home.module.scss";
+import { handleGetBlogsApi } from "~/api";
 
 const cx = classNames.bind(styles);
 
 function BlogSection() {
-  const [shipBlog, setShipBlog] = useState([]);
-
-  useEffect(() => {
-
-    fetch("/api/blogs")
-      .then((res) => res.json())
-      .then((data) => setShipBlog(data))
-      .catch((error) => console.error("Error fetching blogs:", error));
-  }, []);
+  const [blog, setBlogs] = useState([]);
+    const { setGlobalLoading } = useContext(LoadingContext);
+  
+    const getBlogs = useCallback(async () => {
+      setGlobalLoading(true);
+      try {
+        const response = await handleGetBlogsApi();
+        setBlogs(response.blog || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu tàu:", error);
+      } finally {
+        setGlobalLoading(false);
+      }
+    }, [setGlobalLoading]);
+  
+    useEffect(() => {
+      getBlogs();
+    }, [getBlogs]);
+  
 
   return (
     <section className={cx("container", "BlogSection-section")}> 
@@ -40,7 +52,7 @@ function BlogSection() {
       </div>
 
       <div className={cx("BlogSection-cardList")}> 
-        {shipBlog.map((blog) => (
+        {blog.map((blog) => (
           <Link key={blog.slug} to={`/blog-detail/${blog.slug}`} className={cx("BlogCard-blogCard")}> 
             <div className={cx("card")}> 
               <div className={cx("BlogCard-imageWrapper")}> 
