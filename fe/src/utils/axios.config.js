@@ -10,6 +10,12 @@ export const injectStore = (_store) => {
   axiosReduxStore = _store;
 };
 
+// Inject loading
+let globalLoading;
+export const injectLoading = (_loading) => {
+  globalLoading = _loading;
+}
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true, // Cho phép gửi cookie
@@ -51,11 +57,13 @@ instance.interceptors.response.use(
       notification.error({
         message: error?.response?.data?.message || error?.message,
       });
+      globalLoading(false);
     }
 
     // Logout khi bị lỗi 401
     if (error.response?.status === 401) {
       axiosReduxStore.dispatch(logoutUserApi());
+      globalLoading(false);
     }
 
     // Gọi api refresh token khi bị lỗi 410
@@ -70,6 +78,7 @@ instance.interceptors.response.use(
           })
           .catch((_error) => {
             axiosReduxStore.dispatch(logoutUserApi());
+            globalLoading(false);
             return Promise.reject(_error);
           })
           .finally(() => {

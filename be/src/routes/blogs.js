@@ -66,11 +66,11 @@ router.delete(
   BlogsController.delete
 );
 
-// GET /blogs/:slug
-router.get("/:slug", BlogsController.getBlogBySlug);
-
 // GET /blogs/:id
 router.get("/:id", BlogsController.index);
+
+// GET /blogs/:slug
+router.get("/detail/:slug", BlogsController.getBlogBySlug);
 
 // GET /blogs
 router.get("/", BlogsController.show);

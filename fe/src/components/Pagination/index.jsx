@@ -92,7 +92,6 @@ Pagination.propTypes = {
   totalPages: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
-  records: PropTypes.number.isRequired,
   displayNumberRecords: PropTypes.node.isRequired,
 };
 
