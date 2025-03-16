@@ -20,6 +20,7 @@ class HotelService {
           ],
           include: [
             { model: Cities, as: "cities", attributes: ["name", "id"] },
+            { model: Products, as: "product", attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] },
           ],
       });
     } catch (error) {

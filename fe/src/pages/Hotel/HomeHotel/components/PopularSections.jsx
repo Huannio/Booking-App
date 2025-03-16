@@ -1,52 +1,34 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import axios from "~/utils/axios.config";
 import classNames from "classnames/bind";
 import Button from "~/components/Button";
 import styles from "../Home.module.scss";
-import { handleGetShipsApi } from "~/api";
+import { handleGetHotelsApi } from "~/api";
 
 const cx = classNames.bind(styles);
 
-const CruiseSection = () => {
-  const [ships, setShips] = useState([]);
-  const [cruises, setCruises] = useState([]);
-
+const HotelSection = () => {
+  const [hotel, setHotel] = useState([]);
   const { setGlobalLoading } = useContext(LoadingContext);
 
-  const getShips = useCallback(async () => {
+  const getHotel = useCallback(async () => {
     setGlobalLoading(true);
-    try {
-      const response = await handleGetShipsApi();
-      setShips(response.ships || []);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu tàu:", error);
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [setGlobalLoading]);
-
-  useEffect(() => {
-    getShips();
-  }, [getShips]);
-
-  const getCruises = useCallback(async () => {
-    setGlobalLoading(true);
-    const { cruises } = await axios.get("/cruises");
-    setCruises(cruises || []);
+    const response = await handleGetHotelsApi();
+    setHotel(response.hotel);
     setGlobalLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
-    getCruises();
-  }, [getCruises]);
+    getHotel();
+  }, [getHotel]);
 
   return (
     <section className={cx("popularSections")}>
     <div className={cx("container", "popularSections-section")}>
       <div className={cx("SectionHeader-sectionHeader")}>
         <div className={cx("SectionHeader-title")}>
-          <h4 >Khám phá và trải nghiệm <br/> tất cả dịch vụ tuyệt vời nhất <br/> từ các khách sạn trên mọi miền <br/> đất nước cùng Mixi Vivu.</h4>
+          <h4>Du thuyền mới</h4>
+          <h4>và phổ biến nhất</h4>
           <div>
             <span style = {{boxSizing: "border-box",display: "inline-block",overflow: "hidden",width: "initial",height: "initial",background: "none",opacity: 1,border: 0,margin: 0,padding: 0,position: "relative",maxWidth: "100%",}} >
               <span style = {{boxSizing: "border-box", display: "block", width: "initial", height: "initial", background: "none", opacity: 1, border: 0, margin: 0, padding: 0, maxWidth: "100%",}} >
@@ -61,22 +43,22 @@ const CruiseSection = () => {
           </div>
         </div>
         <label htmlFor="" className={cx("lg", "SectionHeader-description")}>
-        Không gian nghỉ dưỡng sang trọng, tiện nghi và hiện đại cùng dịch vụ chuyên nghiệp, Mixi Vivu tự hào mang đến những trải nghiệm hoàn hảo cho kỳ nghỉ của bạn, giúp bạn tận hưởng từng khoảnh khắc một cách đáng nhớ và trọn vẹn nhất!
+          Tận hưởng sự xa hoa và đẳng cấp tối đa trên du thuyền mới nhất và phổ biến nhất.
         </label>
       </div>
 
       <div className={cx("PopularShips-cardList")}>
-        {ships.slice(0, 6).map((ship) => {
-          const cruiseInfo = cruises.find((c) => c.id === ship.id) || {}; // Lấy thông tin cruise theo ship.id
+        {hotel.slice(0, 6).map((hotel) => {
+          const product = hotel.product[0];
 
           return (
-            <a href={`/du-thuyen/${ship.slug}`} key={ship.id}>
+            <a href={`/du-thuyen/${product.slug}`} key={hotel.id}>
               <div className={cx("card", "ProductCard-grid")}>
                 <div className={cx("ProductCard-imageWrapper")}>
                 <div className={cx("ProductCard-imageWrapper-image")} style={{ width: "352px", height: "216px", position: "relative", overflow: "hidden", }}>
                   <img
-                    alt={ship.title}
-                    src={ship.thumbnail}
+                    alt={product?.title}
+                    src={product?.thumbnail}
                     width="100%"
                     height="100%"
                     loading="lazy"
@@ -99,32 +81,20 @@ const CruiseSection = () => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <label className="xs">4.9 (11) đánh giá</label>
+                  <label className="xs">{product?.score_reviews} ({product?.num_reviews}) đánh giá</label>
                 </div>
                 </div>
                 <div className={cx("ProductCard-cardContent")}>
                 <div className={cx("ProductCard-body")}>
-                <div className="Badge-default Badge-sm Badge-container ProductCard-location">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M5.7 15C4.03377 15.6353 3 16.5205 3 17.4997C3 19.4329 7.02944 21 12 21C16.9706 21 21 19.4329 21 17.4997C21 16.5205 19.9662 15.6353 18.3 15M12 9H12.01M18 9C18 13.0637 13.5 15 12 18C10.5 15 6 13.0637 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9ZM13 9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9C11 8.44772 11.4477 8 12 8C12.5523 8 13 8.44772 13 9Z"
-                        stroke="var(--gray-500)"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                  <div className={cx("Badge-default", "Badge-sm", "Badge-container", "ProductCard-location")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"> 
+                    <path d="M5.7 15C4.03377 15.6353 3 16.5205 3 17.4997C3 19.4329 7.02944 21 12 21C16.9706 21 21 19.4329 21 17.4997C21 16.5205 19.9662 15.6353 18.3 15M12 9H12.01M18 9C18 13.0637 13.5 15 12 18C10.5 15 6 13.0637 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9ZM13 9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9C11 8.44772 11.4477 8 12 8C12.5523 8 13 8.44772 13 9Z" stroke="var(--gray-500)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <label className="xs">{cruises.category_id}</label>
+                    <label className="xs">{hotel.cities.name}</label>
                   </div>
 
                   <p className={cx("ProductCard-title", "md", "subheading")}>
-                  {ship.title}
+                  {product?.title}
                   </p>
                   <div className={cx("ProductCard-description")}>
                   <svg
@@ -135,12 +105,12 @@ const CruiseSection = () => {
                     fill="none"
                   >
                     <path
-                     d="M3.62 17.28C3.71813 17.5267 3.91022 17.7242 4.15402 17.8292C4.39782 17.9343 4.67335 17.9381 4.92 17.84C5.16665 17.7419 5.36422 17.5498 5.46924 17.306C5.57426 17.0622 5.57813 16.7867 5.48 16.54L4.36 13.72L11 12.25V17C11 17.2652 11.1054 17.5196 11.2929 17.7071C11.4804 17.8946 11.7348 18 12 18C12.2652 18 12.5196 17.8946 12.7071 17.7071C12.8946 17.5196 13 17.2652 13 17V12.25L19.64 13.72L18.52 16.54C18.4713 16.6621 18.4471 16.7926 18.4489 16.9241C18.4507 17.0556 18.4784 17.1854 18.5304 17.3061C18.5824 17.4269 18.6577 17.5362 18.7521 17.6278C18.8464 17.7194 18.9578 17.7915 19.08 17.84C19.1978 17.8866 19.3233 17.9103 19.45 17.91C19.6503 17.9102 19.846 17.8502 20.0118 17.7379C20.1776 17.6256 20.3059 17.4661 20.38 17.28L21.93 13.37C21.9832 13.2348 22.0063 13.0896 21.9977 12.9445C21.989 12.7994 21.9489 12.658 21.88 12.53C21.8132 12.4025 21.7196 12.2909 21.6057 12.2029C21.4918 12.1149 21.3602 12.0525 21.22 12.02L18 11.31V7C18 6.73478 17.8946 6.48043 17.7071 6.29289C17.5196 6.10536 17.2652 6 17 6H15V3C15 2.73478 14.8946 2.48043 14.7071 2.29289C14.5196 2.10536 14.2652 2 14 2H10C9.73478 2 9.48043 2.10536 9.29289 2.29289C9.10536 2.48043 9 2.73478 9 3V6H7C6.73478 6 6.48043 6.10536 6.29289 6.29289C6.10536 6.48043 6 6.73478 6 7V11.31L2.78 12C2.63976 12.0325 2.5082 12.0949 2.39429 12.1829C2.28038 12.2709 2.18682 12.3825 2.12 12.51C2.05113 12.638 2.01098 12.7794 2.00234 12.9245C1.99371 13.0696 2.0168 13.2148 2.07 13.35L3.62 17.28ZM11 4H13V6H11V4ZM8 8H16V10.86L12.22 10H12.12H12H11.88H11.78L8 10.86V8ZM20.71 19.28C20.3591 19.3875 20.0232 19.5387 19.71 19.73C19.3914 19.9163 19.029 20.0145 18.66 20.0145C18.291 20.0145 17.9286 19.9163 17.61 19.73C16.9173 19.3392 16.1354 19.1339 15.34 19.1339C14.5446 19.1339 13.7627 19.3392 13.07 19.73C12.7471 19.9141 12.3817 20.011 12.01 20.011C11.6383 20.011 11.2729 19.9141 10.95 19.73C10.2566 19.3411 9.47499 19.1368 8.68 19.1368C7.88501 19.1368 7.10336 19.3411 6.41 19.73C6.09143 19.9163 5.72904 20.0145 5.36 20.0145C4.99096 20.0145 4.62857 19.9163 4.31 19.73C3.99683 19.5387 3.66087 19.3875 3.31 19.28C3.17694 19.2327 3.03537 19.2141 2.89461 19.2255C2.75385 19.2368 2.61709 19.2778 2.49334 19.3459C2.36958 19.4139 2.26163 19.5073 2.1766 19.6201C2.09157 19.7328 2.03138 19.8623 2 20C1.92535 20.2533 1.95389 20.5258 2.07941 20.7581C2.20493 20.9904 2.41724 21.1636 2.67 21.24C2.87136 21.2946 3.06347 21.3788 3.24 21.49C3.84671 21.846 4.53657 22.0357 5.24 22.04C5.9706 22.0401 6.68823 21.8469 7.32 21.48C7.71198 21.2638 8.15234 21.1504 8.6 21.1504C9.04766 21.1504 9.48803 21.2638 9.88 21.48C10.5073 21.8387 11.2174 22.0274 11.94 22.0274C12.6626 22.0274 13.3727 21.8387 14 21.48C14.392 21.2638 14.8323 21.1504 15.28 21.1504C15.7277 21.1504 16.168 21.2638 16.56 21.48C17.1798 21.8499 17.8882 22.0453 18.61 22.0453C19.3318 22.0453 20.0402 21.8499 20.66 21.48C20.8365 21.3688 21.0286 21.2846 21.23 21.23C21.3631 21.2031 21.4893 21.1493 21.6009 21.0721C21.7126 20.9948 21.8073 20.8956 21.8793 20.7805C21.9514 20.6654 21.9992 20.5368 22.02 20.4027C22.0407 20.2685 22.0339 20.1315 22 20Z"
+                      d="M20 3.5H4C3.20435 3.5 2.44129 3.81607 1.87868 4.37868C1.31607 4.94129 1 5.70435 1 6.5V19.5C1 19.7652 1.10536 20.0196 1.29289 20.2071C1.48043 20.3946 1.73478 20.5 2 20.5H6C6.16471 20.4991 6.32665 20.4576 6.47145 20.3791C6.61625 20.3006 6.73941 20.1876 6.83 20.05L8.54 17.5H15.46L17.17 20.05C17.2606 20.1876 17.3838 20.3006 17.5285 20.3791C17.6733 20.4576 17.8353 20.4991 18 20.5H22C22.2652 20.5 22.5196 20.3946 22.7071 20.2071C22.8946 20.0196 23 19.7652 23 19.5V6.5C23 5.70435 22.6839 4.94129 22.1213 4.37868C21.5587 3.81607 20.7956 3.5 20 3.5ZM21 18.5H18.54L16.83 16C16.7454 15.8531 16.6248 15.7302 16.4796 15.6428C16.3344 15.5553 16.1694 15.5062 16 15.5H8C7.83529 15.5009 7.67335 15.5424 7.52855 15.6209C7.38375 15.6994 7.26059 15.8124 7.17 15.95L5.46 18.5H3V13.5H21V18.5ZM7 11.5V10.5C7 10.2348 7.10536 9.98043 7.29289 9.79289C7.48043 9.60536 7.73478 9.5 8 9.5H10C10.2652 9.5 10.5196 9.60536 10.7071 9.79289C10.8946 9.98043 11 10.2348 11 10.5V11.5H7ZM13 11.5V10.5C13 10.2348 13.1054 9.98043 13.2929 9.79289C13.4804 9.60536 13.7348 9.5 14 9.5H16C16.2652 9.5 16.5196 9.60536 16.7071 9.79289C16.8946 9.98043 17 10.2348 17 10.5V11.5H13ZM21 11.5H19V10.5C19 9.70435 18.6839 8.94129 18.1213 8.37868C17.5587 7.81607 16.7956 7.5 16 7.5H14C13.2599 7.50441 12.5476 7.78221 12 8.28C11.4524 7.78221 10.7401 7.50441 10 7.5H8C7.20435 7.5 6.44129 7.81607 5.87868 8.37868C5.31607 8.94129 5 9.70435 5 10.5V11.5H3V6.5C3 6.23478 3.10536 5.98043 3.29289 5.79289C3.48043 5.60536 3.73478 5.5 4 5.5H20C20.2652 5.5 20.5196 5.60536 20.7071 5.79289C20.8946 5.98043 21 6.23478 21 6.5V11.5Z"
                       fill="var(--gray-600)"
-                    ></path>
+                    />
                   </svg>
                     <p className={cx("sm")}>
-                      Hạ thuỷ {cruiseInfo.year || "N/A"} - Tàu vỏ {cruiseInfo.shell || "N/A"} - {cruiseInfo.cabin || "N/A"} phòng
+                       {hotel.year || "N/A"} phòng
                     </p>
                   </div>
                 </div>
@@ -150,7 +120,7 @@ const CruiseSection = () => {
                     className={cx("ProductCard-price", "subheading md")}
                     style={{ color: "var(--primary-dark, #0E4F4F)" }}
                   >
-                    {ship.default_price || "N/A"} đ / khách
+                    {product.default_price || "N/A"} đ / khách
                   </p>
                   <Button type="button" className={cx("btn", "btn-sm", "btn-primary")}>
                     <div className={cx("label", "sm")}>Đặt ngay</div>
@@ -189,4 +159,4 @@ const CruiseSection = () => {
   );
 };
 
-export default CruiseSection;
+export default HotelSection;

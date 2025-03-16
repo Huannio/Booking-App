@@ -7,7 +7,7 @@ import styles from '../Home.module.scss';
 const cx = classNames.bind(styles);
 
 function Banner() {
-  const [keyword, setKeyword] = useState('');
+  const [title, settitle] = useState('');
   const [location, setLocation] = useState('Tất cả địa điểm');
   const [price, setPrice] = useState('Tất cả mức giá');
   const [locationsDropdownVisible, setLocationsDropdownVisible] = useState(false); 
@@ -36,7 +36,7 @@ function Banner() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/tim-du-thuyen/search?keyword=${keyword}&location=${location}&price=${price}`);
+    navigate(`/tim-du-thuyen?title=${title}&location=${location}&price=${price}`);
   };
 
   return (
@@ -62,10 +62,10 @@ function Banner() {
                 <input
                   className="p-md"
                   type="text"
-                  name="keyword"
-                  value={keyword}
+                  name="title"
+                  value={title}
                   placeholder="Nhập tên du thuyền"
-                  onChange={(e) => setKeyword(e.target.value)}
+                  onChange={(e) => settitle(e.target.value)}
                 />
               </label>
             </div>

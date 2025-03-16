@@ -47,9 +47,6 @@ export const handleGetShipsApi = async () => {
   return await axios.get("/ships");
 };
 
-export const handleGetShipByIdApi = async (id) => {
-  return await axios.get(`/ships/${id}`);
-}
 
 export const handleGetCruiseCategoryApi = async () => {
   return await axios.get("/ships/cruise-category");

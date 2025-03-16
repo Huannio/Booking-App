@@ -40,8 +40,8 @@ import {
 import {
   Show as ShowFeature,
   Create as CreateFeature,
-  // Update as UpdateFeature,
-  // Delete as DeleteFeature,
+  Update as UpdateFeature,
+  Delete as DeleteFeature,
 } from "../pages/Feature";
 
 import {
@@ -285,22 +285,26 @@ export const privateRoutes = [
     path: config.routes.features.index,
     component: ShowFeature,
     layout: AdminLayout,
+    requiredPermission: "features.index",
   },
   {
     path: config.routes.features.create,
     component: CreateFeature,
     layout: AdminLayout,
+    requiredPermission: "features.create",
   },
-  // {
-  //   path: config.routes.features.update,
-  //   component: UpdateFeature,
-  //   layout: AdminLayout,
-  // },
-  // {
-  //   path: config.routes.features.delete,
-  //   component: DeleteFeature,
-  //   layout: AdminLayout,
-  // },
+  {
+    path: config.routes.features.update,
+    component: UpdateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.update",
+  },
+  {
+    path: config.routes.features.delete,
+    component: DeleteFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.delete",
+  },
 
   // Hotel 
   {

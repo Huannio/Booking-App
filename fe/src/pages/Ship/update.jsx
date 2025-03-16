@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Select, notification } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -15,6 +15,7 @@ import {
   SelectField,
   TextField,
   UploadImageField,
+  UploadThumbnailField,
 } from "~/components/Input";
 import { handleGetCruiseCategoryApi } from "~/api";
 import { handleGetShipBySlugApi } from "../../api";
@@ -139,6 +140,13 @@ function Update() {
       >
         <div className="flex justify-between align-center">
           <h6>Tạo mới thông tin du thuyền</h6>
+          <div style={{position: "absolute", right: "125px"}}>
+          <Link to={`/ships/updateFeature/${slug}`}>
+            <Button primary normal className="interceptor-loading">
+              <div className="label md">Tạo đặc trưng du thuyền</div>
+            </Button>
+          </Link>
+          </div>
           <Button primary normal submit className="interceptor-loading">
             <div className="label md">Tạo</div>
           </Button>
@@ -321,7 +329,7 @@ function Update() {
         {/* Nhóm thông tin hình ảnh */}
         <div className={cx("group-input")}>
           <div className={cx("form-group")}>
-            <UploadImageField
+            <UploadThumbnailField
               label="Thumbnail"
               name="thumbnail"
               control={control}

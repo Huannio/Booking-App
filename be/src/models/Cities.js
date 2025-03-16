@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Cities.hasMany(models.Hotel, {
         foreignKey: "city_id",
-        as: "city",
+        as: "cities",
       });
     }
   }

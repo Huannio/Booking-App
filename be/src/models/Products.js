@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Products.hasOne(models.Cruise, { foreignKey: "id", as: "cruise" });
       Products.hasOne(models.Hotel, { foreignKey: "id", as: "hotel" });
+      Products.hasOne(models.Rooms, { foreignKey: "id", as: "rooms" });
     }
   }
   Products.init(

@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "id",
         as: "product",
       });
+
+      Hotel.hasMany(models.Rooms, {
+        foreignKey: "hotel_id",
+        as: "rooms",
+      });
     }
   }
   Hotel.init(
@@ -25,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-
         allowNull: false,
       },
       city_id: {

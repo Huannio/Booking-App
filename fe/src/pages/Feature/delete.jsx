@@ -24,7 +24,8 @@ function Delete() {
   const getFeatures = useCallback(async () => {
     setGlobalLoading(true);
     const response = await handleGetFeatureByIdApi(id);
-    reset({ text: response?.text });
+    console.log(response)
+    reset({ text: response.feature?.text });
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
 

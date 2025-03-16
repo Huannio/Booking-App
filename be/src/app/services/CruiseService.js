@@ -1,4 +1,4 @@
-const {Cruise, CruiseCategory, products,} = require("../../models");
+const {Cruise, CruiseCategory, Products,} = require("../../models");
 
 class CruiseCataloguesService {
    async getAll() {
@@ -11,19 +11,10 @@ class CruiseCataloguesService {
             as: "cruise_category",
             attributes: ["id", "name"],
           },
-        ],
-        include: [
           {
-            model: products,
+            model: Products, 
             as: "product",
-            attributes: ["id", "title", "slug", "thumbnail", "category_id"],
-            include: [
-              {
-                model: CruiseCategory,
-                as: "cruise_category",
-                attributes: ["id", "name"],
-              },
-            ],
+            attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"],
           },
         ],
       });

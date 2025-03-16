@@ -32,6 +32,10 @@ function BlogSection() {
   }, [getBlog]);
 
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
+
   return (
     <section className={cx("container", "BlogSection-section")}> 
       <div className={cx("SectionHeader-sectionHeader")}> 
@@ -75,7 +79,7 @@ function BlogSection() {
                 <p className={cx("subheading", "md", "BlogCard-title")}>{blog.title}</p>
                 <p className={cx("BlogCard-description", "sm")}>{blog.short_desc}</p>
               </div>
-              <p className={cx("BlogCard-footer", "detail", "sm")}>{blog.created_at}</p>
+              <p className={cx("BlogCard-footer", "detail", "sm")}>{formatDate(blog.createdAt)}</p>
             </div>
           </Link>
         ))}

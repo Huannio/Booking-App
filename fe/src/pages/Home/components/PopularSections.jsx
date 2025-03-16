@@ -4,32 +4,13 @@ import axios from "~/utils/axios.config";
 import classNames from "classnames/bind";
 import Button from "~/components/Button";
 import styles from "../Home.module.scss";
-import { handleGetShipsApi } from "../../../api";
 
 const cx = classNames.bind(styles);
 
 const CruiseSection = () => {
-  const [ships, setShips] = useState([]);
   const [cruises, setCruises] = useState([]);
 
   const { setGlobalLoading } = useContext(LoadingContext);
-
-  const getShips = useCallback(async () => {
-    setGlobalLoading(true);
-    try {
-      const response = await handleGetShipsApi();
-      setShips(response.ships || []);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu tàu:", error);
-    } finally {
-      setGlobalLoading(false);
-    }
-  }, [setGlobalLoading]);
-
-  useEffect(() => {
-    getShips();
-  }, [getShips]);
-
   const getCruises = useCallback(async () => {
     setGlobalLoading(true);
     const { cruises } = await axios.get("/cruises");
@@ -67,17 +48,17 @@ const CruiseSection = () => {
       </div>
 
       <div className={cx("PopularShips-cardList")}>
-        {ships.slice(0, 6).map((ship) => {
-          const cruiseInfo = cruises.find((c) => c.id === ship.id) || {}; // Lấy thông tin cruise theo ship.id
+        {cruises.slice(0, 6).map((cruise) => {
+          const product = cruise.product[0];
 
           return (
-            <a href={`/du-thuyen/${ship.slug}`} key={ship.id}>
+            <a href={`/du-thuyen/${product.slug}`} key={cruise.id}>
               <div className={cx("card", "ProductCard-grid")}>
                 <div className={cx("ProductCard-imageWrapper")}>
                 <div className={cx("ProductCard-imageWrapper-image")} style={{ width: "352px", height: "216px", position: "relative", overflow: "hidden", }}>
                   <img
-                    alt={ship.title}
-                    src={ship.thumbnail}
+                    alt={product?.title}
+                    src={product?.thumbnail}
                     width="100%"
                     height="100%"
                     loading="lazy"
@@ -100,32 +81,20 @@ const CruiseSection = () => {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <label className="xs">4.9 (11) đánh giá</label>
+                  <label className="xs">{product?.score_reviews} ({product?.num_reviews}) đánh giá</label>
                 </div>
                 </div>
                 <div className={cx("ProductCard-cardContent")}>
                 <div className={cx("ProductCard-body")}>
-                <div className="Badge-default Badge-sm Badge-container ProductCard-location">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M5.7 15C4.03377 15.6353 3 16.5205 3 17.4997C3 19.4329 7.02944 21 12 21C16.9706 21 21 19.4329 21 17.4997C21 16.5205 19.9662 15.6353 18.3 15M12 9H12.01M18 9C18 13.0637 13.5 15 12 18C10.5 15 6 13.0637 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9ZM13 9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9C11 8.44772 11.4477 8 12 8C12.5523 8 13 8.44772 13 9Z"
-                        stroke="var(--gray-500)"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                  <div className={cx("Badge-default", "Badge-sm", "Badge-container", "ProductCard-location")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"> 
+                    <path d="M5.7 15C4.03377 15.6353 3 16.5205 3 17.4997C3 19.4329 7.02944 21 12 21C16.9706 21 21 19.4329 21 17.4997C21 16.5205 19.9662 15.6353 18.3 15M12 9H12.01M18 9C18 13.0637 13.5 15 12 18C10.5 15 6 13.0637 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9ZM13 9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9C11 8.44772 11.4477 8 12 8C12.5523 8 13 8.44772 13 9Z" stroke="var(--gray-500)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <label className="xs">{cruises.category_id}</label>
+                    <label className="xs">{cruise.cruise_category.name}</label>
                   </div>
 
                   <p className={cx("ProductCard-title", "md", "subheading")}>
-                  {ship.title}
+                  {product?.title}
                   </p>
                   <div className={cx("ProductCard-description")}>
                   <svg
@@ -141,7 +110,7 @@ const CruiseSection = () => {
                     ></path>
                   </svg>
                     <p className={cx("sm")}>
-                      Hạ thuỷ {cruiseInfo.year || "N/A"} - Tàu vỏ {cruiseInfo.shell || "N/A"} - {cruiseInfo.cabin || "N/A"} phòng
+                      Hạ thuỷ {cruise.year || "N/A"} - Tàu vỏ {cruise.shell || "N/A"} - {cruise.cabin || "N/A"} phòng
                     </p>
                   </div>
                 </div>
@@ -151,7 +120,7 @@ const CruiseSection = () => {
                     className={cx("ProductCard-price", "subheading md")}
                     style={{ color: "var(--primary-dark, #0E4F4F)" }}
                   >
-                    {ship.default_price || "N/A"} đ / khách
+                    {product.default_price || "N/A"} đ / khách
                   </p>
                   <Button type="button" className={cx("btn", "btn-sm", "btn-primary")}>
                     <div className={cx("label", "sm")}>Đặt ngay</div>
