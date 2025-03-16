@@ -44,6 +44,9 @@ export const handleGetDescriptionsBlogApi = async (id) => {
 export const handleGetBlogByTypeIdApi = async (id) => {
   return await axios.get(`/blogs/types/${id}`);
 }
+export const handleGetBlogBySlugApi = async (slug) => {
+  return await axios.get(`/blogs/detail/${slug}`);
+}
 
 // Ship
 export const handleGetShipsApi = async () => {

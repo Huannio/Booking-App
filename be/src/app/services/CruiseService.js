@@ -12,6 +12,20 @@ class CruiseCataloguesService {
             attributes: ["id", "name"],
           },
         ],
+        include: [
+          {
+            model: products,
+            as: "product",
+            attributes: ["id", "title", "slug", "thumbnail", "category_id"],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
       });
     } catch (error) {
       throw error;

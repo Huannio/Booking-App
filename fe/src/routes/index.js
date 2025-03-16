@@ -41,7 +41,7 @@ import config from "~/config";
 import BusinessPage from "../pages/business";
 
 // Blog
-import BlogPage from "../pages/Blog/Homeblog";
+import BlogPage from "../pages/Blog/HomeBlog";
 import BlogDetail from "../pages/Blog/DetailBlog";
 
 // Footer

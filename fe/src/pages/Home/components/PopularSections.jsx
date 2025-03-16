@@ -67,7 +67,7 @@ const CruiseSection = () => {
       </div>
 
       <div className={cx("PopularShips-cardList")}>
-        {ships.map((ship) => {
+        {ships.slice(0, 6).map((ship) => {
           const cruiseInfo = cruises.find((c) => c.id === ship.id) || {}; // Lấy thông tin cruise theo ship.id
 
           return (

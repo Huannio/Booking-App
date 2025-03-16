@@ -1,20 +1,36 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
+import { LoadingContext } from "~/components/Loading/Loading";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../Home.module.scss";
+import { handleGetBlogsApi } from "~/api";
 
 const cx = classNames.bind(styles);
 
 function BlogSection() {
-  const [shipBlog, setShipBlog] = useState([]);
+  const { setGlobalLoading } = useContext(LoadingContext);
+  const [blogs, setBlogs] = useState([]); 
+  const getBlog= useCallback(async () => {
+    setGlobalLoading(true);
+    try {
+      const response = await handleGetBlogsApi();
+      console.log("Full response:", response);
+      
+      const blogData = response?.data || [];
+      
+      setBlogs(blogData);
+    } catch (error) {
+      console.error("Lỗi khi lấy blog:", error);
+      setBlogs([]);
+    } finally {
+      setGlobalLoading(false);
+    }
+  }, [setGlobalLoading]);
 
   useEffect(() => {
+    getBlog();
+  }, [getBlog]);
 
-    fetch("/api/blogs")
-      .then((res) => res.json())
-      .then((data) => setShipBlog(data))
-      .catch((error) => console.error("Error fetching blogs:", error));
-  }, []);
 
   return (
     <section className={cx("container", "BlogSection-section")}> 
@@ -40,7 +56,7 @@ function BlogSection() {
       </div>
 
       <div className={cx("BlogSection-cardList")}> 
-        {shipBlog.map((blog) => (
+        {blogs.slice(0, 3).map((blog) => (  
           <Link key={blog.slug} to={`/blog-detail/${blog.slug}`} className={cx("BlogCard-blogCard")}> 
             <div className={cx("card")}> 
               <div className={cx("BlogCard-imageWrapper")}> 
@@ -64,6 +80,7 @@ function BlogSection() {
           </Link>
         ))}
       </div>
+
 
       <div className={cx("BlogSection-action")}> 
         <Link to="/blog"> 

@@ -31,8 +31,8 @@ const items = [
   },
   {
     key: "/features",
-    label: <Link to={config.routes.features.index}>Quản lý đặc trưng</Link>,
     icon: <ContainerOutlined />,
+    label: <Link to={config.routes.features.index}>Quản lý đặc trưng</Link>,
   },
   {
     key: "/blogs",

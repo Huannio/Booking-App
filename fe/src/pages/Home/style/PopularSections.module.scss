@@ -6,6 +6,7 @@
     padding: 80px 32px;
 }
 
+
 @media (max-width: 1024px) {
   .popularSections {
     padding-top: 0px;
@@ -32,6 +33,8 @@
 .PopularShips-action {
   display: flex;
   justify-content: center;
+  gap: 80px;
+    padding: 80px 32px;
 }
 
 @media (max-width: 1024px) {
