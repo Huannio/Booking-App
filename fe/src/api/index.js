@@ -1,10 +1,5 @@
 import axios from "~/utils/axios.config";
 
-export const handleLogoutApi = async () => {
-  localStorage.removeItem("user");
-  return await axios.post("/auth/logout");
-};
-
 export const handleRefreshTokenApi = async () => {
   return await axios.post("/auth/refresh-token");
 };
@@ -14,9 +9,7 @@ export const handleCheckAuthApi = async () => {
 };
 
 
-export const handleGetShipByIdApi = async (id) => {
-  return await axios.get(`/ships/${id}`);
-}
+// Blog
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
 };
@@ -33,6 +26,10 @@ export const handleGetBlogByIdApi = async (id) => {
   return await axios.get(`/blogs/${id}`);
 };
 
+export const handleGetBlogBySlugApi = async (slug) => {
+  return await axios.get(`/blogs/detail/${slug}`);
+}
+
 export const handleGetBlogDescriptionsTypesApi = async () => {
   return await axios.get("/blogs/descriptions/types");
 };
@@ -44,14 +41,15 @@ export const handleGetDescriptionsBlogApi = async (id) => {
 export const handleGetBlogByTypeIdApi = async (id) => {
   return await axios.get(`/blogs/types/${id}`);
 }
-export const handleGetBlogBySlugApi = async (slug) => {
-  return await axios.get(`/blogs/detail/${slug}`);
-}
 
 // Ship
 export const handleGetShipsApi = async () => {
   return await axios.get("/ships");
 };
+
+export const handleGetShipByIdApi = async (id) => {
+  return await axios.get(`/ships/${id}`);
+}
 
 export const handleGetCruiseCategoryApi = async () => {
   return await axios.get("/ships/cruise-category");

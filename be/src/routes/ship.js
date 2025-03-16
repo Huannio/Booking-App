@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const ShipController = require("../app/controllers/ShipController");
 const upload = require("../middleware/upload");
-
+const authorizeJWT = require("../middleware/authorize");
+const checkPermission = require("../middleware/checkPermission");
 // POST /ship/create
 router.post(
   "/create",

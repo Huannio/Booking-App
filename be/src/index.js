@@ -9,6 +9,12 @@ const sequelize = require("./config/database");
 const app = express();
 const port = env.PORT || 3000;
 
+// Fix cache from disk (GONE - 410)
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-cache");
+  next();
+});
+
 app.use(
   cors({
     origin: env.ORIGIN,

@@ -3,6 +3,8 @@ const router = express.Router();
 const BlogsController = require("../app/controllers/BlogsController");
 const upload = require("../middleware/upload");
 const BlogsValidation = require("../validations/BlogsValidation");
+const authorizeJWT = require("../middleware/authorize");
+const checkPermission = require("../middleware/checkPermission");
 
 // GET /blogs/pagination
 router.get("/pagination", BlogsController.getBlogPagination);
@@ -10,6 +12,8 @@ router.get("/pagination", BlogsController.getBlogPagination);
 // POST /blogs/create
 router.post(
   "/create",
+  authorizeJWT,
+  checkPermission("blogs.create"),
   upload.single("thumbnail"),
   BlogsValidation.createBlog,
   BlogsController.create
@@ -18,6 +22,8 @@ router.post(
 // POST /blogs/createDetails
 router.post(
   "/createDetails",
+  authorizeJWT,
+  checkPermission("blogs.create"),
   upload.array("images"),
   BlogsController.createDetails
 );
@@ -34,6 +40,8 @@ router.get("/descriptions/types", BlogsController.getTypeBlogDescriptions);
 // PUT /blogs/updateDetails
 router.put(
   "/updateDetails",
+  authorizeJWT,
+  checkPermission("blogs.update"),
   upload.array("images"),
   BlogsController.updateDetails
 );
@@ -42,13 +50,27 @@ router.put(
 router.get("/descriptions/:id", BlogsController.getDescriptionsBlog);
 
 // PUT /blogs/update/:id
-router.put("/update/:id", upload.single("thumbnail"), BlogsController.update);
+router.put(
+  "/update/:id",
+  authorizeJWT,
+  checkPermission("blogs.update"),
+  upload.single("thumbnail"),
+  BlogsController.update
+);
 
 // DELETE /blogs/delete/:id
-router.delete("/delete/:id", BlogsController.delete);
+router.delete(
+  "/delete/:id",
+  authorizeJWT,
+  checkPermission("blogs.delete"),
+  BlogsController.delete
+);
 
 // GET /blogs/:id
 router.get("/:id", BlogsController.index);
+
+// GET /blogs/:slug
+router.get("/detail/:slug", BlogsController.getBlogBySlug);
 
 // GET /blogs
 router.get("/", BlogsController.show);

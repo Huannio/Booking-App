@@ -9,8 +9,10 @@ import ImageWrapper from "~/components/ImageWrapper";
 import images from "~/assets/images";
 import { InputField } from "~/components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "~/utils/axios.config";
 import { notification } from "antd";
+import { useDispatch } from "react-redux";
+import { loginUserApi } from "~/redux/user/userSlice";
+
 const cx = classNames.bind(styles);
 function Login() {
   const {
@@ -22,15 +24,18 @@ function Login() {
     mode: "onBlur",
   });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const { setPermissions } = usePermission();
   const handleLogin = async (data) => {
-    const response = await axios.post("/auth/login", data);
-    if (response?.data?.user) {
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+    const { email, password } = data;
+    const res = await dispatch(loginUserApi({ email, password }));
+    if (!res.error) {
       notification.success({
-        message: "Đăng nhập thành công!",
+        message: res?.data?.message || "Đăng nhập thành công!",
       });
+
       navigate("/dashboard");
     }
   };

@@ -9,6 +9,7 @@ function SectionHeader({
   secondTitle,
   mainContent,
   column = false,
+  badge,
 }) {
   return (
     <div className={cx("SectionHeader", { "SectionHeader-column": column })}>
@@ -18,6 +19,8 @@ function SectionHeader({
           <br></br>
           {secondTitle}
         </h4>
+
+        {badge}
 
         {!column && (
           <div>
@@ -180,6 +183,7 @@ SectionHeader.propTypes = {
   firstTitle: PropTypes.string,
   secondTitle: PropTypes.string,
   mainContent: PropTypes.string,
+  badge: PropTypes.node,
 };
 
 export default SectionHeader;
