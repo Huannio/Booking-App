@@ -13,9 +13,9 @@ router.post(
   HotelController.create
 );
 
-// PUT /ship/update/:slug
+// PUT /ship/update/:id
 router.put(
-  "/update/:slug",
+  "/update/:id",
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -23,15 +23,15 @@ router.put(
   HotelController.update
 );
 
-// DELETE /ship/delete/:slug
-router.delete("/delete/:slug", HotelController.delete);
+// DELETE /ship/delete/:id
+router.delete("/delete/:id", HotelController.delete);
 
 // GET /ship/cruise-category
-router.get("/cruise-category", HotelController.getCity);
+router.get("/city", HotelController.getCity);
 
 
-// GET /ship/:slug
-router.get("/:slug", HotelController.index);
+// GET /ship/:id
+router.get("/:id", HotelController.index);
 
 // GET /ship
 router.get("/", HotelController.show);

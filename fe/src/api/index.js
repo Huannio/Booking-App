@@ -71,3 +71,19 @@ export const handleGetFeatureTypesApi = async () => {
   return await axios.get("/features/types");
 };
 
+// Hotel
+export const handleGetHotelsApi = async () => {
+  return await axios.get("/hotel");
+};
+
+export const handleGetHotelByIdApi = async (id) => {
+  return await axios.get(`/hotel/${id}`);
+}
+
+export const handleGetCityApi = async () => {
+  return await axios.get("/hotel/city");
+};
+
+// export const handleGetHotelBySlugApi = async (slug) => {
+//   return await axios.get(`/hotel/${slug}`);
+// };

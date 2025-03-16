@@ -9,17 +9,17 @@ const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
 
-class HotelHotelService {
+class HotelService {
   async getAllHotel() {
     try {
-      return await Hotels.findAll({
+      return await Hotel.findAll({
         attributes: [
             "id",
             "admin",
             "city_id",
           ],
           include: [
-            { model: Cities, as: "city", attributes: ["name", "id"] },
+            { model: Cities, as: "cities", attributes: ["name", "id"] },
           ],
       });
     } catch (error) {
@@ -27,36 +27,12 @@ class HotelHotelService {
     }
   }
 
-  async getHotelBySlug(slug) {
+  async getHotelById(id) {
     try {
-      return await Products.findOne({
-        where: { slug },
-        attributes: [
-          "id",
-          "title",
-          "address",
-          "map_link",
-          "map_iframe_link",
-          "default_price",
-          "slug",
-          "num_reviews",
-          "score_reviews",
-          "schedule",
-          "thumbnail",
-          "images",
-          "type_product_id",
-          "active",
-        ],
-        include: [
-          {
-            model: Hotel,
-            as: "hotel",
-            attributes: ["id", "admin", "city_id"],
-            include: [
-                { model: Cities, as: "city", attributes: ["name", "id"] },
-            ],
-          },
-        ],
+      return await Hotel.findOne({
+        attributes: ["id", "admin", "city_id"],
+        where: { id },
+        include: [{ model: Cities, as: "cities", attributes: ["name", "id"] }],
       });
     } catch (error) {
       throw error;
@@ -137,7 +113,7 @@ class HotelHotelService {
     }
   }
 
-  async updateHotel(slug, reqBody, reqFiles) {
+  async updateHotel(id, reqBody, reqFiles) {
     try {
       const {
         title,
@@ -150,10 +126,9 @@ class HotelHotelService {
         images,
         thumbnail,
       } = reqBody;
-
-      const ship = await this.getHotelBySlug(slug);
+      const slug = slugify(title);
       const checkHotel = await Products.findOne({
-        where: { slug: slugify(title), id: { [Op.ne]: ship.id } },
+        where: { slug, id: { [Op.ne]: id } },
       });
 
       if (checkHotel) {
@@ -217,7 +192,7 @@ class HotelHotelService {
           slug: slugify(title),
           active: true,
         },
-        { where: { id: ship.id } }
+        { where: { id} }
       );
 
       const hotel = await Hotel.update(
@@ -239,9 +214,9 @@ class HotelHotelService {
     }
   }
 
-  async deleteHotel(slug) {
+  async deleteHotel(id) {
     try {
-      return await Products.destroy({ where: { slug } });
+      return await Products.destroy({ where: { id } });
     } catch (error) {
       throw error;
     }

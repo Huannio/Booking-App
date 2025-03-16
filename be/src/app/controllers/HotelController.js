@@ -18,9 +18,9 @@ class HotelController {
 
   index = async (req, res, next) => {
     try {
-      const { slug } = req.params;
-      console.log(slug);
-      const hotel = await this.HotelService.getHotelBySlug(slug);
+      const { id } = req.params;
+      console.log(id);
+      const hotel = await this.HotelService.getHotelById(id);
       res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, hotel });
     } catch (error) {
       next(error);
@@ -51,9 +51,9 @@ class HotelController {
 
   update = async (req, res, next) => {
     try {
-      const { slug } = req.params;
+      const { id } = req.params;
       const updateHotel = await this.HotelService.updateHotel(
-        slug,
+        id,
         req.body,
         req.files
       );
@@ -67,8 +67,8 @@ class HotelController {
 
   delete = async (req, res, next) => {
     try {
-      const { slug } = req.params;
-      const deleteHotel = await this.HotelService.deleteHotel(slug);
+      const { id } = req.params;
+      const deleteHotel = await this.HotelService.deleteHotel(id);
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
         deleteHotel,

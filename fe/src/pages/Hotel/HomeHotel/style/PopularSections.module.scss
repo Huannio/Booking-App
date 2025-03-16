@@ -30,13 +30,6 @@
   flex-wrap: wrap;
 }
 
-.popularSections-section {
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  padding: 80px 32px;
-}
-
 .PopularShips-action {
   display: flex;
   justify-content: center;
@@ -118,6 +111,13 @@
   display: flex;
   gap: 32px;
   flex-wrap: wrap;
+}
+
+.popularSections-section {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 80px 32px;
 }
 
 .PopularShips-action {

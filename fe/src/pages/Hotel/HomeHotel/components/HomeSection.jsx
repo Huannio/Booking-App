@@ -3,33 +3,34 @@ import { LoadingContext } from "~/components/Loading/Loading";
 import classNames from "classnames/bind"; 
 import Button from "~/components/Button";
 import styles from '../Home.module.scss';
-import { handleGetCruiseCategoryApi } from "~/api";
+import { handleGetCityApi } from "~/api";
 
 const cx = classNames.bind(styles); 
 
 const HomeSection = () => {
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [cruiseCategories, setCruiseCategories] = useState([]); 
-  const getCruiseCategory = useCallback(async () => {
+  const [city, setCity] = useState([]); 
+
+  const getCity = useCallback(async () => {
     setGlobalLoading(true);
     try {
-      const response = await handleGetCruiseCategoryApi();
+      const response = await handleGetCityApi();
       console.log("Full response:", response);
       
-      const categoryData = response?.cruiseCategory || [];
+      const cityData = response?.city || [];
       
-      setCruiseCategories(categoryData);
+      setCity(cityData);
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục du thuyền:", error);
-      setCruiseCategories([]);
+      console.error("Lỗi khi lấy thành phố", error);
+      setCity([]);
     } finally {
       setGlobalLoading(false);
     }
   }, [setGlobalLoading]);
 
   useEffect(() => {
-    getCruiseCategory();
-  }, [getCruiseCategory]);
+    getCity();
+  }, [getCity]);
   
   return (
     <section className={cx("container", "home-section")}>
@@ -38,7 +39,7 @@ const HomeSection = () => {
           <h4>Các điểm đến của Mixivivu</h4>
         </div>
         <label htmlFor="" className={cx("lg", "SectionHeader-description")}>
-          Khám phá vẻ đẹp tuyệt vời của Du thuyền Hạ Long: Hành trình đến thiên đường thiên nhiên
+        Trải nghiệm sự sang trọng và thư giãn tại Khách sạn: Hành trình đến thiên đường nghỉ dưỡng hoàn hảo
         </label>
         <div>
             <span style = {{boxSizing: "border-box",display: "inline-block",overflow: "hidden",width: "initial",height: "initial",background: "none",opacity: 1,border: 0,margin: 0,padding: 0,position: "relative",maxWidth: "100%",}} >
@@ -56,14 +57,14 @@ const HomeSection = () => {
 
       <div className={cx("home-cardList")}>
         {/* Thêm kiểm tra là Array trước khi map */}
-        {Array.isArray(cruiseCategories) && cruiseCategories.map((cruiseCategory) => (
-          <a href={`/tim-du-thuyen/search?keyword=${cruiseCategory.name}`} key={cruiseCategory.id}>
+        {Array.isArray(city) && city.map((city) => (
+          <a href={`/tim-khach-san/search?keyword=${city.name}`} key={city.id}>
             <div className={cx("card", "CategoryCard-categoryCard")}>
               <div className={cx("CategoryCard-imageWrapper")}>
                 <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
                   <img
                     alt="mixivivu"
-                    src={cruiseCategory.image}
+                    src={city.image}
                     width="100%"
                     height="100%"
                     loading="lazy"
@@ -72,7 +73,7 @@ const HomeSection = () => {
                 </div>
               </div>
               <div className={cx("CategoryCard-body")}>
-                <h6>{cruiseCategory.name}</h6>
+                <h6>{city.name}</h6>
               </div>
               <div className={cx("CategoryCard-footer")}>
                 <Button type="button" className={cx("btn", "btn-sm", "btn-outline")}>

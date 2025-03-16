@@ -7,6 +7,7 @@ import {
 } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Hotel from "../pages/Hotel/HomeHotel";
 
 import {
   Show as ShowUser,
@@ -42,6 +43,13 @@ import {
   // Update as UpdateFeature,
   // Delete as DeleteFeature,
 } from "../pages/Feature";
+
+import {
+  Show as ShowHotel,
+  Create as CreateHotel,
+  Update as UpdateHotel,
+  Delete as DeleteHotel,
+} from "../pages/Hotel/HotelAdmin";
 
 import {
   Show as ShowBlog,
@@ -96,6 +104,10 @@ export const publicRoutes = [
   {
     path: "/doanh-nghiep",
     component: BusinessPage,
+  },
+  {
+    path: "/tim-khach-san",
+    component: Hotel,
   },
 
   // Footer
@@ -289,6 +301,32 @@ export const privateRoutes = [
   //   component: DeleteFeature,
   //   layout: AdminLayout,
   // },
+
+  // Hotel 
+  {
+    path: config.routes.hotel.index,
+    component: ShowHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.index",
+  },
+  {
+    path: config.routes.hotel.create,
+    component: CreateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.create",
+  },
+  {
+    path: config.routes.hotel.update,
+    component: UpdateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.delete,
+    component: DeleteHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.delete",
+  },
 
   // Blogs
   {

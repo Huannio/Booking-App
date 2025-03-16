@@ -31,73 +31,52 @@ const ReviewSection = () => {
         <div className={cx("ReviewQuote-reviewQuote")}>
           <div className={cx("ReviewQuote-quoteBody", activeReview === 0 ? "ReviewQuote-quoteBody-active" : "")}>
             <div className={cx("ReviewQuote-quoteContent")}>
-              <p className={cx("subheading", "lg")}>Du thuyền Heritage Bình Chuẩn</p>
+              <p className={cx("subheading", "lg")}>Khách sạn Golden Holiday Hội An</p>
               <p className={cx("lg")}>
-              Khách sạn Golden Holiday Hội An
-                <br />
-                Đi đúng hôm thời tiết đẹp, ngắm cảnh vịnh Hạ Long đẹp tuyệt vời.
+              Chúng tôi đã có một kỳ nghỉ tuyệt vời tại khách sạn Golden Holiday Hội An. Phòng ốc rộng rãi, thoáng mát và được trang trí đẹp mắt. Nhân viên rất thân thiện và luôn sẵn lòng hỗ trợ. Sẽ quay lại đây lần sau.
               </p>
             </div>
-            <p className={cx("detail-md", "upper-case")}>Chị Thu Hà</p>
+            <p className={cx("detail-md", "upper-case")}>Chị Minh Anh</p>
           </div>
 
           <div className={cx("ReviewQuote-quoteBody", activeReview === 1 ? "ReviewQuote-quoteBody-active" : "")}>
             <div className={cx("ReviewQuote-quoteContent")}>
-              <p className={cx("subheading", "lg")}>Du thuyền Stellar of the Seas</p>
+              <p className={cx("subheading", "lg")}>Khách sạn Grand Tourane Đà Nẵng</p>
               <p className={cx("lg")}>
-                Du thuyền 5 sao và sự trải nghiệm tuyệt vời. Tour của chúng tôi đi rất đầy đủ như theo chương trình đã thông báo trước. Đồ ăn khá đa dạng, nấu vừa với khẩu vị của tất cả mọi độ tuổi từ bé đến các bác U80.
-                Rất đáng nhớ !!!
-                <br />
-                Nhân viên tư vấn nhiệt tình,phục vụ chu đáo. Đồ ăn ngon,phòng ốc đẹp.
-                <br />
-                Đây thực sự là trải nghiệm đáng nhớ,mình sẽ tiếp tục ủng hộ và giới thiệu cho bạn
-                bè. Cảm ơn du thuyền!
+              Khách sạn Grand Tourane Đà Nẵng có vị trí tuyệt vời, gần biển và các nhà hàng nổi tiếng. Phòng nghỉ sạch sẽ, giường thoải mái và view rất đẹp. Dịch vụ ăn uống tại nhà hàng khách sạn cũng rất chất lượng.
               </p>
             </div>
-            <p className={cx("detail-md", "upper-case")}>Anh Khánh</p>
+            <p className={cx("detail-md", "upper-case")}>Gia đình chị Trúc Quỳnh</p>
           </div>
 
           <div className={cx("ReviewQuote-quoteBody", activeReview === 2 ? "ReviewQuote-quoteBody-active" : "")}>
             <div className={cx("ReviewQuote-quoteContent")}>
-              <p className={cx("subheading", "lg")}> Du thuyền Heritage Bình Chuẩn</p>
+              <p className={cx("subheading", "lg")}></p>
               <p className={cx("lg")}>
-              Tour du thuyền 2 ngày 1 đêm rất tuyệt vời,tôi đc ngắm vẻ đẹp cả vịnh Hạ Long,khám phá các hang động.
-              Nhân viên tư vấn nhiệt tình,phục vụ chu đáo. Đồ ăn ngon,phòng ốc đẹp.
-                <br />
-                Đây thực sự là trải nghiệm đáng nhớ,mình sẽ tiếp tục ủng hộ và giới thiệu cho bạn bè. Cảm ơn du thuyền!
+              Dịch vụ khách hàng ở đây thật sự ấn tượng. Mọi yêu cầu của chúng tôi đều được đáp ứng nhanh chóng. Cảm ơn đội ngũ nhân viên đã làm cho kỳ nghỉ của chúng tôi trở nên đáng nhớ.
               </p>
             </div>
-            <p className={cx("detail-md", "upper-case")}>Chị Linh - Anh Dũng</p>
+            <p className={cx("detail-md", "upper-case")}>Anh Tiến Lâm</p>
           </div>
 
           <div className={cx("ReviewQuote-quoteBody", activeReview === 3 ? "ReviewQuote-quoteBody-active" : "")}>
             <div className={cx("ReviewQuote-quoteContent")}>
-              <p className={cx("subheading", "lg")}> Du thuyền Heritage Bình Chuẩn</p>
+              <p className={cx("subheading", "lg")}> </p>
               <p className={cx("lg")}>
-              Cảm ơn team đã cho mình trải nghiệm quá ưng ý.
-                <br />
-                Đi đúng hôm thời tiết đẹp,ngắm cảnh vịnh Hạ Long đẹp tuyệt vời.
-                <br />
-                Nhân viên tư vấn nhiệt tình còn note lại khách dị ứng món gì,phục vụ chu đáo, buffet hải sản tươi ngon,phòng ốc đẹp 
-                <br />
-                Tuyệt vời lắm !!!
+              Tiện nghi trong phòng rất hiện đại và đầy đủ. Bể bơi sạch sẽ và không gian xung quanh rất thư giãn. Chúng tôi thực sự hài lòng với trải nghiệm này.
               </p>
             </div>
-            <p className={cx("detail-md", "upper-case")}>Bạn Minh Hoàng</p>
+            <p className={cx("detail-md", "upper-case")}>Chị Thu Lệ</p>
           </div>
 
           <div className={cx("ReviewQuote-quoteBody", activeReview === 4 ? "ReviewQuote-quoteBody-active" : "")}>
             <div className={cx("ReviewQuote-quoteContent")}>
               <p className={cx("subheading", "lg")}> Du thuyền Heritage Bình Chuẩn</p>
               <p className={cx("lg")}>
-              Du thuyền 5 sao và sự trải nghiệm tuyệt vời. Tour của chúng tôi đi rất đầy đủ như theo chương trình đã thông báo trước. Đồ ăn khá đa dạng, nấu vừa với khẩu vị của tất cả mọi độ tuổi từ bé đến các bác U80.
-                <br />
-                Chúng tôi được trải nghiệm gần như đầy đủ các hoạt động chèo kayak,thăm hang,thăm vịnh.... và loại hải sản tươi ngon
-                <br />
-                Rất đáng nhớ !!!
+              Khách sạn có khu vực spa và gym rất tốt. Chúng tôi đã có những giờ phút thư giãn tuyệt vời tại đây. Chắc chắn sẽ giới thiệu khách sạn này cho bạn bè và gia đình.
               </p>
             </div>
-            <p className={cx("detail-md", "upper-case")}>Cô Thanh Hằng và bạn</p>
+            <p className={cx("detail-md", "upper-case")}>Chị Minh Khuê</p>
           </div>
 
         </div>
@@ -107,16 +86,16 @@ const ReviewSection = () => {
             <label className={cx("label", "md")}>Chị Thu Hà</label>
           </button>
           <button type="button" className={cx("btn", "btn-btn", "btn-normal", "btn-outline", "ReviewSection-reviewBtn", activeReview === 1 ? "ReviewSection-defaultBtn" : "")} onClick={() => setActiveReview(1)}>
-            <label className={cx("label", "md")}>Anh Khánh</label>
+            <label className={cx("label", "md")}>Gia đình chị Trúc Quỳnh</label>
           </button>
           <button type="button" className={cx("btn", "btn-btn", "btn-normal", "btn-outline", "ReviewSection-reviewBtn", activeReview === 1 ? "ReviewSection-defaultBtn" : "")} onClick={() => setActiveReview(2)}>
-            <label className={cx("label", "md")}>Chị Linh - Anh Dũng</label>
+            <label className={cx("label", "md")}>Anh Tiến Lâm</label>
           </button>
           <button type="button" className={cx("btn", "btn-btn", "btn-normal", "btn-outline", "ReviewSection-reviewBtn", activeReview === 1 ? "ReviewSection-defaultBtn" : "")} onClick={() => setActiveReview(3)}>
-            <label className={cx("label", "md")}>Bạn Minh Hoàng</label>
+            <label className={cx("label", "md")}>Chị Thu Lệ</label>
           </button>
           <button type="button" className={cx("btn", "btn-btn", "btn-normal", "btn-outline", "ReviewSection-reviewBtn", activeReview === 1 ? "ReviewSection-defaultBtn" : "")} onClick={() => setActiveReview(4)}>
-            <label className={cx("label", "md")}>Cô Thanh Hằng và bạn</label>
+            <label className={cx("label", "md")}>Chị Minh Khuê</label>
           </button>
         </div>
       </div>
