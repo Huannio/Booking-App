@@ -1,6 +1,5 @@
 import { AdminLayout } from "../components/Layout";
 import Home from "../pages/Home";
-import Detail from "../pages/Detail";
 import {
   Cruise as CruiseSearch,
   Flight as FlightSearch,
@@ -68,15 +67,17 @@ import {
   Update as UpdateUserPermission,
 } from "../pages/Permissions/Permission";
 
+import AccountVerification from "../pages/Auth/AccountVerification";
 
 export const publicRoutes = [
   {
-    path: "/",
-    component: Home,
+    path: config.routes.account.verification,
+    component: AccountVerification,
+    layout: null,
   },
   {
-    path: "/:type/:slug",
-    component: Detail,
+    path: "/",
+    component: Home,
   },
   {
     path: "/tim-du-thuyen",

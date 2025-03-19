@@ -36,6 +36,17 @@ class UserController {
     }
   };
 
+  verifyAccount = async (req, res, next) => {
+    try {
+      const verifyAccount = await this.userService.verifyAccount(req.body);
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, verifyAccount, message: "Kích hoạt tài khoản thành công!" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   update = async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -52,13 +63,11 @@ class UserController {
     try {
       const { id } = req.params;
       const deleteUser = await this.userService.deleteUser(id);
-      res
-        .status(StatusCodes.OK)
-        .json({
-          statusCode: StatusCodes.OK,
-          deleteUser,
-          message: "Xóa thành công!",
-        });
+      res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        deleteUser,
+        message: "Xóa thành công!",
+      });
     } catch (error) {
       next(error);
     }
