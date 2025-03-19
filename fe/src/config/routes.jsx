@@ -44,6 +44,9 @@ const routes = {
     index: "/blog",
     detail: "/blog-detail/:slug",
   },
+  account: {
+    verification: "/account/verification",
+  },
 };
 
 export default routes;

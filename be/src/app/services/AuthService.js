@@ -31,6 +31,13 @@ class AuthService {
       throw new ApiError(StatusCodes.NOT_FOUND, "Email không tồn tại!");
     }
 
+    if (!user.publish) {
+      throw new ApiError(
+        StatusCodes.NOT_ACCEPTABLE,
+        "Tài khoản chưa được kích hoạt!"
+      );
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -82,6 +89,10 @@ class AuthService {
 
       return { accessToken: newToken };
     } catch (error) {
+      if (error.message?.includes("jwt expired")) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+      }
+
       throw error;
     }
   }

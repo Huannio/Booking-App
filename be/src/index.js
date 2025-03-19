@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: env.ORIGIN,
+    origin: env.WEBSITE_DOMAIN_DEV,
     credentials: true,
   })
 );
