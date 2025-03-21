@@ -57,6 +57,9 @@ const routes = {
     update: "/hotel/update/:slug",
     delete: "/hotel/delete/:slug",
   },
+  account: {
+    verification: "/account/verification",
+  },
 };
 
 export default routes;
