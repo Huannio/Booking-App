@@ -3,8 +3,9 @@ const {
   Products,
   Hotel,
   Cities,
+  Rooms,
 } = require("../../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
@@ -13,15 +14,11 @@ class HotelService {
   async getAllHotel() {
     try {
       return await Hotel.findAll({
-        attributes: [
-            "id",
-            "admin",
-            "city_id",
-          ],
-          include: [
-            { model: Cities, as: "cities", attributes: ["name", "id"] },
-            { model: Products, as: "product", attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] },
-          ],
+        attributes: ["id", "admin", "city_id"],
+        include: [
+          { model: Cities, as: "cities", attributes: ["name", "id"] },
+          { model: Products, as: "product", attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] },
+        ],
       });
     } catch (error) {
       throw error;
@@ -30,11 +27,31 @@ class HotelService {
 
   async getHotelById(id) {
     try {
-      return await Hotel.findOne({
+      const hotel = await Hotel.findOne({
         attributes: ["id", "admin", "city_id"],
         where: { id },
-        include: [{ model: Cities, as: "cities", attributes: ["name", "id"] }],
+        include: [
+          { 
+            model: Cities, 
+            as: "cities", 
+            attributes: ["name", "id"] 
+          },
+          { 
+            model: Products, 
+            as: "product", 
+            attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] 
+          },
+        ],
       });
+
+
+      const totalRooms = await Rooms.count({
+        where: { product_id: hotel.product.id },
+      });
+
+      hotel.dataValues.totalRooms = totalRooms;
+
+      return hotel;
     } catch (error) {
       throw error;
     }
@@ -136,15 +153,12 @@ class HotelService {
         throw new ApiError(StatusCodes.CONFLICT, "Tên Khách sạn đã tồn tại!");
       }
 
-      console.log(checkHotel);
-
       let imageLinkList = [];
       let thumbnailLink = null;
       if (reqFiles) {
         if (reqFiles.thumbnail) {
           const thumbnail = await uploadToCloudinary(
             reqFiles.thumbnail[0].buffer
-            // "thumbnail"
           );
           thumbnailLink = thumbnail.url;
         }
@@ -152,10 +166,7 @@ class HotelService {
         if (reqFiles.images) {
           imageLinkList = await Promise.all(
             reqFiles.images.map(async (image) => {
-              const uploadedImage = await uploadToCloudinary(
-                image.buffer
-                // slug
-              );
+              const uploadedImage = await uploadToCloudinary(image.buffer);
               return uploadedImage.url;
             })
           );
@@ -193,7 +204,7 @@ class HotelService {
           slug: slugify(title),
           active: true,
         },
-        { where: { id} }
+        { where: { id } }
       );
 
       const hotel = await Hotel.update(
@@ -202,7 +213,7 @@ class HotelService {
           admin,
         },
         {
-          where: { id: ship.id },
+          where: { id }, // Sửa từ `ship.id` thành `id`
         }
       );
 

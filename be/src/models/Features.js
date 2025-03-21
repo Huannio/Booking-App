@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "types",
       });
 
-    //   Feature.hasMany(models.Products, {
-    //     foreignKey: "id",
-    //     as: "product",
-    //   });
+      Feature.belongsToMany(models.Products, {
+        through: "product_feature", 
+        foreignKey: "id",   
+        as: "products",             
+      });
     }
   }
   Feature.init(

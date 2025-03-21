@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         as: "cities",
       });
 
-      Hotel.hasMany(models.Products, {
-        foreignKey: "id",
-        as: "product",
-      });
-
       Hotel.hasMany(models.Rooms, {
         foreignKey: "hotel_id",
         as: "rooms",
@@ -31,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        references: {
+          model: "products",
+          key: "id",
+        },
       },
       city_id: {
         type: DataTypes.INTEGER,

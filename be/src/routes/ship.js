@@ -30,6 +30,8 @@ router.delete("/delete/:slug", ShipController.delete);
 // GET /ship/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
 
+// GET /ship/feature
+router.get("/feature", ShipController.getFeatureShip);
 
 // GET /ship/:slug
 router.get("/:slug", ShipController.index);

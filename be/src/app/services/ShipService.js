@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const {
   Products,
   ProductType,
+  Features,
   Cruise,
   CruiseCategory,
 } = require("../../models");
@@ -74,6 +75,10 @@ class ShipService {
               },
             ],
           },
+          { model: Features, 
+            as: "features", 
+            attributes: ["text", "id", "icon"] 
+          },
         ],
       });
     } catch (error) {
@@ -85,6 +90,25 @@ class ShipService {
     try {
       return await CruiseCategory.findAll({
         attributes: ["id", "name", "image"],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getFeatureShip(product_id) {
+    try {
+      return await Features.findAll({
+        attributes: ["id", "icon", "text", "type"],
+        include: [
+          { model: Features, as: "features", attributes: ["text", "id", "icon"] },
+          {
+            model: Products,
+            as: "products",
+            attributes: ["id"],
+            where: { id: product_id },
+          },
+        ],
       });
     } catch (error) {
       throw error;
@@ -105,6 +129,7 @@ class ShipService {
         year,
         admin,
         trip,
+        features,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -153,7 +178,9 @@ class ShipService {
         admin,
         trip,
       });
-
+      if (features && features.length > 0) {
+        await product.addFeatures(features); 
+      }
       return {
         product,
         cruise,
@@ -179,6 +206,7 @@ class ShipService {
         trip,
         images,
         thumbnail,
+        features,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
@@ -261,6 +289,10 @@ class ShipService {
           where: { id: ship.id },
         }
       );
+
+      if (features && features.length > 0) {
+        await ship.setFeatures(features); 
+      }
 
       return {
         product,
