@@ -7,6 +7,7 @@ import {
   blogSchema,
   blogDetailSchema,
   cruiseSchema,
+  featureSchema,
   usersCataloguesSchema,
   permissionSchema,
 } from "./validationSchema";
@@ -19,6 +20,7 @@ const config = {
   blogSchema,
   blogDetailSchema,
   cruiseSchema,
+  featureSchema,
   usersCataloguesSchema,
   permissionSchema,
 };

@@ -6,6 +6,7 @@ import {
 } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Hotel from "../pages/Hotel/HomeHotel";
 
 import {
   Show as ShowUser,
@@ -13,6 +14,7 @@ import {
   Update as UpdateUser,
   Delete as DeleteUser,
 } from "../pages/User";
+
 
 import {
   Show as ShowUserCatalogues,
@@ -34,6 +36,19 @@ import {
   Update as UpdateShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
+import {
+  Show as ShowFeature,
+  Create as CreateFeature,
+  Update as UpdateFeature,
+  Delete as DeleteFeature,
+} from "../pages/Feature";
+
+import {
+  Show as ShowHotel,
+  Create as CreateHotel,
+  Update as UpdateHotel,
+  Delete as DeleteHotel,
+} from "../pages/Hotel/HotelAdmin";
 
 import {
   Show as ShowBlog,
@@ -91,38 +106,42 @@ export const publicRoutes = [
     path: "/doanh-nghiep",
     component: BusinessPage,
   },
+  {
+    path: "/tim-khach-san",
+    component: Hotel,
+  },
 
   // Footer
   {
-    path: "/ve-chung-toi",
+    path: '/ve-chung-toi',
     component: AboutUs,
   },
   {
-    path: "/dieu-khoan-va-dieu-kien",
+    path: '/dieu-khoan-va-dieu-kien',
     component: Terms,
   },
   {
-    path: "/chinh-sach-rieng-tu",
+    path: '/chinh-sach-rieng-tu',
     component: Privacy,
   },
   {
-    path: "/huong-dan-su-dung",
+    path: '/huong-dan-su-dung',
     component: HowToUse,
   },
   {
-    path: "/hinh-thuc-thanh-toan",
+    path: '/hinh-thuc-thanh-toan',
     component: Payment,
   },
   {
-    path: "/lien-he",
+    path: '/lien-he',
     component: Contact,
   },
   {
-    path: "/quy-dinh-chung-va-luu-y",
+    path: '/quy-dinh-chung-va-luu-y',
     component: Rules,
   },
   {
-    path: "/cau-hoi-thuong-gap",
+    path: '/cau-hoi-thuong-gap',
     component: Question,
   },
 
@@ -168,6 +187,7 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "users.delete",
   },
+
 
   // User Catalogues
   {
@@ -259,6 +279,58 @@ export const privateRoutes = [
     component: DeleteShip,
     layout: AdminLayout,
     requiredPermission: "ships.delete",
+  },
+
+  // Feature
+  {
+    path: config.routes.features.index,
+    component: ShowFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.index",
+  },
+  {
+    path: config.routes.features.create,
+    component: CreateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.create",
+  },
+  {
+    path: config.routes.features.update,
+    component: UpdateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.update",
+  },
+  {
+    path: config.routes.features.delete,
+    component: DeleteFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.delete",
+  },
+
+  // Hotel 
+  {
+    path: config.routes.hotel.index,
+    component: ShowHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.index",
+  },
+  {
+    path: config.routes.hotel.create,
+    component: CreateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.create",
+  },
+  {
+    path: config.routes.hotel.update,
+    component: UpdateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.delete,
+    component: DeleteHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.delete",
   },
 
   // Blogs

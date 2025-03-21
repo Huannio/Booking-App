@@ -7,16 +7,16 @@ import styles from '../Home.module.scss';
 const cx = classNames.bind(styles);
 
 function Banner() {
-  const [keyword, setKeyword] = useState('');
+  const [title, settitle] = useState('');
   const [location, setLocation] = useState('Tất cả địa điểm');
   const [price, setPrice] = useState('Tất cả mức giá');
-  const [locationsDropdownVisible, setLocationsDropdownVisible] = useState(false); // dropdown địa điểm
-  const [pricesDropdownVisible, setPricesDropdownVisible] = useState(false); // dropdown mức giá
+  const [locationsDropdownVisible, setLocationsDropdownVisible] = useState(false); 
+  const [pricesDropdownVisible, setPricesDropdownVisible] = useState(false); 
   const navigate = useNavigate();
 
   const handleLocationClick = () => {
     setLocationsDropdownVisible(!locationsDropdownVisible);
-    setPricesDropdownVisible(false); // Toggle visibility dropdown
+    setPricesDropdownVisible(false); 
   };
 
   const handlePriceClick = () => {
@@ -26,18 +26,17 @@ function Banner() {
 
   const handleLocationSelect = (selectedLocation) => {
     setLocation(selectedLocation);
-    setLocationsDropdownVisible(false); // Đóng dropdown sau khi chọn
+    setLocationsDropdownVisible(false); 
   };
 
   const handlePriceSelect = (selectedPrice) => {
     setPrice(selectedPrice);
-    setPricesDropdownVisible(false); // Đóng dropdown sau khi chọn
+    setPricesDropdownVisible(false); 
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Điều hướng với các tham số query
-    navigate(`/tim-du-thuyen/search?keyword=${keyword}&location=${location}&price=${price}`);
+    navigate(`/tim-du-thuyen?title=${title}&location=${location}&price=${price}`);
   };
 
   return (
@@ -63,10 +62,10 @@ function Banner() {
                 <input
                   className="p-md"
                   type="text"
-                  name="keyword"
-                  value={keyword}
+                  name="title"
+                  value={title}
                   placeholder="Nhập tên du thuyền"
-                  onChange={(e) => setKeyword(e.target.value)}
+                  onChange={(e) => settitle(e.target.value)}
                 />
               </label>
             </div>

@@ -14,7 +14,15 @@ module.exports = (sequelize, DataTypes) => {
         as: "type",
       });
 
+      Products.belongsToMany(models.Features, {
+        through: "product_feature", 
+        foreignKey: "id",   
+        as: "features",           
+      });
+
       Products.hasOne(models.Cruise, { foreignKey: "id", as: "cruise" });
+      Products.hasOne(models.Hotel, { foreignKey: "id", as: "hotel" });
+      Products.hasOne(models.Rooms, { foreignKey: "id", as: "rooms" });
     }
   }
   Products.init(

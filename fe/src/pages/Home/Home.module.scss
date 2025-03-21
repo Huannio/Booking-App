@@ -1,6 +1,9 @@
 @use "./style/banner.module.scss";
 @use "./style/button.module.scss";
 @use "./style/seach.module.scss";
+@use "./style/section.module.scss";
+@use "./style/PopularSections.module.scss";
+@use "./style/BlogSection.module.scss";
 @use "../../components/GlobalStyles/GlobalStyles.scss";
 
 #Home-popularSections {
@@ -26,36 +29,6 @@
     gap: 40px;
 }
 
-// blog section
-
-.BlogSection-section {
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  padding: 80px 32px;
-}
-
-.BlogSection-action,
-.BlogSection-cardList {
-  display: flex;
-  justify-content: center;
-}
-
-.BlogSection-cardList {
-  gap: 32px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 1024px) {
-  .BlogSection-section {
-    padding: 24px;
-    gap: 24px;
-  }
-
-  .BlogSection-cardList {
-    gap: 16px;
-  }
-}
 
 // section
 .SectionHeader-column {

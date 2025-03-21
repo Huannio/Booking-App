@@ -8,6 +8,7 @@ export const handleCheckAuthApi = async () => {
   return await axios.get("/auth/check-auth");
 };
 
+
 // Blog
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
@@ -52,6 +53,7 @@ export const handleGetShipsApi = async () => {
   return await axios.get("/ships");
 };
 
+
 export const handleGetCruiseCategoryApi = async () => {
   return await axios.get("/ships/cruise-category");
 };
@@ -59,3 +61,32 @@ export const handleGetCruiseCategoryApi = async () => {
 export const handleGetShipBySlugApi = async (slug) => {
   return await axios.get(`/ships/${slug}`);
 };
+
+// Feature
+export const handleGetFeaturesApi = async () => {
+  return await axios.get("/features");
+};
+export const handleGetFeatureByIdApi = async (id) => {
+  return await axios.get(`/features/${id}`);
+};
+
+export const handleGetFeatureTypesApi = async () => {
+  return await axios.get("/features/types");
+};
+
+// Hotel
+export const handleGetHotelsApi = async () => {
+  return await axios.get("/hotel");
+};
+
+export const handleGetHotelByIdApi = async (id) => {
+  return await axios.get(`/hotel/${id}`);
+}
+
+export const handleGetCityApi = async () => {
+  return await axios.get("/hotel/city");
+};
+
+// export const handleGetHotelBySlugApi = async (slug) => {
+//   return await axios.get(`/hotel/${slug}`);
+// };

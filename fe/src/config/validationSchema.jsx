@@ -30,6 +30,7 @@ export const loginSchema = yup.object({
   password: yup.string().required("Vui lòng nhập trường này"),
 });
 
+
 export const blogSchema = yup.object({
   title: yup.string().required("Vui lòng nhập trường này"),
   short_desc: yup.string().required("Vui lòng nhập trường này"),
@@ -81,6 +82,11 @@ export const cruiseSchema = yup.object().shape({
   year: yup.number().required("Vui lòng nhập trường này"),
 });
 
+export const featureSchema = yup.object().shape({
+  text: yup.string().required("Vui lòng nhập trường này"),
+  type: yup.string().required("Vui lòng chọn trường này"),
+  icon: yup.mixed().required("Vui lòng chọn ảnh"),
+});
 export const permissionSchema = yup.object({
   name: yup.string().required("Vui lòng nhập trường này"),
   canonical: yup.string().required("Vui lòng nhập trường này"),

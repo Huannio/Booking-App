@@ -97,25 +97,21 @@ function UploadImageField({
                 <div className={cx("preview-container-list")}>
                   {previews.map((src, index) => (
                     <div className={cx("preview-container")} key={index}>
-                      <img
-                        src={src}
-                        alt={`Preview ${index}`}
-                        className={cx("preview")}
-                      />
+                      <img src={src} alt={`Preview ${index}`} className={cx("preview")} />
                       <div className={cx("overlay")}>
                         <EyeOutlined
                           onClick={() => {
                             setModalVisible(true);
                             setFullscreenImage(src);
                           }}
-                          style={{ fontSize: "20px" }}
+                          style={{ fontSize: "16px", color: "white" }}
                         />
                         <button
                           type="button"
                           onClick={() => handleRemoveImage(index, onChange)}
                           className={cx("remove-image-btn")}
                         >
-                          <DeleteOutlined style={{ fontSize: "20px" }} />
+                          <DeleteOutlined style={{ fontSize: "16px", color: "white" }} />
                         </button>
                       </div>
                     </div>

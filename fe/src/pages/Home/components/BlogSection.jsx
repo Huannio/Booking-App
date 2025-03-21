@@ -1,19 +1,40 @@
+import { useContext, useEffect, useState, useCallback } from "react";
+import { LoadingContext } from "~/components/Loading/Loading";
 import { Link } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../Home.module.scss";
-import { useEffect, useState } from "react";
+import { handleGetBlogsApi } from "~/api";
 
 const cx = classNames.bind(styles);
 
 function BlogSection() {
-  const [shipBlog, setShipBlog] = useState([]);
+  const { setGlobalLoading } = useContext(LoadingContext);
+  const [blogs, setBlogs] = useState([]); 
+  const getBlog= useCallback(async () => {
+    setGlobalLoading(true);
+    try {
+      const response = await handleGetBlogsApi();
+      console.log("Full response:", response);
+      
+      const blogData = response?.data || [];
+      
+      setBlogs(blogData);
+    } catch (error) {
+      console.error("Lỗi khi lấy blog:", error);
+      setBlogs([]);
+    } finally {
+      setGlobalLoading(false);
+    }
+  }, [setGlobalLoading]);
 
   useEffect(() => {
-    fetch("/api/blogs")
-      .then((res) => res.json())
-      .then((data) => setShipBlog(data))
-      .catch((error) => console.error("Error fetching blogs:", error));
-  }, []);
+    getBlog();
+  }, [getBlog]);
+
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
 
   return (
     <section className={cx("container", "BlogSection-section")}> 
@@ -39,7 +60,7 @@ function BlogSection() {
       </div>
 
       <div className={cx("BlogSection-cardList")}> 
-        {shipBlog.map((blog) => (
+        {blogs.slice(0, 3).map((blog) => (  
           <Link key={blog.slug} to={`/blog-detail/${blog.slug}`} className={cx("BlogCard-blogCard")}> 
             <div className={cx("card")}> 
               <div className={cx("BlogCard-imageWrapper")}> 
@@ -58,11 +79,12 @@ function BlogSection() {
                 <p className={cx("subheading", "md", "BlogCard-title")}>{blog.title}</p>
                 <p className={cx("BlogCard-description", "sm")}>{blog.short_desc}</p>
               </div>
-              <p className={cx("BlogCard-footer", "detail", "sm")}>{blog.created_at}</p>
+              <p className={cx("BlogCard-footer", "detail", "sm")}>{formatDate(blog.createdAt)}</p>
             </div>
           </Link>
         ))}
       </div>
+
 
       <div className={cx("BlogSection-action")}> 
         <Link to="/blog"> 

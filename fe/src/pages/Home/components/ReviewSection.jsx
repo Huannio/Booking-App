@@ -33,7 +33,7 @@ const ReviewSection = () => {
             <div className={cx("ReviewQuote-quoteContent")}>
               <p className={cx("subheading", "lg")}>Du thuyền Heritage Bình Chuẩn</p>
               <p className={cx("lg")}>
-                Cảm ơn team đã cho mình trải nghiệm quá ưng ý.
+              Khách sạn Golden Holiday Hội An
                 <br />
                 Đi đúng hôm thời tiết đẹp, ngắm cảnh vịnh Hạ Long đẹp tuyệt vời.
               </p>

@@ -7,8 +7,6 @@ const checkPermission = require("../middleware/checkPermission");
 // POST /ship/create
 router.post(
   "/create",
-  authorizeJWT,
-  checkPermission("ships.create"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -19,8 +17,6 @@ router.post(
 // PUT /ship/update/:slug
 router.put(
   "/update/:slug",
-  authorizeJWT,
-  checkPermission("ships.update"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -29,15 +25,13 @@ router.put(
 );
 
 // DELETE /ship/delete/:slug
-router.delete(
-  "/delete/:slug",
-  authorizeJWT,
-  checkPermission("ships.delete"),
-  ShipController.delete
-);
+router.delete("/delete/:slug", ShipController.delete);
 
 // GET /ship/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
+
+// GET /ship/feature
+router.get("/feature", ShipController.getFeatureShip);
 
 // GET /ship/:slug
 router.get("/:slug", ShipController.index);
