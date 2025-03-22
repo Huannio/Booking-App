@@ -92,6 +92,30 @@ class PermissionManagementController {
       next(error);
     }
   };
+
+  search = async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+
+      const { total, data, totalPages } =
+        await this.permissionManagementService.getPermissionSearch(
+          req.query,
+          limit,
+          offset
+        );
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        data,
+        total,
+        totalPages,
+        records: data.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 module.exports = new PermissionManagementController();

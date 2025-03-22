@@ -6,6 +6,9 @@ const BlogsValidation = require("../validations/BlogsValidation");
 const authorizeJWT = require("../middleware/authorize");
 const checkPermission = require("../middleware/checkPermission");
 
+// GET /blogs/search
+router.get("/search", BlogsController.search);
+
 // GET /blogs/pagination
 router.get("/pagination", BlogsController.getBlogPagination);
 

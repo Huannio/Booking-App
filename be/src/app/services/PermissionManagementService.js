@@ -104,6 +104,35 @@ class PermissionManagementService {
       throw error;
     }
   }
+
+  getPermissionSearch = async (reqQuery, limit, offset) => {
+    try {
+      const { name } = reqQuery;
+      const where = {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      };
+
+      const total = await Permissions.count({ where });
+
+      const permissions = await Permissions.findAndCountAll({
+        limit,
+        offset,
+        attributes: ["id", "name", "canonical", "module"],
+        where,
+        order: [["name", "ASC"]],
+      });
+
+      return {
+        total: total,
+        data: permissions.rows,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 module.exports = new PermissionManagementService();

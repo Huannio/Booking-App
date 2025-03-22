@@ -37,6 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       active: DataTypes.BOOLEAN,
       type_product_id: DataTypes.INTEGER,
       slug: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,

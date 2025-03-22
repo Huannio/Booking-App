@@ -4,7 +4,11 @@ const ShipController = require("../app/controllers/ShipController");
 const upload = require("../middleware/upload");
 const authorizeJWT = require("../middleware/authorize");
 const checkPermission = require("../middleware/checkPermission");
-// POST /ship/create
+
+// GET /ships/search
+router.get("/search", ShipController.search);
+
+// POST /ships/create
 router.post(
   "/create",
   authorizeJWT,
@@ -16,7 +20,7 @@ router.post(
   ShipController.create
 );
 
-// PUT /ship/update/:slug
+// PUT /ships/update/:slug
 router.put(
   "/update/:slug",
   authorizeJWT,
@@ -28,7 +32,7 @@ router.put(
   ShipController.update
 );
 
-// DELETE /ship/delete/:slug
+// DELETE /ships/delete/:slug
 router.delete(
   "/delete/:slug",
   authorizeJWT,
@@ -36,12 +40,12 @@ router.delete(
   ShipController.delete
 );
 
-// GET /ship/cruise-category
+// GET /ships/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
 
-// GET /ship/:slug
+// GET /ships/:slug
 router.get("/:slug", ShipController.index);
 
-// GET /ship
+// GET /ships
 router.get("/", ShipController.show);
 module.exports = router;

@@ -8,6 +8,17 @@ export const handleCheckAuthApi = async () => {
   return await axios.get("/auth/check-auth");
 };
 
+// User
+export const handleSearchUsersApi = async (email, page = 0, limit = null) => {
+  const params = new URLSearchParams();
+
+  if (email) params.append("email", email);
+  if (page !== null) params.append("page", page);
+  if (limit !== null) params.append("limit", limit);
+
+  return await axios.get(`/users/search?${params.toString()}`);
+};
+
 // Blog
 export const handleGetBlogTypesApi = async () => {
   return await axios.get("/blogs/types");
@@ -47,6 +58,20 @@ export const handleGetBlogByTypeIdApi = async (id) => {
   return await axios.get(`/blogs/types/${id}`);
 };
 
+export const handleSearchBlogsApi = async (
+  title = null,
+  page = 0,
+  limit = null
+) => {
+  const params = new URLSearchParams();
+
+  if (title) params.append("title", title);
+  if (page !== null) params.append("page", page);
+  if (limit !== null) params.append("limit", limit);
+
+  return await axios.get(`/blogs/search?${params.toString()}`);
+};
+
 // Ship
 export const handleGetShipsApi = async () => {
   return await axios.get("/ships");
@@ -58,4 +83,41 @@ export const handleGetCruiseCategoryApi = async () => {
 
 export const handleGetShipBySlugApi = async (slug) => {
   return await axios.get(`/ships/${slug}`);
+};
+
+export const handleSearchShipsApi = async (
+  title = null,
+  categoryId = null,
+  greaterDefaultPrice = null,
+  lowerDefaultPrice = null,
+  page = 0,
+  limit = null
+) => {
+  const params = new URLSearchParams();
+
+  if (title) params.append("title", title);
+  if (categoryId !== null) params.append("categoryId", categoryId);
+  if (greaterDefaultPrice !== null)
+    params.append("greaterDefaultPrice", greaterDefaultPrice);
+  if (lowerDefaultPrice !== null)
+    params.append("lowerDefaultPrice", lowerDefaultPrice);
+  if (page !== null) params.append("page", page);
+  if (limit !== null) params.append("limit", limit);
+
+  return await axios.get(`/ships/search?${params.toString()}`);
+};
+
+// permissions-management
+export const handleSearchPermissionsApi = async (
+  name = null,
+  page = 0,
+  limit = null
+) => {
+  const params = new URLSearchParams();
+
+  if (name) params.append("name", name);
+  if (page !== null) params.append("page", page);
+  if (limit !== null) params.append("limit", limit);
+
+  return await axios.get(`/permissions-management/search?${params.toString()}`);
 };

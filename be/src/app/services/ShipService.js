@@ -5,7 +5,7 @@ const {
   Cruise,
   CruiseCategory,
 } = require("../../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
@@ -274,6 +274,89 @@ class ShipService {
   async deleteShip(slug) {
     try {
       return await Products.destroy({ where: { slug } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getShipSearch(
+    limit,
+    offset,
+    categoryId,
+    title,
+    greaterDefaultPrice,
+    lowerDefaultPrice
+  ) {
+    try {
+      let whereCruise = {};
+      let whereProducts = {};
+
+      if (categoryId != null) {
+        whereCruise.category_id = categoryId;
+      }
+
+      if (title != null) {
+        whereProducts = {
+          title: {
+            [Op.like]: `%${title}%`,
+          },
+        };
+      }
+
+      if (greaterDefaultPrice != null && lowerDefaultPrice != null) {
+        whereProducts.default_price = {
+          [Op.gte]: greaterDefaultPrice,
+          [Op.lte]: lowerDefaultPrice,
+        };
+      }
+
+      const total = await Products.count({
+        where: whereProducts,
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            where: whereCruise,
+          },
+        ],
+      });
+
+      const ships = await Products.findAndCountAll({
+        limit,
+        offset,
+        attributes: ["id", "title", "thumbnail", "slug", "address"],
+        where: whereProducts,
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            where: whereCruise,
+            attributes: [
+              "id",
+              "category_id",
+              "shell",
+              "cabin",
+              "year",
+              "admin",
+              "trip",
+            ],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+      });
+
+      return {
+        total: total,
+        data: ships.rows,
+        totalPages: Math.ceil(total / limit),
+      };
     } catch (error) {
       throw error;
     }

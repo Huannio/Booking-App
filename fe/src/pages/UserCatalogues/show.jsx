@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Input, Space, Table } from "antd";
+import { Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import axios from "~/utils/axios.config";
@@ -66,11 +66,6 @@ function Show() {
       <div className="flex justify-between align-center">
         <div className="flex align-center gap-12">
           <h1>Danh sách vai trò</h1>
-          <Input
-            type="text"
-            placeholder="Tìm kiếm..."
-            style={{ width: "300px" }}
-          />
         </div>
         <Link to={"/users-catalogues/create"}>
           <Button type="primary" style={{ marginBottom: "20px" }}>
