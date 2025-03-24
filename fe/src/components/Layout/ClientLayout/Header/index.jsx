@@ -9,7 +9,7 @@ import Button from "~/components/Button";
 const cx = classNames.bind(styles);
 function Header() {
   return (
-    <header className={cx("header-wrapper", "home-header")}>
+    <header className={cx("header-wrapper", "Home-header")}>
       <div
         className={cx(
           "container flex justify-between align-center",

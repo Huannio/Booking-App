@@ -1,0 +1,22 @@
+.Home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 80px 32px;
+  & .Home-cardList {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 1024px) {
+  .Home-section {
+    padding: 24px;
+  }
+
+  .Home-cardList {
+    gap: 16px;
+  }
+}

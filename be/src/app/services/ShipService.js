@@ -6,7 +6,7 @@ const {
   Cruise,
   CruiseCategory,
 } = require("../../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
@@ -34,6 +34,24 @@ class ShipService {
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
+          {
+            model: Cruise,
+            as: "cruise",
+            attributes: ["id", "year", "cabin", "shell", "admin", "trip"],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
+          },
         ],
       });
     } catch (error) {
@@ -75,9 +93,11 @@ class ShipService {
               },
             ],
           },
-          { model: Features, 
-            as: "features", 
-            attributes: ["text", "id", "icon"] 
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
           },
         ],
       });
@@ -101,7 +121,11 @@ class ShipService {
       return await Features.findAll({
         attributes: ["id", "icon", "text", "type"],
         include: [
-          { model: Features, as: "features", attributes: ["text", "id", "icon"] },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+          },
           {
             model: Products,
             as: "products",
@@ -178,9 +202,6 @@ class ShipService {
         admin,
         trip,
       });
-      if (features && features.length > 0) {
-        await product.addFeatures(features); 
-      }
       return {
         product,
         cruise,
@@ -206,7 +227,6 @@ class ShipService {
         trip,
         images,
         thumbnail,
-        features,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
@@ -243,7 +263,7 @@ class ShipService {
       }
 
       if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images.split(","));
+        imageLinkList.push(...images);
         imageLinkList = imageLinkList.join(",");
       }
 
@@ -290,10 +310,6 @@ class ShipService {
         }
       );
 
-      if (features && features.length > 0) {
-        await ship.setFeatures(features); 
-      }
-
       return {
         product,
         cruise,
@@ -306,6 +322,127 @@ class ShipService {
   async deleteShip(slug) {
     try {
       return await Products.destroy({ where: { slug } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getShipSearch(
+    limit,
+    offset,
+    categoryId,
+    title,
+    greaterDefaultPrice,
+    lowerDefaultPrice
+  ) {
+    try {
+      let whereCruise = {};
+      let whereProducts = {};
+
+      if (categoryId != null) {
+        whereCruise.category_id = categoryId;
+      }
+
+      if (title != null) {
+        whereProducts = {
+          title: {
+            [Op.like]: `%${title}%`,
+          },
+        };
+      }
+
+      if (greaterDefaultPrice != null || lowerDefaultPrice != null) {
+        whereProducts.default_price = {};
+        if (greaterDefaultPrice != null) {
+          whereProducts.default_price[Op.gte] = greaterDefaultPrice;
+        }
+
+        if (lowerDefaultPrice != null) {
+          whereProducts.default_price[Op.lte] = lowerDefaultPrice;
+        }
+      }
+
+      const total = await Products.count({
+        where: whereProducts,
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            where: whereCruise,
+          },
+        ],
+      });
+
+      // Về sau nếu thiếu trường nào thì hãy vào đây viết thêm để query vào trường đó
+      const ships = await Products.findAndCountAll({
+        limit,
+        offset,
+        attributes: ["id", "title", "thumbnail", "slug", "address"],
+        where: whereProducts,
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            where: whereCruise,
+            attributes: [
+              "id",
+              "category_id",
+              "shell",
+              "cabin",
+              "year",
+              "admin",
+              "trip",
+            ],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+      });
+
+      return {
+        total: total,
+        data: ships.rows,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getActiveShip() {
+    try {
+      return await Products.findAll({
+        where: { active: true, type_product_id: 1 },
+        attributes: ["id", "title", "thumbnail", "slug", "address", "default_price", "schedule"],
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            attributes: [
+              "id",
+              "category_id",
+              "shell",
+              "cabin",
+              "year",
+              "admin",
+              "trip",
+            ],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      });
     } catch (error) {
       throw error;
     }

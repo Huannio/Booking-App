@@ -6,8 +6,8 @@ const UserController = require("../app/controllers/UserController");
 const checkPermission = require("../middleware/checkPermission");
 const authorizeJWT = require("../middleware/authorize");
 
-// GET /users/:id
-router.get("/:id", UserController.index);
+// GET /users/search
+router.get("/search", UserController.search);
 
 // POST /users/create
 
@@ -42,6 +42,9 @@ router.put(
   UsersValidation.verifyAccount,
   UserController.verifyAccount
 );
+
+// GET /users/:id
+router.get("/:id", UserController.index);
 
 // GET /users
 router.get("/", authorizeJWT, checkPermission("users.index"), UserController.show);

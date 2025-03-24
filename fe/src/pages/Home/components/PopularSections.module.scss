@@ -1,0 +1,41 @@
+#Home-popularSections {
+  padding-top: 136px;
+}
+
+.PopularShips {
+  &-section {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    padding: 80px 32px;
+  }
+
+  &-cardList {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  &-action {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1024px) {
+  .popularSections {
+    padding-top: 0px;
+  }
+
+  .PopularShips {
+    &-section {
+      padding: 24px;
+      gap: 24px;
+    }
+
+    &-cardList {
+      gap: 16px;
+      justify-content: center;
+    }
+  }
+}

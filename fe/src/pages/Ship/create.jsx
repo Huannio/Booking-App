@@ -295,7 +295,7 @@ function Create() {
               name="thumbnail"
               control={control}
               error={errors.thumbnail}
-
+              variant="thumbnail"
             />
           </div>
 

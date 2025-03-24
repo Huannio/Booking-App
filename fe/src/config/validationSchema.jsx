@@ -30,7 +30,6 @@ export const loginSchema = yup.object({
   password: yup.string().required("Vui lòng nhập trường này"),
 });
 
-
 export const blogSchema = yup.object({
   title: yup.string().required("Vui lòng nhập trường này"),
   short_desc: yup.string().required("Vui lòng nhập trường này"),
@@ -90,4 +89,15 @@ export const featureSchema = yup.object().shape({
 export const permissionSchema = yup.object({
   name: yup.string().required("Vui lòng nhập trường này"),
   canonical: yup.string().required("Vui lòng nhập trường này"),
+});
+
+// hotel schema
+export const hotelSchema = yup.object().shape({
+  title: yup.string().required("Vui lòng nhập trường này"),
+  address: yup.string().required("Vui lòng nhập trường này"),
+  admin: yup.string().required("Vui lòng nhập trường này"),
+  default_price: yup.number().required("Vui lòng nhập trường này"),
+  thumbnail: yup.mixed().required("Vui lòng chọn ảnh"),
+  images: yup.array().required("Vui lòng chọn ảnh"),
+  cities: yup.number().required("Vui lòng chọn trường này"),
 });

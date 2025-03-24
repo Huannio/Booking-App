@@ -7,10 +7,8 @@ class HotelController {
 
   getCity = async (req, res, next) => {
     try {
-      const city = await this.HotelService.getCity();
-      res
-        .status(StatusCodes.OK)
-        .json({ statusCode: StatusCodes.OK, city });
+      const data = await this.HotelService.getCity();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
     } catch (error) {
       next(error);
     }
@@ -18,10 +16,9 @@ class HotelController {
 
   index = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      console.log(id);
-      const hotel = await this.HotelService.getHotelById(id);
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, hotel });
+      const { slug } = req.params;
+      const data = await this.HotelService.getHotelBySlug(slug);
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
     } catch (error) {
       next(error);
     }
@@ -29,8 +26,8 @@ class HotelController {
 
   show = async (req, res, next) => {
     try {
-      const hotel = await this.HotelService.getAllHotel();
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, hotel });
+      const data = await this.HotelService.getAllHotel();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
     } catch (error) {
       next(error);
     }
@@ -38,7 +35,10 @@ class HotelController {
 
   create = async (req, res, next) => {
     try {
-      const createHotel = await this.HotelService.createHotel(req.body, req.files);
+      const createHotel = await this.HotelService.createHotel(
+        req.body,
+        req.files
+      );
       res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,
         message: "Tạo thông tin khách sạn thành công!",
@@ -51,9 +51,8 @@ class HotelController {
 
   update = async (req, res, next) => {
     try {
-      const { id } = req.params;
       const updateHotel = await this.HotelService.updateHotel(
-        id,
+        req.params.slug,
         req.body,
         req.files
       );
@@ -67,13 +66,50 @@ class HotelController {
 
   delete = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const deleteHotel = await this.HotelService.deleteHotel(id);
+      const { slug } = req.params;
+      const deleteHotel = await this.HotelService.deleteHotel(slug);
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
         deleteHotel,
         message: "Xóa thành công!",
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  search = async (req, res, next) => {
+    try {
+      const { title, greaterDefaultPrice, lowerDefaultPrice } = req.query;
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+      const cityId = req.query.cityId || null;
+      const { total, data, totalPages } =
+        await this.HotelService.getHotelSearch(
+          limit,
+          offset,
+          cityId,
+          title,
+          greaterDefaultPrice,
+          lowerDefaultPrice
+        );
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        data,
+        total,
+        totalPages,
+        records: data.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getActive = async (req, res, next) => {
+    try {
+      const data = await this.HotelService.getActiveHotel();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
     } catch (error) {
       next(error);
     }

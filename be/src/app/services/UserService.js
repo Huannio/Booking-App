@@ -137,6 +137,41 @@ class UserService {
       throw error;
     }
   }
+
+  async searchUser(reqQuery, limit, offset) {
+    try {
+      const { email } = reqQuery;
+      const where = {
+        email: {
+          [Op.like]: `%${email}%`,
+        },
+      };
+
+      const total = await Users.count({ where });
+
+      const users = await Users.findAndCountAll({
+        limit,
+        offset,
+        attributes: ["id", "email", "name"],
+        where,
+        include: [
+          {
+            model: UserCatalogues,
+            as: "user_catalogues",
+            attributes: ["name", "id"],
+          },
+        ],
+      });
+
+      return {
+        total: total,
+        data: users.rows,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

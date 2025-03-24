@@ -107,7 +107,7 @@ export const publicRoutes = [
     component: BusinessPage,
   },
   {
-    path: "/tim-khach-san",
+    path: "/khach-san",
     component: Hotel,
   },
 
@@ -356,13 +356,13 @@ export const privateRoutes = [
     path: config.routes.blogs.createDetail,
     component: CreateDetailBlog,
     layout: AdminLayout,
-    requiredPermission: "blogs.createDetail",
+    requiredPermission: "blogs.create",
   },
   {
     path: config.routes.blogs.updateDetail,
     component: UpdateDetailBlog,
     layout: AdminLayout,
-    requiredPermission: "blogs.updateDetail",
+    requiredPermission: "blogs.update",
   },
   {
     path: config.routes.blogs.delete,

@@ -119,6 +119,42 @@ class ShipController {
       next(error);
     }
   };
+
+  search = async (req, res, next) => {
+    try {
+      const { title, greaterDefaultPrice, lowerDefaultPrice } = req.query;
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+      const categoryId = parseInt(req.query.categoryId) || null;
+      const { total, data, totalPages } = await this.ShipService.getShipSearch(
+        limit,
+        offset,
+        categoryId,
+        title,
+        greaterDefaultPrice,
+        lowerDefaultPrice
+      );
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        data,
+        total,
+        totalPages,
+        records: data.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getActive = async (req, res, next) => {
+    try {
+      const data = await this.ShipService.getActiveShip();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 module.exports = new ShipController();

@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { Input, Space, Table } from "antd";
+import {  Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import { handleGetShipsApi } from "~/api";
+import { handleGetHotelsApi } from "~/api";
 import { useSelector } from "react-redux";
 import { selectCurrentPermission } from "~/redux/user/userSlice";
+import { handleSearchHotelApi } from "~/api";
+import { SearchInputBox } from "~/components/SearchBox";
 
 const shipsColumn = (permissions) => {
   const columns = [
@@ -28,20 +30,20 @@ const shipsColumn = (permissions) => {
   ];
 
   if (
-    permissions.includes("ships.update") &&
-    permissions.includes("ships.delete")
+    permissions.includes("hotel.update") &&
+    permissions.includes("hotel.delete")
   ) {
     columns.push({
       title: "Tùy chọn",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Link to={`/ships/update/${record.slug}`}>
+          <Link to={`/hotel/update/${record.slug}`}>
             <EditOutlined
               style={{ color: "green", fontSize: "20px", cursor: "pointer" }}
             />
           </Link>
-          <Link to={`/ships/delete/${record.slug}`}>
+          <Link to={`/hotel/delete/${record.slug}`}>
             <DeleteOutlined
               style={{ color: "red", fontSize: "20px", cursor: "pointer" }}
             />
@@ -60,18 +62,20 @@ function Show() {
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
 
-  const getShips = useCallback(async () => {
-    setGlobalLoading(true);
-    setLoading(true);
-    const response = await handleGetShipsApi();
-    const formattedData = response.ships.map((ship, index) => ({
+  const formatData = (data) => {
+    return data.map((ship, index) => ({
       index: index + 1,
-      slug: ship.slug,
       key: ship.id,
       title: ship.title,
       address: ship.address,
     }));
-    setShips(formattedData);
+  };
+
+  const getShips = useCallback(async () => {
+    setGlobalLoading(true);
+    setLoading(true);
+    const response = await handleGetHotelsApi();
+    setShips(formatData(response.data));
     setGlobalLoading(false);
     setLoading(false);
   }, [setGlobalLoading]);
@@ -84,17 +88,42 @@ function Show() {
     <div className="w-full">
       <div className="flex justify-between align-center">
         <div className="flex align-center gap-12">
-          <h1>Danh sách du thuyền</h1>
-          <Input
-            type="text"
-            placeholder="Tìm kiếm..."
-            style={{ width: "300px" }}
-          />
+          <h1>Danh sách khách sạn</h1>
+          <div style={{ width: "300px" }}>
+            <SearchInputBox
+              inputGroup
+              name="search"
+              firstIcon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              }
+              placeholder="Tìm kiếm theo tên khách sạn..."
+              api={handleSearchHotelApi}
+              fieldDropdown={"title"}
+              fieldDropdownLink={"slug"}
+              to="/hotel/update/"
+              onSearchResult={(data) => setShips(formatData(data))}
+              hideDropdown
+            />
+          </div>
         </div>
-        {permissions.includes("ships.create") && (
-          <Link to="/ships/create">
+        {permissions.includes("hotel.create") && (
+          <Link to="/hotel/create">
             <Button type="primary" style={{ marginBottom: "20px" }}>
-              Thêm mới du thuyền
+              Thêm mới khách sạn
             </Button>
           </Link>
         )}

@@ -4,7 +4,6 @@ const upload = require("../middleware/upload");
 
 const FeatureController = require("../app/controllers/FeatureController");
 
-
 // POST /features/create
 
 router.post(

@@ -39,9 +39,11 @@ class UserController {
   verifyAccount = async (req, res, next) => {
     try {
       const verifyAccount = await this.userService.verifyAccount(req.body);
-      res
-        .status(StatusCodes.OK)
-        .json({ statusCode: StatusCodes.OK, verifyAccount, message: "Kích hoạt tài khoản thành công!" });
+      res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        verifyAccount,
+        message: "Kích hoạt tài khoản thành công!",
+      });
     } catch (error) {
       next(error);
     }
@@ -68,6 +70,32 @@ class UserController {
         deleteUser,
         message: "Xóa thành công!",
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  search = async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+
+      const { total, data, totalPages } = await this.userService.searchUser(
+        req.query,
+        limit,
+        offset
+      );
+
+      res
+        .status(StatusCodes.OK)
+        .json({
+          statusCode: StatusCodes.OK,
+          data,
+          total,
+          totalPages,
+          records: data.length,
+        });
     } catch (error) {
       next(error);
     }

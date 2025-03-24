@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { Input, Space, Table } from "antd";
+import { Space, Table } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import axios from "~/utils/axios.config";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
+import { handleSearchPermissionsApi } from "~/api";
+import { SearchInputBox } from "~/components/SearchBox";
 
 const columns = [
   {
@@ -43,18 +45,19 @@ function Show() {
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
   const [permissions, setPermissions] = useState([]);
+  const formatData = (data) => {
+    return data.map((permission) => ({
+      key: permission.id,
+      name: permission.name,
+      canonical: permission.canonical,
+    }));
+  };
   const getPermissions = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
 
     const response = await axios.get("/permissions-management");
-    const formattedData = response.data.map((permission) => ({
-      key: permission.id,
-      name: permission.name,
-      canonical: permission.canonical,
-    }));
-
-    setPermissions(formattedData);
+    setPermissions(formatData(response.data));
 
     setGlobalLoading(false);
     setLoading(false);
@@ -69,11 +72,36 @@ function Show() {
       <div className="flex justify-between align-center">
         <div className="flex align-center gap-12">
           <h1>Danh sách quyền</h1>
-          <Input
-            type="text"
-            placeholder="Tìm kiếm..."
-            style={{ width: "300px" }}
-          />
+          <div style={{ width: "300px" }}>
+            <SearchInputBox
+              hideDropdown
+              inputGroup
+              name="search"
+              firstIcon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              }
+              placeholder="Tìm kiếm theo tên quyền..."
+              api={handleSearchPermissionsApi}
+              fieldDropdown={"name"}
+              fieldDropdownLink={"id"}
+              to="/permissions-management/update/"
+              onSearchResult={(data) => setPermissions(formatData(data))}
+            />
+          </div>
         </div>
         <Link to={"/permissions-management/create"}>
           <Button type="primary" style={{ marginBottom: "20px" }}>

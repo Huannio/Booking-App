@@ -11,7 +11,7 @@ module.exports = {
      */
     await queryInterface.createTable("features", {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true

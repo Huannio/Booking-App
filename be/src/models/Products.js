@@ -2,22 +2,20 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Products extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       Products.belongsTo(models.ProductType, {
         foreignKey: "type_product_id",
         as: "type",
       });
 
       Products.belongsToMany(models.Features, {
-        through: "product_feature", 
-        foreignKey: "id",   
-        as: "features",           
+        through: {
+          model: models.ProductFeature,
+          attributes: [],
+        },
+        foreignKey: "product_id",
+        otherKey: "feature_id",
+        as: "features",
       });
 
       Products.hasOne(models.Cruise, { foreignKey: "id", as: "cruise" });
@@ -25,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       Products.hasOne(models.Rooms, { foreignKey: "id", as: "rooms" });
     }
   }
+
   Products.init(
     {
       id: {
@@ -45,11 +44,16 @@ module.exports = (sequelize, DataTypes) => {
       active: DataTypes.BOOLEAN,
       type_product_id: DataTypes.INTEGER,
       slug: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
       modelName: "Products",
       tableName: "products",
+      defaultScope: {
+        attributes: { exclude: ["product_id"] },
+      },
     }
   );
   return Products;

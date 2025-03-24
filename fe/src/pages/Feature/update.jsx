@@ -110,15 +110,14 @@ function Update() {
         </div>
 
         <div className="group-input">
-          <div className="form-group">
-            <UploadImageField
-              label="icon"
-              name="icon"
-              control={control}
-              error={errors.icon}
-              status={errors.icon && "error"}
-            />
-          </div>
+          <UploadImageField
+            label="icon"
+            name="icon"
+            control={control}
+            error={errors.icon}
+            status={errors.icon && "error"}
+            variant="thumbnail"
+          />
         </div>
 
         <div className="flex justify-end gap-16">

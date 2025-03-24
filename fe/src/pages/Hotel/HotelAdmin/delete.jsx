@@ -7,7 +7,7 @@ import Button from "~/components/Button";
 import axios from "~/utils/axios.config";
 
 import { LoadingContext } from "~/components/Loading/Loading";
-import { handleGetShipBySlugApi } from "~/api";
+import { handleGetHotelBySlugApi } from "~/api";
 
 function DeleteShip() {
   const navigate = useNavigate();
@@ -22,25 +22,23 @@ function DeleteShip() {
     formState: { errors },
   } = useForm();
 
-  // Lấy thông tin du thuyền theo ID
-  const getShip = useCallback(async () => {
+  const getHotel = useCallback(async () => {
     setGlobalLoading(true);
-    const response = await handleGetShipBySlugApi(slug);
-    reset({ title: response?.ship?.title });
+    const response = await handleGetHotelBySlugApi(slug);
+    reset({ title: response?.data?.title });
     setGlobalLoading(false);
   }, [setGlobalLoading, slug, reset]);
 
   useEffect(() => {
-    getShip();
-  }, [getShip]);
+    getHotel();
+  }, [getHotel]);
 
-  // Xử lý xóa du thuyền
   const handleDeleteShip = async () => {
     setConfirmLoading(true);
-    const response = await axios.delete(`/ships/delete/${slug}`);
+    const response = await axios.delete(`/hotel/delete/${slug}`);
     if (response.statusCode === 200) {
-      notification.success({ message: "Xóa du thuyền thành công!" });
-      navigate("/ships");
+      notification.success({ message: "Xóa khách sạn thành công!" });
+      navigate("/hotel");
     }
     setConfirmLoading(false);
     setModalVisible(false);
@@ -48,7 +46,7 @@ function DeleteShip() {
 
   return (
     <div className="flex w-full flex-col gap-16">
-      <h6>Xóa du thuyền</h6>
+      <h6>Xóa khách sạn</h6>
 
       <div className="flex flex-col gap-32">
         <div className="group-input" style={{ gridTemplateColumns: "1fr 1fr" }}>
@@ -60,10 +58,10 @@ function DeleteShip() {
           </div>
           <div className="form-group">
             <InputField
-              label="Tên du thuyền"
+              label="Tên khách sạn"
               type="text"
               name="title"
-              placeholder="Nhập tên du thuyền..."
+              placeholder="Nhập tên khách sạn..."
               control={control}
               error={errors.title}
               disabled
@@ -82,13 +80,13 @@ function DeleteShip() {
       </div>
 
       <Modal
-        title="Xóa du thuyền"
+        title="Xóa khách sạn"
         open={modalVisible}
         onOk={handleDeleteShip}
         confirmLoading={confirmLoading}
         onCancel={() => setModalVisible(false)}
       >
-        <p>Bạn có chắc chắn muốn xóa du thuyền này?</p>
+        <p>Bạn có chắc chắn muốn xóa khách sạn này?</p>
       </Modal>
     </div>
   );

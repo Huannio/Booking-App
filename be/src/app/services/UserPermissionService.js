@@ -1,8 +1,4 @@
-const env = require("../../config/environment");
-const { StatusCodes } = require("http-status-codes");
 const { UserCataloguePermission } = require("../../models");
-const ApiError = require("../../middleware/ApiError");
-
 class UserPermissionService {
   getPermissionId = async (id) => {
     try {

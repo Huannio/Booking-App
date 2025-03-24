@@ -5,6 +5,15 @@ const PermissionManagementController = require("../app/controllers/PermissionMan
 const authorizeJWT = require("../middleware/authorize");
 const checkPermission = require("../middleware/checkPermission");
 
+
+// GET /permissions-management/search
+router.get(
+  "/search",
+  authorizeJWT,
+  checkPermission("permissions-management.index"),
+  PermissionManagementController.search
+);
+
 // POST /permissions-management/create
 router.post(
   "/create",

@@ -29,6 +29,10 @@ button {
   border: 1px solid #eaecf0;
   color: var(--gray-800);
   fill: var(--gray-800);
+
+  & > svg > path {
+    stroke: var(--gray-800);
+  }
 }
 
 .outline:hover {
@@ -51,6 +55,13 @@ button {
 .small {
   padding: 10px 16px;
   white-space: nowrap;
+}
+
+.normal, .small {
+  & > svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .onlyIcon {
@@ -104,5 +115,13 @@ button {
 
   &:hover > svg > path {
     stroke: var(--base-white);
+  }
+}
+
+@media (max-width: 1024px) {
+  .SearchBox-submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

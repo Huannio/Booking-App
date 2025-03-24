@@ -4,6 +4,8 @@ const {
   Hotel,
   Cities,
   Rooms,
+  ProductType,
+  Features,
 } = require("../../models");
 const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -13,11 +15,44 @@ const uploadToCloudinary = require("../../utils/cloudinary");
 class HotelService {
   async getAllHotel() {
     try {
-      return await Hotel.findAll({
-        attributes: ["id", "admin", "city_id"],
+      return await Products.findAll({
+        where: { type_product_id: 2 },
+        attributes: [
+          "id",
+          "title",
+          "address",
+          "map_link",
+          "map_iframe_link",
+          "default_price",
+          "slug",
+          "num_reviews",
+          "score_reviews",
+          "schedule",
+          "thumbnail",
+          "images",
+          "type_product_id",
+          "active",
+        ],
         include: [
-          { model: Cities, as: "cities", attributes: ["name", "id"] },
-          { model: Products, as: "product", attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] },
+          { model: ProductType, as: "type", attributes: ["name", "id"] },
+          {
+            model: Hotel,
+            as: "hotel",
+            attributes: ["id", "admin", "city_id"],
+            include: [
+              {
+                model: Cities,
+                as: "cities",
+                attributes: ["name", "id"],
+              },
+            ],
+          },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
+          },
         ],
       });
     } catch (error) {
@@ -25,33 +60,48 @@ class HotelService {
     }
   }
 
-  async getHotelById(id) {
+  async getHotelBySlug(slug) {
     try {
-      const hotel = await Hotel.findOne({
-        attributes: ["id", "admin", "city_id"],
-        where: { id },
+      return await Products.findOne({
+        where: { slug },
+        attributes: [
+          "id",
+          "title",
+          "address",
+          "map_link",
+          "map_iframe_link",
+          "default_price",
+          "slug",
+          "num_reviews",
+          "score_reviews",
+          "schedule",
+          "thumbnail",
+          "images",
+          "type_product_id",
+          "active",
+        ],
         include: [
-          { 
-            model: Cities, 
-            as: "cities", 
-            attributes: ["name", "id"] 
+          { model: ProductType, as: "type", attributes: ["name", "id"] },
+          {
+            model: Hotel,
+            as: "hotel",
+            attributes: ["id", "admin", "city_id"],
+            include: [
+              {
+                model: Cities,
+                as: "cities",
+                attributes: ["name", "id"],
+              },
+            ],
           },
-          { 
-            model: Products, 
-            as: "product", 
-            attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"] 
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
           },
         ],
       });
-
-
-      const totalRooms = await Rooms.count({
-        where: { product_id: hotel.product.id },
-      });
-
-      hotel.dataValues.totalRooms = totalRooms;
-
-      return hotel;
     } catch (error) {
       throw error;
     }
@@ -82,6 +132,7 @@ class HotelService {
       const checkHotel = await Products.findOne({
         where: { slug: slugify(title) },
       });
+
       if (checkHotel) {
         throw new ApiError(StatusCodes.CONFLICT, "Tên Khách sạn đã tồn tại!");
       }
@@ -131,7 +182,7 @@ class HotelService {
     }
   }
 
-  async updateHotel(id, reqBody, reqFiles) {
+  async updateHotel(slug, reqBody, reqFiles) {
     try {
       const {
         title,
@@ -144,9 +195,9 @@ class HotelService {
         images,
         thumbnail,
       } = reqBody;
-      const slug = slugify(title);
+      const hotel = await this.getHotelBySlug(slug);
       const checkHotel = await Products.findOne({
-        where: { slug, id: { [Op.ne]: id } },
+        where: { slug: slugify(title), id: { [Op.ne]: hotel.id } },
       });
 
       if (checkHotel) {
@@ -174,7 +225,7 @@ class HotelService {
       }
 
       if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images.split(","));
+        imageLinkList.push(...images);
         imageLinkList = imageLinkList.join(",");
       }
 
@@ -204,31 +255,149 @@ class HotelService {
           slug: slugify(title),
           active: true,
         },
-        { where: { id } }
+        { where: { id: hotel.id } }
       );
 
-      const hotel = await Hotel.update(
+      const updateHotel = await Hotel.update(
         {
           city_id: cities,
           admin,
         },
         {
-          where: { id }, // Sửa từ `ship.id` thành `id`
+          where: { id: hotel.id },
         }
       );
 
       return {
         product,
-        hotel,
+        updateHotel,
       };
     } catch (error) {
       throw error;
     }
   }
 
-  async deleteHotel(id) {
+  async deleteHotel(slug) {
     try {
-      return await Products.destroy({ where: { id } });
+      return await Products.destroy({ where: { slug } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHotelSearch(
+    limit,
+    offset,
+    cityId,
+    title,
+    greaterDefaultPrice,
+    lowerDefaultPrice
+  ) {
+    try {
+      let whereHotel = {};
+      let whereProducts = {};
+
+      if (cityId != null) {
+        whereHotel.city_id = cityId;
+      }
+
+      if (title != null) {
+        whereProducts = {
+          title: {
+            [Op.like]: `%${title}%`,
+          },
+        };
+      }
+
+      if (greaterDefaultPrice != null || lowerDefaultPrice != null) {
+        whereProducts.default_price = {};
+        if (greaterDefaultPrice != null) {
+          whereProducts.default_price[Op.gte] = greaterDefaultPrice;
+        }
+
+        if (lowerDefaultPrice != null) {
+          whereProducts.default_price[Op.lte] = lowerDefaultPrice;
+        }
+      }
+
+      const total = await Products.count({
+        where: whereProducts,
+        include: [
+          {
+            model: Hotel,
+            as: "hotel",
+            where: whereHotel,
+          },
+        ],
+      });
+
+      // Về sau nếu thiếu trường nào thì hãy vào đây viết thêm để query vào trường đó
+      const hotels = await Products.findAndCountAll({
+        limit,
+        offset,
+        attributes: [
+          "id",
+          "title",
+          "thumbnail",
+          "slug",
+          "address",
+          "default_price",
+        ],
+        where: whereProducts,
+        include: [
+          {
+            model: Hotel,
+            as: "hotel",
+            where: whereHotel,
+            attributes: ["id", "city_id", "admin"],
+          },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["id", "icon", "text", "type"],
+            through: { attributes: [] },
+          },
+        ],
+        order: [["id", "ASC"]],
+      });
+
+      return {
+        total: total,
+        data: hotels.rows,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getActiveHotel() {
+    try {
+      return await Products.findAll({
+        where: { active: true, type_product_id: 2 },
+        attributes: [
+          "id",
+          "title",
+          "thumbnail",
+          "slug",
+          "address",
+          "default_price",
+        ],
+        include: [
+          {
+            model: Hotel,
+            as: "hotel",
+            attributes: ["id", "admin"],
+            include: [
+              {
+                model: Cities,
+                as: "cities",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      });
     } catch (error) {
       throw error;
     }
