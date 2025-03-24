@@ -7,8 +7,10 @@ import {
   blogSchema,
   blogDetailSchema,
   cruiseSchema,
+  featureSchema,
   usersCataloguesSchema,
   permissionSchema,
+  hotelSchema,
 } from "./validationSchema";
 const config = {
   routes,
@@ -19,8 +21,10 @@ const config = {
   blogSchema,
   blogDetailSchema,
   cruiseSchema,
+  featureSchema,
   usersCataloguesSchema,
   permissionSchema,
+  hotelSchema,
 };
 
 export default config;

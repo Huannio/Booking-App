@@ -22,6 +22,7 @@ function SearchInputBox({
   reactHookFormChange,
   onSearchResult,
   hideDropdown,
+  isDebounceEmptyCallApi = true,
 }) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [value, setValue] = useState("");
@@ -52,7 +53,9 @@ function SearchInputBox({
   };
 
   useEffect(() => {
-    if (!debounced.trim()) return;
+    if (!isDebounceEmptyCallApi) {
+      if (!debounced.trim()) return;
+    }
     if (!api) return;
     api(debounced).then((res) => {
       setItems(res.data);
@@ -99,8 +102,7 @@ function SearchInputBox({
               className={cx(
                 "flex flex-col gap-12 justify-center align-center w-full"
               )}
-
-              style={{padding: "20px"}}
+              style={{ padding: "20px" }}
             >
               <div
                 style={{
@@ -153,6 +155,7 @@ SearchInputBox.propTypes = {
   reactHookFormChange: Proptypes.func,
   onSearchResult: Proptypes.func,
   hideDropdown: Proptypes.bool,
+  isDebounceEmptyCallApi: Proptypes.bool,
 };
 
 export default SearchInputBox;

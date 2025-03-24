@@ -26,6 +26,7 @@ const routes = {
     delete: "/permissions-management/delete/:id",
     index: "/permissions-management",
   },
+
   blogs: {
     index: "/blogs",
     create: "/blogs/create",
@@ -40,9 +41,21 @@ const routes = {
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
   },
+  features: {
+    index: "/features",
+    create: "/features/create",
+    update: "/features/update/:id",
+    delete: "/features/delete/:id",
+  },
   blog: {
     index: "/blog",
     detail: "/blog-detail/:slug",
+  },
+  hotel: {
+    index: "/hotel",
+    create: "/hotel/create",
+    update: "/hotel/update/:slug",
+    delete: "/hotel/delete/:slug",
   },
   account: {
     verification: "/account/verification",

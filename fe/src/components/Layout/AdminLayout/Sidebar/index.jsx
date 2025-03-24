@@ -69,6 +69,16 @@ const Sidebar = () => {
       icon: <ContainerOutlined />,
       label: <Link to={config.routes.ships.index}>Quản lý du thuyền</Link>,
     },
+    permissions.includes("features.index") && {
+      key: "/features",
+      icon: <ContainerOutlined />,
+      label: <Link to={config.routes.features.index}>Quản lý đặc trưng</Link>,
+    },
+    permissions.includes("hotel.index") && {
+      key: "/hotel",
+      icon: <ContainerOutlined />,
+      label: <Link to={config.routes.hotel.index}>Quản lý khách sạn</Link>,
+    },
     permissions.includes("blogs.index") && {
       key: "/blogs",
       label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,

@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import BlogCard from "~/components/Card/BlogCard";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { Skeleton } from "antd";
-import Pagination from "../../../components/Pagination";
+import Pagination from "~/components/Pagination";
+import { formatDate } from "~/utils/formatters";
 
 const cx = classNames.bind(styles);
 
@@ -82,8 +83,11 @@ const BlogPage = () => {
         className={cx("BlogPage-blog-header", "flex justify-between gap-16")}
       >
         <SectionHeader
-          firstTitle={"Hạ Long: Khám phá Sự đặc sắc"}
-          secondTitle={"và Cập nhật tin tức mới nhất"}
+          title={
+            <h4>
+              Hạ Long: Khám phá Sự đặc sắc <br /> và Cập nhật tin tức mới nhất
+            </h4>
+          }
           mainContent={
             "Hạ Long: Bí mật và Cuộc sống trong Vịnh - Khám phá và Cập nhật những tin tức hấp dẫn từ điểm đến tuyệt vời này."
           }
@@ -121,7 +125,7 @@ const BlogPage = () => {
                 imgSrc={blog.thumbnail}
                 title={blog.title}
                 description={blog.short_desc}
-                date={new Date(blog.createdAt).toLocaleDateString("vi-VN")}
+                date={formatDate(blog.createdAt)}
               />
             </Link>
           ))}

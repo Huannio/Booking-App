@@ -77,6 +77,10 @@ export const handleGetShipsApi = async () => {
   return await axios.get("/ships");
 };
 
+export const handleGetShipsActiveApi = async () => {
+  return await axios.get("/ships/active");
+}
+
 export const handleGetCruiseCategoryApi = async () => {
   return await axios.get("/ships/cruise-category");
 };
@@ -84,7 +88,6 @@ export const handleGetCruiseCategoryApi = async () => {
 export const handleGetShipBySlugApi = async (slug) => {
   return await axios.get(`/ships/${slug}`);
 };
-
 export const handleSearchShipsApi = async (
   title = null,
   categoryId = null,
@@ -120,4 +123,58 @@ export const handleSearchPermissionsApi = async (
   if (limit !== null) params.append("limit", limit);
 
   return await axios.get(`/permissions-management/search?${params.toString()}`);
+};
+// Feature
+export const handleGetFeaturesApi = async () => {
+  return await axios.get("/features");
+};
+export const handleGetFeatureByIdApi = async (id) => {
+  return await axios.get(`/features/${id}`);
+};
+
+export const handleGetFeatureTypesApi = async () => {
+  return await axios.get("/features/types");
+};
+
+// Hotel
+export const handleGetHotelsApi = async () => {
+  return await axios.get("/hotel");
+};
+
+export const handleGetHotelByIdApi = async (id) => {
+  return await axios.get(`/hotel/${id}`);
+};
+
+export const handleGetCityApi = async () => {
+  return await axios.get("/hotel/city");
+};
+
+export const handleGetHotelBySlugApi = async (slug) => {
+  return await axios.get(`/hotel/${slug}`);
+};
+
+export const handleGetActiveHotelApi = async () => {
+  return await axios.get("/hotel/active");
+}
+
+export const handleSearchHotelApi = async (
+  title = null,
+  cityId = null,
+  greaterDefaultPrice = null,
+  lowerDefaultPrice = null,
+  page = 0,
+  limit = null
+) => {
+  const params = new URLSearchParams();
+
+  if (title) params.append("title", title);
+  if (cityId !== null) params.append("cityId", cityId);
+  if (greaterDefaultPrice !== null)
+    params.append("greaterDefaultPrice", greaterDefaultPrice);
+  if (lowerDefaultPrice !== null)
+    params.append("lowerDefaultPrice", lowerDefaultPrice);
+  if (page !== null) params.append("page", page);
+  if (limit !== null) params.append("limit", limit);
+
+  return await axios.get(`/hotel/search?${params.toString()}`);
 };

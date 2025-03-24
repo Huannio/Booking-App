@@ -107,6 +107,7 @@ function Create() {
               control={control}
               error={errors.thumbnail}
               status={errors.thumbnail && "error"}
+              variant="thumbnail" 
             />
           </div>
 

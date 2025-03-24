@@ -14,3 +14,14 @@ export const interceptorLoadingElements = (calling) => {
     }
   }
 };
+
+export const formatMoney = (number) => {
+  return new Intl.NumberFormat("en-US", {
+    // style: "currency",
+    currency: "VND",
+  }).format(number);
+};
+
+export const formatDate = (date) => {
+  return new Date(date).toLocaleDateString("vi-VN");
+}

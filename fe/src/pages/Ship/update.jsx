@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Select, notification } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -16,8 +16,7 @@ import {
   TextField,
   UploadImageField,
 } from "~/components/Input";
-import { handleGetCruiseCategoryApi } from "~/api";
-import { handleGetShipBySlugApi } from "../../api";
+import { handleGetCruiseCategoryApi, handleGetShipBySlugApi } from "~/api";
 
 const cx = classNames.bind(styles);
 const { Option } = Select;
@@ -138,10 +137,17 @@ function Update() {
         onSubmit={handleSubmit(handleUpdateShipForm)}
       >
         <div className="flex justify-between align-center">
-          <h6>Tạo mới thông tin du thuyền</h6>
-          <Button primary normal submit className="interceptor-loading">
-            <div className="label md">Tạo</div>
-          </Button>
+          <h6>Cập nhật thông tin du thuyền</h6>
+          <div className="flex align-center gap-16">
+            <Link to={`/ships/updateFeature/${slug}`}>
+              <Button primary normal className="interceptor-loading">
+                <div className="label md">Đặc trưng du thuyền</div>
+              </Button>
+            </Link>
+            <Button primary normal submit className="interceptor-loading">
+              <div className="label md">Cập nhật</div>
+            </Button>
+          </div>
         </div>
         <div className={cx("group-input")}>
           <div className="form-group">
@@ -326,6 +332,7 @@ function Update() {
               name="thumbnail"
               control={control}
               error={errors.thumbnail}
+              variant="thumbnail"
             />
           </div>
 

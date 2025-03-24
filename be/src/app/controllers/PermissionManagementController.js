@@ -29,7 +29,6 @@ class PermissionManagementController {
     try {
       const data = await this.permissionManagementService.create(
         req.body,
-        req.params.id
       );
       res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,

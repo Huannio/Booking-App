@@ -8,7 +8,7 @@ import { Modal } from "antd";
 
 const cx = classNames.bind(styles);
 
-function UploadImageField({
+function UploadField({
   label,
   name,
   control,
@@ -16,6 +16,7 @@ function UploadImageField({
   className,
   multiple = false,
   accept = "image/*",
+  variant = "default", // 'default' | 'thumbnail'
   ...passProps
 }) {
   const [previews, setPreviews] = useState([]);
@@ -27,7 +28,6 @@ function UploadImageField({
       const existingImages = Array.isArray(control._defaultValues[name])
         ? control._defaultValues[name]
         : [control._defaultValues[name]];
-
       setPreviews(existingImages);
     }
   }, [control._defaultValues, name]);
@@ -36,8 +36,8 @@ function UploadImageField({
     const selectedFiles = Array.from(e.target.files);
     const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
 
-    setPreviews([...previews, ...newPreviews]); // Gộp ảnh cũ với ảnh mới
-    onChange([...previews, ...selectedFiles]); // Cập nhật cho react-hook-form
+    setPreviews([...previews, ...newPreviews]);
+    onChange([...previews, ...selectedFiles]);
   };
 
   const handleRemoveImage = (index, onChange) => {
@@ -50,6 +50,15 @@ function UploadImageField({
     } else {
       onChange(null);
     }
+  };
+
+  // Style mapping by variant
+  const styleMap = {
+    containerList:
+      variant === "thumbnail" ? "pre-container-list" : "preview-container-list",
+    container: variant === "thumbnail" ? "pre-container" : "preview-container",
+    image: variant === "thumbnail" ? "pre" : "preview",
+    overlay: variant === "thumbnail" ? "pre-overlay" : "overlay",
   };
 
   return (
@@ -71,10 +80,10 @@ function UploadImageField({
         <Controller
           name={name}
           control={control}
-          rules={{ required: "Vui lòng chọn ảnh" }} // Thêm validation
+          rules={{ required: "Vui lòng chọn ảnh" }}
           render={({ field: { onChange } }) => (
             <>
-              {!(!multiple && previews.length > 0) && ( // Ẩn nút nếu không có multiple và đã có ảnh
+              {!(!multiple && previews.length > 0) && (
                 <label htmlFor={name} className="not-input-group">
                   <span className={cx("upload", { "input-error": error })}>
                     + Upload
@@ -94,28 +103,37 @@ function UploadImageField({
               />
 
               {previews.length > 0 && (
-                <div className={cx("preview-container-list")}>
+                <div className={cx(styleMap.containerList)}>
                   {previews.map((src, index) => (
-                    <div className={cx("preview-container")} key={index}>
+                    <div className={cx(styleMap.container)} key={index}>
                       <img
                         src={src}
                         alt={`Preview ${index}`}
-                        className={cx("preview")}
+                        className={cx(styleMap.image)}
                       />
-                      <div className={cx("overlay")}>
+                      <div className={cx(styleMap.overlay)}>
                         <EyeOutlined
                           onClick={() => {
                             setModalVisible(true);
                             setFullscreenImage(src);
                           }}
-                          style={{ fontSize: "20px" }}
+                          style={{
+                            fontSize: variant === "thumbnail" ? "20px" : "16px",
+                            color: "white",
+                          }}
                         />
                         <button
                           type="button"
                           onClick={() => handleRemoveImage(index, onChange)}
                           className={cx("remove-image-btn")}
                         >
-                          <DeleteOutlined style={{ fontSize: "20px" }} />
+                          <DeleteOutlined
+                            style={{
+                              fontSize:
+                                variant === "thumbnail" ? "20px" : "16px",
+                              color: "white",
+                            }}
+                          />
                         </button>
                       </div>
                     </div>
@@ -128,6 +146,7 @@ function UploadImageField({
           )}
         />
       </div>
+
       <Modal
         open={modalVisible}
         onOk={() => setModalVisible(false)}
@@ -143,7 +162,7 @@ function UploadImageField({
   );
 }
 
-UploadImageField.propTypes = {
+UploadField.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string.isRequired,
   control: PropTypes.object.isRequired,
@@ -151,6 +170,7 @@ UploadImageField.propTypes = {
   className: PropTypes.string,
   multiple: PropTypes.bool,
   accept: PropTypes.string,
+  variant: PropTypes.oneOf(["default", "thumbnail"]),
 };
 
-export default UploadImageField;
+export default UploadField;

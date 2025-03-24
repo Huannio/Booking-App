@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const {
   Products,
   ProductType,
+  Features,
   Cruise,
   CruiseCategory,
 } = require("../../models");
@@ -33,6 +34,24 @@ class ShipService {
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
+          {
+            model: Cruise,
+            as: "cruise",
+            attributes: ["id", "year", "cabin", "shell", "admin", "trip"],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
+          },
         ],
       });
     } catch (error) {
@@ -74,6 +93,12 @@ class ShipService {
               },
             ],
           },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+            through: { attributes: [] },
+          },
         ],
       });
     } catch (error) {
@@ -84,7 +109,30 @@ class ShipService {
   async getCruiseCategory() {
     try {
       return await CruiseCategory.findAll({
-        attributes: ["id", "name"],
+        attributes: ["id", "name", "image"],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getFeatureShip(product_id) {
+    try {
+      return await Features.findAll({
+        attributes: ["id", "icon", "text", "type"],
+        include: [
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+          },
+          {
+            model: Products,
+            as: "products",
+            attributes: ["id"],
+            where: { id: product_id },
+          },
+        ],
       });
     } catch (error) {
       throw error;
@@ -105,6 +153,7 @@ class ShipService {
         year,
         admin,
         trip,
+        features,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -153,7 +202,6 @@ class ShipService {
         admin,
         trip,
       });
-
       return {
         product,
         cruise,
@@ -215,7 +263,7 @@ class ShipService {
       }
 
       if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images.split(","));
+        imageLinkList.push(...images);
         imageLinkList = imageLinkList.join(",");
       }
 
@@ -303,11 +351,15 @@ class ShipService {
         };
       }
 
-      if (greaterDefaultPrice != null && lowerDefaultPrice != null) {
-        whereProducts.default_price = {
-          [Op.gte]: greaterDefaultPrice,
-          [Op.lte]: lowerDefaultPrice,
-        };
+      if (greaterDefaultPrice != null || lowerDefaultPrice != null) {
+        whereProducts.default_price = {};
+        if (greaterDefaultPrice != null) {
+          whereProducts.default_price[Op.gte] = greaterDefaultPrice;
+        }
+
+        if (lowerDefaultPrice != null) {
+          whereProducts.default_price[Op.lte] = lowerDefaultPrice;
+        }
       }
 
       const total = await Products.count({
@@ -321,6 +373,7 @@ class ShipService {
         ],
       });
 
+      // Về sau nếu thiếu trường nào thì hãy vào đây viết thêm để query vào trường đó
       const ships = await Products.findAndCountAll({
         limit,
         offset,
@@ -357,6 +410,39 @@ class ShipService {
         data: ships.rows,
         totalPages: Math.ceil(total / limit),
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getActiveShip() {
+    try {
+      return await Products.findAll({
+        where: { active: true, type_product_id: 1 },
+        attributes: ["id", "title", "thumbnail", "slug", "address", "default_price", "schedule"],
+        include: [
+          {
+            model: Cruise,
+            as: "cruise",
+            attributes: [
+              "id",
+              "category_id",
+              "shell",
+              "cabin",
+              "year",
+              "admin",
+              "trip",
+            ],
+            include: [
+              {
+                model: CruiseCategory,
+                as: "cruise_category",
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      });
     } catch (error) {
       throw error;
     }

@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
 import Button from "~/components/Button";
 import classNames from "classnames/bind";
-import styles from "../Home.module.scss";
-import SearchBox from "../../../components/SearchBox/SearchBox";
-import SearchInputBox from "../../../components/SearchBox/SearchInputBox";
-import { handleSearchShipsApi, handleGetCruiseCategoryApi } from "~/api";
-import SearchSelectBox from "../../../components/SearchBox/SearchSelectBox";
+import styles from "./Banner.module.scss";
+import SearchBox from "~/components/SearchBox/SearchBox";
+import SearchInputBox from "~/components/SearchBox/SearchInputBox";
+import { handleSearchShipsApi } from "~/api";
+import SearchSelectBox from "~/components/SearchBox/SearchSelectBox";
 import { Controller, useForm } from "react-hook-form";
+import PropTypes from "prop-types";
 const cx = classNames.bind(styles);
 
-function Banner() {
+function Banner({ cruiseCategory }) {
   const { control, setValue, handleSubmit } = useForm();
-  const [cruiseCategory, setCruiseCategory] = useState([]);
-
-  const getCruiseCategory = async () => {
-    const res = await handleGetCruiseCategoryApi();
-    setCruiseCategory(res.cruiseCategory);
-  };
-
-  useEffect(() => {
-    getCruiseCategory();
-  }, []);
 
   const handleSearchShipsForm = (data) => {
     console.log(data);
@@ -47,6 +37,7 @@ function Banner() {
             control={control}
             render={({ field }) => (
               <SearchInputBox
+                isDebounceEmptyCallApi={false}
                 inputGroup
                 name="title"
                 firstIcon={
@@ -193,5 +184,9 @@ function Banner() {
     </div>
   );
 }
+
+Banner.propTypes = {
+  cruiseCategory: PropTypes.array,
+};
 
 export default Banner;

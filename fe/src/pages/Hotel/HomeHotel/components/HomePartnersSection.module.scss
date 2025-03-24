@@ -1,0 +1,43 @@
+.Home-partnersSection {
+  background-color: #f2f4f7;
+}
+
+.PartnerSection {
+  &-section {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    padding: 80px 32px;
+  }
+
+  &-partnerList {
+    display: flex;
+    gap: 32px;
+    overflow: auto;
+    flex-wrap: wrap;
+
+    & .PartnerSection-img-wrapper {
+      width: 176px;
+      height: 64px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .PartnerSection {
+    &-section {
+      padding: 24px;
+      gap: 24px;
+    }
+
+    &-partnerList {
+      gap: 16px;
+
+      & .PartnerSection-img-wrapper {
+        width: 132px;
+        min-width: 132px;
+        height: 48px;
+      }
+    }
+  }
+}

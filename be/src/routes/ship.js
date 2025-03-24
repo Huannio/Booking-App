@@ -11,8 +11,6 @@ router.get("/search", ShipController.search);
 // POST /ships/create
 router.post(
   "/create",
-  authorizeJWT,
-  checkPermission("ships.create"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -23,8 +21,6 @@ router.post(
 // PUT /ships/update/:slug
 router.put(
   "/update/:slug",
-  authorizeJWT,
-  checkPermission("ships.update"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -40,8 +36,14 @@ router.delete(
   ShipController.delete
 );
 
+// GET /ships/active
+router.get("/active", ShipController.getActive);
+
 // GET /ships/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
+
+// GET /ship/feature
+router.get("/feature", ShipController.getFeatureShip);
 
 // GET /ships/:slug
 router.get("/:slug", ShipController.index);
