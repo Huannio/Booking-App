@@ -21,20 +21,18 @@ function UploadImageUseFieldArray({
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    if (
-      value &&
-      Array.isArray(value) &&
-      (fileList.length === 0 || fileList[0]?.url !== value[0]?.url)
-    ) {
-      const newFileList = value
-        .filter((file) => !!file?.url)
-        .map((file) => ({
-          url: file.url,
-        }));
-      setFileList(newFileList);
+    if (value && Array.isArray(value) && value.length > 0) {
+      setFileList((prevFileList) => {
+        if (prevFileList.length === 0) {
+          return value.map((file) => ({
+            uid: file?.uid || file?.url,
+            name: file?.name || "Uploaded Image",
+            url: file?.url,
+          }));
+        }
+        return prevFileList;
+      });
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const onChange = ({ fileList: newFileList }, field = null) => {
