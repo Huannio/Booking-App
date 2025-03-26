@@ -2,8 +2,13 @@ const express = require("express");
 const router = express.Router();
 const ShipController = require("../app/controllers/ShipController");
 const upload = require("../middleware/upload");
+const authorizeJWT = require("../middleware/authorize");
+const checkPermission = require("../middleware/checkPermission");
 
-// POST /ship/create
+// GET /ships/search
+router.get("/search", ShipController.search);
+
+// POST /ships/create
 router.post(
   "/create",
   upload.fields([
@@ -13,7 +18,7 @@ router.post(
   ShipController.create
 );
 
-// PUT /ship/update/:slug
+// PUT /ships/update/:slug
 router.put(
   "/update/:slug",
   upload.fields([
@@ -23,16 +28,26 @@ router.put(
   ShipController.update
 );
 
-// DELETE /ship/delete/:slug
-router.delete("/delete/:slug", ShipController.delete);
+// DELETE /ships/delete/:slug
+router.delete(
+  "/delete/:slug",
+  authorizeJWT,
+  checkPermission("ships.delete"),
+  ShipController.delete
+);
 
-// GET /ship/cruise-category
+// GET /ships/active
+router.get("/active", ShipController.getActive);
+
+// GET /ships/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
 
+// GET /ship/feature
+router.get("/feature", ShipController.getFeatureShip);
 
-// GET /ship/:slug
+// GET /ships/:slug
 router.get("/:slug", ShipController.index);
 
-// GET /ship
+// GET /ships
 router.get("/", ShipController.show);
 module.exports = router;
