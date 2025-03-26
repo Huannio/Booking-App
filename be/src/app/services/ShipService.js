@@ -5,6 +5,8 @@ const {
   Features,
   Cruise,
   CruiseCategory,
+  LongDescProducts,
+  LongDescType,
 } = require("../../models");
 const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -98,6 +100,23 @@ class ShipService {
             as: "features",
             attributes: ["text", "id", "icon"],
             through: { attributes: [] },
+          },
+          {
+            model: LongDescProducts,
+            as: "long_desc_products",
+            attributes: [
+              "id",
+              "type_id",
+              "product_id",
+              "text",
+              "caption",
+              "image_url",
+            ],
+            include: {
+              model: LongDescType,
+              as: "type",
+              attributes: ["id", "type"],
+            },
           },
         ],
       });
@@ -419,7 +438,15 @@ class ShipService {
     try {
       return await Products.findAll({
         where: { active: true, type_product_id: 1 },
-        attributes: ["id", "title", "thumbnail", "slug", "address", "default_price", "schedule"],
+        attributes: [
+          "id",
+          "title",
+          "thumbnail",
+          "slug",
+          "address",
+          "default_price",
+          "schedule",
+        ],
         include: [
           {
             model: Cruise,
@@ -443,6 +470,87 @@ class ShipService {
           },
         ],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image") {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.file ?? null,
+          caption: block.caption ?? null,
+        });
+      });
+
+      return await LongDescProducts.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image" && !block.image_url) {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      let productId;
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.image_url ? block.image_url.url : block.file ?? null,
+          caption: block.caption ?? null,
+        });
+        productId = block.product_id;
+      });
+
+      const longDescProduct = await LongDescProducts.findAll({
+        where: { product_id: productId },
+      });
+
+      if (longDescProduct.length > 0) {
+        await LongDescProducts.destroy({
+          where: { product_id: productId },
+        });
+      }
+      return await LongDescProducts.bulkCreate(data);
     } catch (error) {
       throw error;
     }

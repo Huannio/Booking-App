@@ -48,12 +48,14 @@ function Update() {
   const [cruiseCategory, setCruiseCategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setGlobalLoading } = useContext(LoadingContext);
+  const [ship, setShip] = useState(null);
 
   const { slug } = useParams();
   const getShipBySlug = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
     const response = await handleGetShipBySlugApi(slug);
+    setShip(response.ship);
     reset({
       address: response.ship.address,
       admin: response.ship.cruise.admin,
@@ -139,8 +141,22 @@ function Update() {
         <div className="flex justify-between align-center">
           <h6>Cập nhật thông tin du thuyền</h6>
           <div className="flex align-center gap-16">
+            {ship?.long_desc_products && ship?.long_desc_products.length > 0 ? (
+              <Link to={`/ships/updateDetail/${slug}`}>
+                <Button primary normal>
+                  <div className="label md">Cập nhật thông tin chi tiết</div>
+                </Button>
+              </Link>
+            ) : (
+              <Link to={`/ships/createDetail/${slug}`}>
+                <Button primary normal>
+                  <div className="label md">Tạo thông tin chi tiết</div>
+                </Button>
+              </Link>
+            )}
+
             <Link to={`/ships/updateFeature/${slug}`}>
-              <Button primary normal className="interceptor-loading">
+              <Button primary normal>
                 <div className="label md">Đặc trưng du thuyền</div>
               </Button>
             </Link>
