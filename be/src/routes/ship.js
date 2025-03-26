@@ -8,6 +8,20 @@ const checkPermission = require("../middleware/checkPermission");
 // GET /ships/search
 router.get("/search", ShipController.search);
 
+// POST /ships/createDetail/:slug
+router.post(
+  "/createDetail/:slug",
+  upload.array("images"),
+  ShipController.createDetail
+);
+
+// PUT /ships/updateDetail/:slug
+router.put(
+  "/updateDetail/:slug",
+  upload.array("images"),
+  ShipController.updateDetail
+);
+
 // POST /ships/create
 router.post(
   "/create",
