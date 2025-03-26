@@ -45,6 +45,7 @@ module.exports = {
         slug: "delasea-phat-linh-ha-long",
         num_reviews: 23,
         score_reviews: 5,
+        schedule: "2 ngày 1 đêm.",
         thumbnail:
           "https://res.cloudinary.com/dhnp8ymxv/image/upload/v1731999071/thumbnail/o6obristc019rsh0.webp.webp",
         images:

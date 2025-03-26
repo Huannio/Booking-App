@@ -6,15 +6,14 @@ const UserController = require("../app/controllers/UserController");
 const checkPermission = require("../middleware/checkPermission");
 const authorizeJWT = require("../middleware/authorize");
 
-router.use(authorizeJWT);
-
-// GET /users/:id
-router.get("/:id", UserController.index);
+// GET /users/search
+router.get("/search", UserController.search);
 
 // POST /users/create
 
 router.post(
   "/create",
+  authorizeJWT,
   checkPermission("users.create"),
   UsersValidation.createNewUser,
   UserController.create
@@ -23,6 +22,7 @@ router.post(
 // PUT /users/update/:id
 router.put(
   "/update/:id",
+  authorizeJWT,
   checkPermission("users.update"),
   UsersValidation.updateUser,
   UserController.update
@@ -31,11 +31,22 @@ router.put(
 // DELETE /users/delete/:id
 router.delete(
   "/delete/:id",
+  authorizeJWT,
   checkPermission("users.delete"),
   UserController.delete
 );
 
+// PUT /users/verify-account
+router.put(
+  "/verify-account",
+  UsersValidation.verifyAccount,
+  UserController.verifyAccount
+);
+
+// GET /users/:id
+router.get("/:id", UserController.index);
+
 // GET /users
-router.get("/", checkPermission("users.index"), UserController.show);
+router.get("/", authorizeJWT, checkPermission("users.index"), UserController.show);
 
 module.exports = router;

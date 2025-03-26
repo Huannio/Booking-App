@@ -110,6 +110,7 @@ function Create() {
               control={control}
               error={errors.icon}
               status={errors.icon && "error"}
+              variant="thumbnail"
             />
           </div>
         </div>

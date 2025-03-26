@@ -6,6 +6,9 @@ const BlogsValidation = require("../validations/BlogsValidation");
 const authorizeJWT = require("../middleware/authorize");
 const checkPermission = require("../middleware/checkPermission");
 
+// GET /blogs/search
+router.get("/search", BlogsController.search);
+
 // GET /blogs/pagination
 router.get("/pagination", BlogsController.getBlogPagination);
 
@@ -66,11 +69,11 @@ router.delete(
   BlogsController.delete
 );
 
-// GET /blogs/:slug
-router.get("/:slug", BlogsController.getBlogBySlug);
-
 // GET /blogs/:id
 router.get("/:id", BlogsController.index);
+
+// GET /blogs/:slug
+router.get("/detail/:slug", BlogsController.getBlogBySlug);
 
 // GET /blogs
 router.get("/", BlogsController.show);

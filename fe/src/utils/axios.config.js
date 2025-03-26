@@ -10,6 +10,12 @@ export const injectStore = (_store) => {
   axiosReduxStore = _store;
 };
 
+// Inject loading
+let globalLoading;
+export const injectLoading = (_loading) => {
+  globalLoading = _loading;
+};
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true, // Cho phép gửi cookie
@@ -41,25 +47,27 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
+    const originalRequest = error.config; // Lấy các request api đang bị lỗi
     // Chặn user spam click
     interceptorLoadingElements(false);
 
     // Any status codes that falls outside the range of 2xx cause this function to trigger (200-299)
     // Do something with response error
     // Hiển thị thông báo các loại lỗi khác trừ mã 410 => dùng cho refresh token
-    if (error.response?.status !== 410) {
+    if (error.response?.status !== 410 && !originalRequest?.hideError) {
       notification.error({
         message: error?.response?.data?.message || error?.message,
       });
+      globalLoading(false);
     }
 
     // Logout khi bị lỗi 401
     if (error.response?.status === 401) {
       axiosReduxStore.dispatch(logoutUserApi());
+      globalLoading(false);
     }
 
     // Gọi api refresh token khi bị lỗi 410
-    const originalRequest = error.config; // Lấy các request api đang bị lỗi
     if (error.response?.status === 410 && !originalRequest._retry) {
       // Gán giá trị _retry = true cho request refresh token => Trong khoảng thời gian chờ, chỉ gọi 1 lần refresh token
       originalRequest._retry = true;
@@ -70,6 +78,7 @@ instance.interceptors.response.use(
           })
           .catch((_error) => {
             axiosReduxStore.dispatch(logoutUserApi());
+            globalLoading(false);
             return Promise.reject(_error);
           })
           .finally(() => {

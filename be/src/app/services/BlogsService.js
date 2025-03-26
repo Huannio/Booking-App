@@ -3,6 +3,7 @@ const ApiError = require("../../middleware/ApiError");
 const { Blog, BlogType, LongDescBlog, LongDescType } = require("../../models");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
+const { Op } = require("sequelize");
 
 class BlogsService {
   async getBlogById(id) {
@@ -310,6 +311,41 @@ class BlogsService {
           },
         ],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async search(limit, offset, title) {
+    try {
+      let where = {};
+      if (title) {
+        where = {
+          title: {
+            [Op.like]: `%${title}%`,
+          },
+        };
+      }
+
+      const total = await Blog.count({ where });
+
+      const blogs = await Blog.findAndCountAll({
+        limit,
+        offset,
+        where,
+        attributes: ["id", "title", "short_desc", "thumbnail", "slug"],
+        include: {
+          model: BlogType,
+          as: "type",
+          attributes: ["type"],
+        },
+      });
+
+      return {
+        total: total,
+        data: blogs.rows,
+        totalPages: Math.ceil(total / limit),
+      };
     } catch (error) {
       throw error;
     }

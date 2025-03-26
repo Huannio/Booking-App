@@ -21,15 +21,17 @@ function UploadImageUseFieldArray({
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    if (value && Array.isArray(value)) {
-      value.filter((file) => {
-        if (file) {
-          const newFile = {
-            url: file.url,
-          };
-          setFileList([newFile]);
+    if (value && Array.isArray(value) && value.length > 0) {
+      setFileList((prevFileList) => {
+        if (prevFileList.length === 0) {
+          return value.map((file) => ({
+            uid: file?.uid || file?.url,
+            name: file?.name || "Uploaded Image",
+            url: file?.url,
+          }));
         }
-      })
+        return prevFileList;
+      });
     }
   }, [value]);
 

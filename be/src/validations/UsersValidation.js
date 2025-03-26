@@ -31,7 +31,22 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const verifyAccount = async (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().trim().strict(),
+    token: Joi.string().required().trim().strict(),
+  });
+
+  try {
+    await schema.validateAsync(req.body, { abortEarly: false }); // abortEarly: false will return all errors
+    next();
+  } catch (error) {
+    next(new ApiError(StatusCodes.BAD_REQUEST, new Error(error.message)));
+  }
+};
+
 module.exports = {
   createNewUser,
   updateUser,
+  verifyAccount,
 };

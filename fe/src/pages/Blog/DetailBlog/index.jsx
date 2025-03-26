@@ -42,7 +42,7 @@ function DetailBlog() {
       <div className={cx("container", "BlogDetail-wrapper")}>
         <div className="flex flex-col gap-40">
           <SectionHeader
-            firstTitle={blog?.title}
+            title={<h5>{blog?.title}</h5>}
             column
             badge={
               <Badge

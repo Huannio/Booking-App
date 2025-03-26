@@ -332,7 +332,7 @@ function UpdateDetail() {
                           label={`Image`}
                           placeholder={`Image`}
                           error={errors?.contentBlocks?.[index]?.file}
-                          value={[field.file]}
+                          value={field.file ? [field.file] : []}
                         />
                         <button
                           type="button"

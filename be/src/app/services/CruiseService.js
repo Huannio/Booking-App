@@ -1,4 +1,4 @@
-const {Cruise, CruiseCategory, products,} = require("../../models");
+const {Cruise, CruiseCategory, Products,} = require("../../models");
 
 class CruiseCataloguesService {
    async getAll() {
@@ -10,6 +10,11 @@ class CruiseCataloguesService {
             model: CruiseCategory,
             as: "cruise_category",
             attributes: ["id", "name"],
+          },
+          {
+            model: Products, 
+            as: "product",
+            attributes: ["id", "title", "slug", "thumbnail", "default_price", "num_reviews", "score_reviews"],
           },
         ],
       });

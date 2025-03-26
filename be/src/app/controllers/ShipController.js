@@ -15,6 +15,48 @@ class ShipController {
       next(error);
     }
   };
+  
+  getFeatureShip = async (req, res, next) => {
+    try {
+      const { product_id  } = req.params; 
+      const feature = await this.ShipService.getFeatureShip(
+        product_id,
+        req.body,
+        req.files
+       );
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, feature });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  createFeature = async (req, res, next) => {
+    try {
+      const { product_id, feature_id } = req.body;
+      const result = await this.ShipService.addFeatureToProduct(product_id, feature_id);
+      res.status(StatusCodes.CREATED).json({
+        statusCode: StatusCodes.CREATED,
+        message: "Thêm đặc trưng cho sản phẩm thành công!",
+        result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateFeature = async (req, res, next) => {
+    try {
+      const { product_id, feature_id } = req.params;
+      const result = await this.ShipService.removeFeatureFromProduct(product_id, feature_id);
+      res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        message: "Xóa đặc trưng khỏi sản phẩm thành công!",
+        result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 
   index = async (req, res, next) => {
     try {
@@ -73,6 +115,42 @@ class ShipController {
         deleteShip,
         message: "Xóa thành công!",
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  search = async (req, res, next) => {
+    try {
+      const { title, greaterDefaultPrice, lowerDefaultPrice } = req.query;
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+      const categoryId = parseInt(req.query.categoryId) || null;
+      const { total, data, totalPages } = await this.ShipService.getShipSearch(
+        limit,
+        offset,
+        categoryId,
+        title,
+        greaterDefaultPrice,
+        lowerDefaultPrice
+      );
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        data,
+        total,
+        totalPages,
+        records: data.length,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getActive = async (req, res, next) => {
+    try {
+      const data = await this.ShipService.getActiveShip();
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, data });
     } catch (error) {
       next(error);
     }

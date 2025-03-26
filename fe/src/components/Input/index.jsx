@@ -5,4 +5,5 @@ export { default as OptionField } from "./OptionField";
 export { default as TextField } from "./TextField";
 export { default as ListField } from "./ListField";
 export { default as UploadImageField } from "./UploadImageField";
+export { default as UploadThumbnailField } from "./UploadThumbnailField";
 export { default as UploadImageUseFieldArray } from "./UploadImageUseFieldArray";

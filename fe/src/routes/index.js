@@ -1,12 +1,12 @@
 import { AdminLayout } from "../components/Layout";
 import Home from "../pages/Home";
-import Detail from "../pages/Detail";
 import {
   Cruise as CruiseSearch,
   Flight as FlightSearch,
 } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import Hotel from "../pages/Hotel/HomeHotel";
 
 import {
   Show as ShowUser,
@@ -33,15 +33,25 @@ import {
 import {
   Show as ShowShip,
   Create as CreateShip,
+  // CreateFeature as CreateFeatureShip,
   Update as UpdateShip,
+  // UpdateFeature as UpdateFeatureShip,
   Delete as DeleteShip,
 } from "../pages/Ship";
+
 import {
   Show as ShowFeature,
   Create as CreateFeature,
-  // Update as UpdateFeature,
-  // Delete as DeleteFeature,
+  Update as UpdateFeature,
+  Delete as DeleteFeature,
 } from "../pages/Feature";
+
+import {
+  Show as ShowHotel,
+  Create as CreateHotel,
+  Update as UpdateHotel,
+  Delete as DeleteHotel,
+} from "../pages/Hotel/HotelAdmin";
 
 import {
   Show as ShowBlog,
@@ -75,15 +85,17 @@ import {
   Update as UpdateUserPermission,
 } from "../pages/Permissions/Permission";
 
+import AccountVerification from "../pages/Auth/AccountVerification";
 
 export const publicRoutes = [
   {
-    path: "/",
-    component: Home,
+    path: config.routes.account.verification,
+    component: AccountVerification,
+    layout: null,
   },
   {
-    path: "/:type/:slug",
-    component: Detail,
+    path: "/",
+    component: Home,
   },
   {
     path: "/tim-du-thuyen",
@@ -96,6 +108,10 @@ export const publicRoutes = [
   {
     path: "/doanh-nghiep",
     component: BusinessPage,
+  },
+  {
+    path: "/khach-san",
+    component: Hotel,
   },
 
   // Footer
@@ -174,6 +190,7 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "users.delete",
   },
+
 
   // User Catalogues
   {
@@ -260,6 +277,18 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "ships.update",
   },
+  // {
+  //   path: config.routes.ships.CreateFeatureShip,
+  //   component: CreateFeatureShip,
+  //   layout: AdminLayout,
+  //   requiredPermission: "ships.create",
+  // },
+  // {
+  //   path: config.routes.ships.updateFeatureShip,
+  //   component: UpdateFeatureShip,
+  //   layout: AdminLayout,
+  //   requiredPermission: "ships.update",
+  // },
   {
     path: config.routes.ships.delete,
     component: DeleteShip,
@@ -272,22 +301,52 @@ export const privateRoutes = [
     path: config.routes.features.index,
     component: ShowFeature,
     layout: AdminLayout,
+    requiredPermission: "features.index",
   },
   {
     path: config.routes.features.create,
     component: CreateFeature,
     layout: AdminLayout,
+    requiredPermission: "features.create",
   },
-  // {
-  //   path: config.routes.features.update,
-  //   component: UpdateFeature,
-  //   layout: AdminLayout,
-  // },
-  // {
-  //   path: config.routes.features.delete,
-  //   component: DeleteFeature,
-  //   layout: AdminLayout,
-  // },
+  {
+    path: config.routes.features.update,
+    component: UpdateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.update",
+  },
+  {
+    path: config.routes.features.delete,
+    component: DeleteFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.delete",
+  },
+
+  // Hotel 
+  {
+    path: config.routes.hotel.index,
+    component: ShowHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.index",
+  },
+  {
+    path: config.routes.hotel.create,
+    component: CreateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.create",
+  },
+  {
+    path: config.routes.hotel.update,
+    component: UpdateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.delete,
+    component: DeleteHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.delete",
+  },
 
   // Blogs
   {
@@ -312,13 +371,13 @@ export const privateRoutes = [
     path: config.routes.blogs.createDetail,
     component: CreateDetailBlog,
     layout: AdminLayout,
-    requiredPermission: "blogs.createDetail",
+    requiredPermission: "blogs.create",
   },
   {
     path: config.routes.blogs.updateDetail,
     component: UpdateDetailBlog,
     layout: AdminLayout,
-    requiredPermission: "blogs.updateDetail",
+    requiredPermission: "blogs.update",
   },
   {
     path: config.routes.blogs.delete,

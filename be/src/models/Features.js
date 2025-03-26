@@ -1,32 +1,29 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Feature extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Features extends Model {
     static associate(models) {
-      // define association here
-      Feature.belongsTo(models.FeatureTypes, {
+      Features.belongsTo(models.FeatureTypes, {
         foreignKey: "type",
         as: "types",
       });
 
-    //   Feature.hasMany(models.Products, {
-    //     foreignKey: "id",
-    //     as: "product",
-    //   });
+      Features.belongsToMany(models.Products, {
+        through: models.ProductFeature,
+        foreignKey: "feature_id",
+        otherKey: "product_id",
+        as: "products",
+      });
     }
   }
-  Feature.init(
+
+  Features.init(
     {
       id: {
         type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true,
       },
       icon: DataTypes.TEXT,
       text: DataTypes.STRING,
@@ -45,5 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "features",
     }
   );
-  return Feature;
+  
+  return Features;
 };

@@ -40,15 +40,16 @@ class FeatureController {
 
   update = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const updateFeature = await this.FeatureService.updateFeature(
-        id,
+      const data = await this.FeatureService.updateFeature(
         req.body,
         req.file,
+        req.params.id
       );
-      res
-        .status(StatusCodes.OK)
-        .json({ statusCode: StatusCodes.OK, updateFeature });
+      return res.status(StatusCodes.OK).json({ 
+        statusCode: StatusCodes.OK,
+        message: "Cập nhật đặc trưng thành công!", 
+        data,
+       });
     } catch (error) {
       next(error);
     }
@@ -56,12 +57,11 @@ class FeatureController {
 
   delete = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const deleteFeature = await this.FeatureService.deleteFeature(id);
-      res.status(StatusCodes.OK).json({
+      const data = await this.FeatureService.deleteFeature(req.params.id);
+      return res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        deleteFeature,
         message: "Xóa thành công!",
+        data,
       });
     } catch (error) {
       next(error);

@@ -41,6 +41,8 @@ module.exports = (sequelize, DataTypes) => {
       shell: DataTypes.STRING,
       trip: DataTypes.STRING,
       admin: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,

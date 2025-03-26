@@ -1,7 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const cloudinary = require("../../config/cloudinary");
 const BlogsService = require("../services/BlogsService");
-const uploadToCloudinary = require("../../utils/cloudinary");
 
 class BlogsController {
   constructor() {
@@ -170,6 +168,30 @@ class BlogsController {
     try {
       const blog = await this.blogsService.getBlogBySlug(req.params.slug);
       return res.status(StatusCodes.OK).json(blog);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  search = async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 0;
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+      const offset = page * limit;
+
+      const { total, data, totalPages } = await this.blogsService.search(
+        limit,
+        offset,
+        req.query?.title
+      );
+
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        total,
+        data,
+        totalPages,
+        records: data.length,
+      });
     } catch (error) {
       next(error);
     }
