@@ -16,7 +16,7 @@ const PopularSections = () => {
 
   const getHotels = useCallback(async () => {
     const hotels = await handleGetActiveHotelApi();
-    setHotels(hotels.data || []);
+    setHotels(hotels?.data || []);
   }, []);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const PopularSections = () => {
 
         <div className={cx("PopularShips-cardList")}>
           {hotels.map((hotel) => (
-            <Link key={hotel.id} to={`/tim-khach-san/${hotel.slug}`}>
+            <Link key={hotel?.id} to={`/tim-khach-san/${hotel?.slug}`}>
               <ProductCard
                 BadgeImageWrapper={
                   <Badge
@@ -92,7 +92,7 @@ const PopularSections = () => {
                         ></path>
                       </svg>
                     }
-                    content={hotel.hotel.cities.name}
+                    content={hotel?.hotel?.cities?.name}
                     className={"ProductCard-location"}
                   />
                 }

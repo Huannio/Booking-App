@@ -24,10 +24,10 @@ const HomeSection = ({ cities }) => {
         {cities?.map((city) => {
           if (city?.image != null) {
             return (
-              <Link to={`/tim-du-thuyen?city  Id=${city.id}`} key={city.id}>
+              <Link to={`/tim-du-thuyen?city  Id=${city?.id}`} key={city?.id}>
                 <CategoryCard
-                  title={city.name}
-                  imgSrc={city.image}
+                  title={city?.name}
+                  imgSrc={city?.image}
                   alt={"mixivivu"}
                   button={
                     <Button small outline>
