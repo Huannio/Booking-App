@@ -59,6 +59,8 @@ const routes = {
     create: "/hotel/create",
     update: "/hotel/update/:slug",
     delete: "/hotel/delete/:slug",
+    createDetail: "/hotel/createDetail/:slug",
+    updateDetail: "/hotel/updateDetail/:slug",
   },
   account: {
     verification: "/account/verification",

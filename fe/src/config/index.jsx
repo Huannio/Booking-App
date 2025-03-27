@@ -12,6 +12,7 @@ import {
   permissionSchema,
   hotelSchema,
   shipDetailSchema,
+  hotelDetailSchema
 } from "./validationSchema";
 const config = {
   routes,
@@ -27,6 +28,7 @@ const config = {
   permissionSchema,
   hotelSchema,
   shipDetailSchema,
+  hotelDetailSchema
 };
 
 export default config;

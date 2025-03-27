@@ -11,6 +11,8 @@ router.get("/search", ShipController.search);
 // POST /ships/createDetail/:slug
 router.post(
   "/createDetail/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
   upload.array("images"),
   ShipController.createDetail
 );
@@ -18,6 +20,8 @@ router.post(
 // PUT /ships/updateDetail/:slug
 router.put(
   "/updateDetail/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
   upload.array("images"),
   ShipController.updateDetail
 );
@@ -25,6 +29,8 @@ router.put(
 // POST /ships/create
 router.post(
   "/create",
+  authorizeJWT,
+  checkPermission("ships.create"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },
@@ -35,6 +41,8 @@ router.post(
 // PUT /ships/update/:slug
 router.put(
   "/update/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "images", maxCount: 10 },

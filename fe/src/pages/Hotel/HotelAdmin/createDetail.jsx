@@ -1,12 +1,16 @@
+import Button from "~/components/Button";
+import styles from "./Hotel.module.scss";
+import classNames from "classnames/bind";
+import { useCallback, useContext, useEffect, useState } from "react";
+import config from "~/config";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CloseOutlined } from "@ant-design/icons";
 import {
-  TextField,
-  InputField,
-  UploadImageUseFieldArray,
-} from "~/components/Input";
-import classNames from "classnames/bind";
+  handleGetBlogDescriptionsTypesApi,
+  handleGetShipBySlugApi,
+} from "~/api";
+import { LoadingContext } from "~/components/Loading/Loading";
+import SortableItem from "~/components/Sort/SortableItem";
 import {
   DndContext,
   useSensor,
@@ -20,30 +24,17 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-
-import styles from "./Ship.module.scss";
-import config from "~/config";
-import Button from "~/components/Button";
-import SortableItem from "~/components/Sort/SortableItem";
-import axios from "~/utils/axios.config";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { LoadingContext } from "~/components/Loading/Loading";
-import { notification } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { handleGetShipBySlugApi } from "~/api";
+import { TextField, UploadImageField, InputField } from "~/components/Input";
+import { CloseOutlined } from "@ant-design/icons";
+import axios from "~/utils/axios.config";
+import { notification } from "antd";
+
 const cx = classNames.bind(styles);
 
-function UpdateDetail() {
+function CreateDetail() {
+  const navigate = useNavigate();
   const { slug } = useParams();
-
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(config.shipDetailSchema),
-  });
 
   const { setGlobalLoading } = useContext(LoadingContext);
   const [ship, setShip] = useState(null);
@@ -51,44 +42,24 @@ function UpdateDetail() {
 
   const getData = useCallback(async () => {
     setGlobalLoading(true);
+    const blogType = await handleGetBlogDescriptionsTypesApi();
     const shipData = await handleGetShipBySlugApi(slug);
     setShip(shipData.ship);
-    setBlogDescTypes(shipData.ship.long_desc_products);
-    let data = [];
-    shipData.ship.long_desc_products.map((item) => {
-      if (item.image_url) {
-        data.push({
-          id: item.id,
-          type: item.type.type,
-          type_id: item.type_id,
-          product_id: item.product_id,
-          file: {
-            url: item.image_url,
-          },
-          caption: item.caption,
-        });
-      }
-
-      if (item.text) {
-        data.push({
-          id: item.id,
-          type: item.type.type,
-          type_id: item.type_id,
-          product_id: item.product_id,
-          content: item.text,
-        });
-      }
-    });
-
-    reset({
-      contentBlocks: data,
-    });
+    setBlogDescTypes(blogType);
     setGlobalLoading(false);
-  }, [setGlobalLoading, slug, reset]);
+  }, [setGlobalLoading, slug]);
 
   useEffect(() => {
     getData();
   }, [getData]);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(config.hotelDetailSchema),
+  });
 
   const { fields, append, remove, move } = useFieldArray({
     control,
@@ -99,7 +70,7 @@ function UpdateDetail() {
     append({
       id: Date.now().toString(),
       type: "Header",
-      type_id: blogDescTypes[0].type_id,
+      type_id: blogDescTypes[0].id,
       product_id: ship.id,
       content: "",
     });
@@ -109,7 +80,7 @@ function UpdateDetail() {
     append({
       id: Date.now().toString(),
       type: "Paragraph",
-      type_id: blogDescTypes[1].type_id,
+      type_id: blogDescTypes[1].id,
       product_id: ship.id,
       content: "",
     });
@@ -119,7 +90,7 @@ function UpdateDetail() {
     append({
       id: Date.now().toString(),
       type: "Image",
-      type_id: blogDescTypes[2].type_id,
+      type_id: blogDescTypes[2].id,
       product_id: ship.id,
       file: null,
       caption: "",
@@ -179,38 +150,12 @@ function UpdateDetail() {
     move(oldIndex, newIndex);
   };
 
-  const navigate = useNavigate();
-
-  const handleUpdateForm = async (data) => {
-    if (Object.entries(data.contentBlocks).length === 0) {
-      notification.error({
-        message: "Dữ liệu không được để trống",
-      });
-      return;
-    }
-
+  const handleCreateForm = async (data) => {
+    console.log(data);
     const formData = new FormData();
-    let temp = [];
-    data.contentBlocks.forEach((block) => {
-      temp.push({
-        id: block.id,
-        type: block.type,
-        type_id: block.type_id,
-        product_id: block.product_id,
-        content: block.content,
-        image_url: block.file,
-        caption: block.caption,
-      });
-    });
-
-    const contentBlocks = temp.map((block) => {
-      if (block.type === "Image" && block.image_url.uid) {
-        return {
-          ...block,
-          file: block.image_url,
-          image_url: null,
-          caption: block.caption,
-        };
+    const contentBlocks = data.contentBlocks.map((block) => {
+      if (block.type === "Image") {
+        return { ...block, file: undefined };
       }
       return block;
     });
@@ -219,30 +164,27 @@ function UpdateDetail() {
 
     data.contentBlocks.forEach((block) => {
       if (block.type === "Image") {
-        formData.append("images", block.file);
+        formData.append("images", block.file[0]);
       }
     });
 
-    const response = await axios.put(
-      `/ships/updateDetail/${ship.slug}`,
-      formData
-    );
-    if (response.statusCode === 200) {
+    const response = await axios.post(`/hotel/createDetail/${ship.slug}`, formData);
+    if (response.statusCode === 201) {
       notification.success({
-        message: response?.message || "Cập nhật thông tin chi tiết thành công!",
+        message:
+          response?.message || "Tạo thông tin chi tiết thành công!",
       });
-      navigate("/ships");
+      navigate("/hotel");
     }
   };
 
   return (
     <div className="flex w-full flex-col gap-16">
-      <h6>Cập nhật chi tiết bài viết</h6>
+      <h1>Thông tin chi tiết</h1>
       <div className="divider"></div>
-
       <form
         className="flex flex-col gap-32"
-        onSubmit={handleSubmit(handleUpdateForm)}
+        onSubmit={handleSubmit(handleCreateForm)}
       >
         <div
           className="flex align-center justify-between"
@@ -250,7 +192,7 @@ function UpdateDetail() {
             position: "sticky",
             top: 0,
             backgroundColor: "#fff",
-            zIndex: 999,
+            zIndex: 9999,
           }}
         >
           <div className="flex align-center gap-12">
@@ -350,14 +292,13 @@ function UpdateDetail() {
 
                     {field.type === "Image" && (
                       <div className={cx("custom-image")}>
-                        <UploadImageUseFieldArray
+                        <UploadImageField
                           control={control}
                           name={`contentBlocks.${index}.file`}
                           label={`Image`}
                           placeholder={`Image`}
                           error={errors?.contentBlocks?.[index]?.file}
                           className="optional-height"
-                          value={field.file ? [field.file] : []}
                         />
                         <div
                           style={{
@@ -396,4 +337,4 @@ function UpdateDetail() {
   );
 }
 
-export default UpdateDetail;
+export default CreateDetail;

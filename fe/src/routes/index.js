@@ -50,6 +50,8 @@ import {
   Create as CreateHotel,
   Update as UpdateHotel,
   Delete as DeleteHotel,
+  CreateDetail as CreateHotelDetail,
+  UpdateDetail as UpdateHotelDetail,
 } from "../pages/Hotel/HotelAdmin";
 
 import {
@@ -350,6 +352,18 @@ export const privateRoutes = [
     component: DeleteHotel,
     layout: AdminLayout,
     requiredPermission: "hotel.delete",
+  },
+  {
+    path: config.routes.hotel.createDetail,
+    component: CreateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.updateDetail,
+    component: UpdateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
   },
 
   // Blogs

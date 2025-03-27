@@ -11,6 +11,24 @@ router.get("/active", HotelController.getActive);
 // GET /hotel/search
 router.get("/search", HotelController.search);
 
+// POST /hotel/createDetail/:slug
+router.post(
+  "/createDetail/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  upload.array("images"),
+  HotelController.createDetail
+);
+
+// PUT /hotel/updateDetail/:slug
+router.put(
+  "/updateDetail/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  upload.array("images"),
+  HotelController.updateDetail
+);
+
 // POST /hotel/create
 router.post(
   "/create",

@@ -18,8 +18,6 @@ class ShipController {
 
   createDetail = async (req, res, next) => {
     try {
-      console.log("reqBody", req.body);
-      console.log("reqFiles", req.files);
       const { slug } = req.params;
 
       const createDetail = await this.ShipService.createDetail(
