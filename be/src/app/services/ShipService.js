@@ -172,7 +172,7 @@ class ShipService {
         year,
         admin,
         trip,
-        features,
+        schedule,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -210,6 +210,7 @@ class ShipService {
         type_product_id: 1,
         slug,
         active: true,
+        schedule,
       });
 
       const cruise = await Cruise.create({
@@ -244,60 +245,53 @@ class ShipService {
         year,
         admin,
         trip,
-        images,
-        thumbnail,
+        schedule,
+        images: existingImages,
+        thumbnail: existingThumbnail,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
       const checkShip = await Products.findOne({
-        where: { slug: slugify(title), id: { [Op.ne]: ship.id } },
+        where: {
+          slug: slugify(title),
+          id: { [Op.ne]: ship.id },
+        },
       });
 
       if (checkShip) {
         throw new ApiError(StatusCodes.CONFLICT, "Tên du thuyền đã tồn tại!");
       }
 
+      let thumbnailLink = existingThumbnail;
+      if (reqFiles?.thumbnail) {
+        const thumbnail = await uploadToCloudinary(
+          reqFiles.thumbnail[0].buffer,
+          "thumbnail"
+        );
+        thumbnailLink = thumbnail.url;
+      }
+
       let imageLinkList = [];
-      let thumbnailLink = null;
-      if (reqFiles) {
-        if (reqFiles.thumbnail) {
-          const thumbnail = await uploadToCloudinary(
-            reqFiles.thumbnail[0].buffer,
-            "thumbnail"
-          );
-          thumbnailLink = thumbnail.url;
-        }
 
-        if (reqFiles.images) {
-          imageLinkList = await Promise.all(
-            reqFiles.images.map(async (image) => {
-              const uploadedImage = await uploadToCloudinary(
-                image.buffer,
-                slug
-              );
-              return uploadedImage.url;
-            })
-          );
-        }
+      if (reqFiles?.images) {
+        const newImageUrls = await Promise.all(
+          reqFiles.images.map(async (image) => {
+            const uploadedImage = await uploadToCloudinary(image.buffer, slug);
+            return uploadedImage.url;
+          })
+        );
+        imageLinkList.push(...newImageUrls);
       }
 
-      if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images);
-        imageLinkList = imageLinkList.join(",");
+      if (existingImages) {
+        imageLinkList.push(
+          ...(Array.isArray(existingImages)
+            ? existingImages
+            : existingImages.split(","))
+        );
       }
 
-      if (!images && imageLinkList.length > 0) {
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (images && imageLinkList.length === 0) {
-        imageLinkList = images;
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (thumbnail) {
-        thumbnailLink = thumbnail;
-      }
+      const finalImageList = imageLinkList.join(",");
 
       const product = await Products.update(
         {
@@ -307,10 +301,11 @@ class ShipService {
           map_iframe_link,
           default_price,
           thumbnail: thumbnailLink,
-          images: imageLinkList,
+          images: finalImageList,
           type_product_id: 1,
           slug: slugify(title),
           active: true,
+          schedule,
         },
         { where: { id: ship.id } }
       );
@@ -324,15 +319,10 @@ class ShipService {
           admin,
           trip,
         },
-        {
-          where: { id: ship.id },
-        }
+        { where: { id: ship.id } }
       );
 
-      return {
-        product,
-        cruise,
-      };
+      return { product, cruise };
     } catch (error) {
       throw error;
     }

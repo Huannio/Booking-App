@@ -130,3 +130,32 @@ export const hotelSchema = yup.object().shape({
   images: yup.array().required("Vui lòng chọn ảnh"),
   cities: yup.number().required("Vui lòng chọn trường này"),
 });
+
+export const hotelDetailSchema = yup.object().shape({
+  contentBlocks: yup.array().of(
+    yup.lazy((value) => {
+      switch (value?.type) {
+        case "Header":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup.string().required("Header không được để trống"),
+          });
+        case "Paragraph":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup
+              .string()
+              .trim()
+              .required("Paragraph không được để trống"),
+          });
+        case "Image":
+          return yup.object().shape({
+            type: yup.string().required(),
+            file: yup.mixed().required("Vui lòng chọn ảnh"),
+          });
+        default:
+          return yup.object();
+      }
+    })
+  ),
+});

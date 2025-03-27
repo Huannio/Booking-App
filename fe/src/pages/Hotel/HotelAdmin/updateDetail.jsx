@@ -21,7 +21,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 
-import styles from "./Ship.module.scss";
+import styles from "./Hotel.module.scss";
 import config from "~/config";
 import Button from "~/components/Button";
 import SortableItem from "~/components/Sort/SortableItem";
@@ -30,7 +30,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { notification } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import { handleGetShipBySlugApi } from "~/api";
+import { handleGetHotelBySlugApi } from "~/api";
 const cx = classNames.bind(styles);
 
 function UpdateDetail() {
@@ -42,20 +42,21 @@ function UpdateDetail() {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(config.shipDetailSchema),
+    resolver: yupResolver(config.hotelDetailSchema),
   });
 
   const { setGlobalLoading } = useContext(LoadingContext);
-  const [ship, setShip] = useState(null);
+  const [hotel, setHotel] = useState(null);
   const [blogDescTypes, setBlogDescTypes] = useState(null);
 
   const getData = useCallback(async () => {
     setGlobalLoading(true);
-    const shipData = await handleGetShipBySlugApi(slug);
-    setShip(shipData.ship);
-    setBlogDescTypes(shipData.ship.long_desc_products);
+    const hotelData = await handleGetHotelBySlugApi(slug);
+    setHotel(hotelData.data);
+    setBlogDescTypes(hotelData.data.long_desc_products);
+    
     let data = [];
-    shipData.ship.long_desc_products.map((item) => {
+    hotelData.data.long_desc_products.map((item) => {
       if (item.image_url) {
         data.push({
           id: item.id,
@@ -79,7 +80,7 @@ function UpdateDetail() {
         });
       }
     });
-
+    
     reset({
       contentBlocks: data,
     });
@@ -100,7 +101,7 @@ function UpdateDetail() {
       id: Date.now().toString(),
       type: "Header",
       type_id: blogDescTypes[0].type_id,
-      product_id: ship.id,
+      product_id: hotel.id,
       content: "",
     });
   };
@@ -110,7 +111,7 @@ function UpdateDetail() {
       id: Date.now().toString(),
       type: "Paragraph",
       type_id: blogDescTypes[1].type_id,
-      product_id: ship.id,
+      product_id: hotel.id,
       content: "",
     });
   };
@@ -120,7 +121,7 @@ function UpdateDetail() {
       id: Date.now().toString(),
       type: "Image",
       type_id: blogDescTypes[2].type_id,
-      product_id: ship.id,
+      product_id: hotel.id,
       file: null,
       caption: "",
     });
@@ -182,6 +183,8 @@ function UpdateDetail() {
   const navigate = useNavigate();
 
   const handleUpdateForm = async (data) => {
+    console.log(data);
+    
     if (Object.entries(data.contentBlocks).length === 0) {
       notification.error({
         message: "Dữ liệu không được để trống",
@@ -224,14 +227,14 @@ function UpdateDetail() {
     });
 
     const response = await axios.put(
-      `/ships/updateDetail/${ship.slug}`,
+      `/hotel/updateDetail/${hotel.slug}`,
       formData
     );
     if (response.statusCode === 200) {
       notification.success({
         message: response?.message || "Cập nhật thông tin chi tiết thành công!",
       });
-      navigate("/ships");
+      navigate("/hotel");
     }
   };
 

@@ -6,6 +6,8 @@ const {
   Rooms,
   ProductType,
   Features,
+  LongDescProducts,
+  LongDescType,
 } = require("../../models");
 const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -100,6 +102,23 @@ class HotelService {
             attributes: ["text", "id", "icon"],
             through: { attributes: [] },
           },
+          {
+            model: LongDescProducts,
+            as: "long_desc_products",
+            attributes: [
+              "id",
+              "type_id",
+              "product_id",
+              "text",
+              "caption",
+              "image_url",
+            ],
+            include: {
+              model: LongDescType,
+              as: "type",
+              attributes: ["id", "type"],
+            },
+          },
         ],
       });
     } catch (error) {
@@ -192,56 +211,51 @@ class HotelService {
         map_iframe_link,
         map_link,
         admin,
-        images,
-        thumbnail,
+        images: existingImages,
+        thumbnail: existingThumbnail,
       } = reqBody;
+  
       const hotel = await this.getHotelBySlug(slug);
+  
       const checkHotel = await Products.findOne({
-        where: { slug: slugify(title), id: { [Op.ne]: hotel.id } },
+        where: { 
+          slug: slugify(title), 
+          id: { [Op.ne]: hotel.id } 
+        },
       });
-
+  
       if (checkHotel) {
         throw new ApiError(StatusCodes.CONFLICT, "Tên Khách sạn đã tồn tại!");
       }
-
+  
+      let thumbnailLink = existingThumbnail;
+      if (reqFiles?.thumbnail) {
+        const uploadedThumbnail = await uploadToCloudinary(
+          reqFiles.thumbnail[0].buffer
+        );
+        thumbnailLink = uploadedThumbnail.url;
+      }
+  
       let imageLinkList = [];
-      let thumbnailLink = null;
-      if (reqFiles) {
-        if (reqFiles.thumbnail) {
-          const thumbnail = await uploadToCloudinary(
-            reqFiles.thumbnail[0].buffer
-          );
-          thumbnailLink = thumbnail.url;
-        }
-
-        if (reqFiles.images) {
-          imageLinkList = await Promise.all(
-            reqFiles.images.map(async (image) => {
-              const uploadedImage = await uploadToCloudinary(image.buffer);
-              return uploadedImage.url;
-            })
-          );
-        }
+      
+      if (reqFiles?.images) {
+        const newImageUrls = await Promise.all(
+          reqFiles.images.map(async (image) => {
+            const uploadedImage = await uploadToCloudinary(image.buffer);
+            return uploadedImage.url;
+          })
+        );
+        imageLinkList.push(...newImageUrls);
       }
-
-      if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images);
-        imageLinkList = imageLinkList.join(",");
+  
+      if (existingImages) {
+        imageLinkList.push(...(Array.isArray(existingImages) 
+          ? existingImages 
+          : existingImages.split(',')));
       }
-
-      if (!images && imageLinkList.length > 0) {
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (images && imageLinkList.length === 0) {
-        imageLinkList = images;
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (thumbnail) {
-        thumbnailLink = thumbnail;
-      }
-
+  
+      const finalImageList = imageLinkList.join(',');
+  
       const product = await Products.update(
         {
           title,
@@ -250,28 +264,23 @@ class HotelService {
           map_iframe_link,
           default_price,
           thumbnail: thumbnailLink,
-          images: imageLinkList,
+          images: finalImageList,
           type_product_id: 2,
           slug: slugify(title),
           active: true,
         },
         { where: { id: hotel.id } }
       );
-
+  
       const updateHotel = await Hotel.update(
         {
           city_id: cities,
           admin,
         },
-        {
-          where: { id: hotel.id },
-        }
+        { where: { id: hotel.id } }
       );
-
-      return {
-        product,
-        updateHotel,
-      };
+  
+      return { product, updateHotel };
     } catch (error) {
       throw error;
     }
@@ -398,6 +407,87 @@ class HotelService {
           },
         ],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image") {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.file ?? null,
+          caption: block.caption ?? null,
+        });
+      });
+
+      return await LongDescProducts.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image" && !block.image_url) {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      let productId;
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.image_url ? block.image_url.url : block.file ?? null,
+          caption: block.caption ?? null,
+        });
+        productId = block.product_id;
+      });
+
+      const longDescProduct = await LongDescProducts.findAll({
+        where: { product_id: productId },
+      });
+
+      if (longDescProduct.length > 0) {
+        await LongDescProducts.destroy({
+          where: { product_id: productId },
+        });
+      }
+      return await LongDescProducts.bulkCreate(data);
     } catch (error) {
       throw error;
     }
