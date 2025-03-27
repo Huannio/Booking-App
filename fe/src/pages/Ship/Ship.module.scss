@@ -5,3 +5,18 @@
   gap: 24px;
   justify-content: flex-start;
 }
+
+.custom-paragraph,
+.custom-header,
+.custom-image {
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 8%;
+  right: 2%;
+  font-size: 20px;
+  z-index: 9999;
+}

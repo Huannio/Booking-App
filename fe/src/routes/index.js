@@ -15,7 +15,6 @@ import {
   Delete as DeleteUser,
 } from "../pages/User";
 
-
 import {
   Show as ShowUserCatalogues,
   Create as CreateUserCatalogues,
@@ -35,6 +34,9 @@ import {
   Create as CreateShip,
   Update as UpdateShip,
   Delete as DeleteShip,
+  CreateDetail as CreateShipDetail,
+  UpdateDetail as UpdateShipDetail,
+  UpdateFeature as UpdateShipFeature,
 } from "../pages/Ship";
 import {
   Show as ShowFeature,
@@ -48,6 +50,8 @@ import {
   Create as CreateHotel,
   Update as UpdateHotel,
   Delete as DeleteHotel,
+  CreateDetail as CreateHotelDetail,
+  UpdateDetail as UpdateHotelDetail,
 } from "../pages/Hotel/HotelAdmin";
 
 import {
@@ -113,35 +117,35 @@ export const publicRoutes = [
 
   // Footer
   {
-    path: '/ve-chung-toi',
+    path: "/ve-chung-toi",
     component: AboutUs,
   },
   {
-    path: '/dieu-khoan-va-dieu-kien',
+    path: "/dieu-khoan-va-dieu-kien",
     component: Terms,
   },
   {
-    path: '/chinh-sach-rieng-tu',
+    path: "/chinh-sach-rieng-tu",
     component: Privacy,
   },
   {
-    path: '/huong-dan-su-dung',
+    path: "/huong-dan-su-dung",
     component: HowToUse,
   },
   {
-    path: '/hinh-thuc-thanh-toan',
+    path: "/hinh-thuc-thanh-toan",
     component: Payment,
   },
   {
-    path: '/lien-he',
+    path: "/lien-he",
     component: Contact,
   },
   {
-    path: '/quy-dinh-chung-va-luu-y',
+    path: "/quy-dinh-chung-va-luu-y",
     component: Rules,
   },
   {
-    path: '/cau-hoi-thuong-gap',
+    path: "/cau-hoi-thuong-gap",
     component: Question,
   },
 
@@ -187,7 +191,6 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "users.delete",
   },
-
 
   // User Catalogues
   {
@@ -280,6 +283,24 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "ships.delete",
   },
+  {
+    path: config.routes.ships.createDetail,
+    component: CreateShipDetail,
+    layout: AdminLayout,
+    requiredPermission: "ships.create",
+  },
+  {
+    path: config.routes.ships.updateDetail,
+    component: UpdateShipDetail,
+    layout: AdminLayout,
+    requiredPermission: "ships.update",
+  },
+  {
+    path: config.routes.ships.updateFeature,
+    component: UpdateShipFeature,
+    layout: AdminLayout,
+    requiredPermission: "ships.update",
+  },
 
   // Feature
   {
@@ -307,7 +328,7 @@ export const privateRoutes = [
     requiredPermission: "features.delete",
   },
 
-  // Hotel 
+  // Hotel
   {
     path: config.routes.hotel.index,
     component: ShowHotel,
@@ -331,6 +352,18 @@ export const privateRoutes = [
     component: DeleteHotel,
     layout: AdminLayout,
     requiredPermission: "hotel.delete",
+  },
+  {
+    path: config.routes.hotel.createDetail,
+    component: CreateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.updateDetail,
+    component: UpdateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
   },
 
   // Blogs

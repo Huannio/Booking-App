@@ -81,6 +81,35 @@ export const cruiseSchema = yup.object().shape({
   year: yup.number().required("Vui lòng nhập trường này"),
 });
 
+export const shipDetailSchema = yup.object().shape({
+  contentBlocks: yup.array().of(
+    yup.lazy((value) => {
+      switch (value?.type) {
+        case "Header":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup.string().required("Header không được để trống"),
+          });
+        case "Paragraph":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup
+              .string()
+              .trim()
+              .required("Paragraph không được để trống"),
+          });
+        case "Image":
+          return yup.object().shape({
+            type: yup.string().required(),
+            file: yup.mixed().required("Vui lòng chọn ảnh"),
+          });
+        default:
+          return yup.object();
+      }
+    })
+  ),
+});
+
 export const featureSchema = yup.object().shape({
   text: yup.string().required("Vui lòng nhập trường này"),
   type: yup.string().required("Vui lòng chọn trường này"),
@@ -100,4 +129,33 @@ export const hotelSchema = yup.object().shape({
   thumbnail: yup.mixed().required("Vui lòng chọn ảnh"),
   images: yup.array().required("Vui lòng chọn ảnh"),
   cities: yup.number().required("Vui lòng chọn trường này"),
+});
+
+export const hotelDetailSchema = yup.object().shape({
+  contentBlocks: yup.array().of(
+    yup.lazy((value) => {
+      switch (value?.type) {
+        case "Header":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup.string().required("Header không được để trống"),
+          });
+        case "Paragraph":
+          return yup.object().shape({
+            type: yup.string().required(),
+            content: yup
+              .string()
+              .trim()
+              .required("Paragraph không được để trống"),
+          });
+        case "Image":
+          return yup.object().shape({
+            type: yup.string().required(),
+            file: yup.mixed().required("Vui lòng chọn ảnh"),
+          });
+        default:
+          return yup.object();
+      }
+    })
+  ),
 });

@@ -40,6 +40,9 @@ const routes = {
     create: "/ships/create",
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
+    createDetail: "/ships/createDetail/:slug",
+    updateDetail: "/ships/updateDetail/:slug",
+    updateFeatures: "/ships/updateFeatures/:slug",
   },
   features: {
     index: "/features",
@@ -56,6 +59,8 @@ const routes = {
     create: "/hotel/create",
     update: "/hotel/update/:slug",
     delete: "/hotel/delete/:slug",
+    createDetail: "/hotel/createDetail/:slug",
+    updateDetail: "/hotel/updateDetail/:slug",
   },
   account: {
     verification: "/account/verification",

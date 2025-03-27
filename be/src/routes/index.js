@@ -2,9 +2,8 @@ const express = require("express");
 const userRouter = require("./user");
 const authRouter = require("./auth");
 
-const shipRouter = require("./Ship");
+const shipRouter = require("./ship");
 const FeatureRouter = require("./feature");
-const path = require("path");
 const hotelRouter = require("./hotel");
 
 const userCataloguesRouter = require("./userCatalogues");

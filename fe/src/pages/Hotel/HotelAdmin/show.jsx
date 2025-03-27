@@ -10,7 +10,7 @@ import { selectCurrentPermission } from "~/redux/user/userSlice";
 import { handleSearchHotelApi } from "~/api";
 import { SearchInputBox } from "~/components/SearchBox";
 
-const shipsColumn = (permissions) => {
+const hotelsColumn = (permissions) => {
   const columns = [
     {
       title: "STT",
@@ -58,31 +58,32 @@ const shipsColumn = (permissions) => {
 function Show() {
   const permissions = useSelector(selectCurrentPermission);
 
-  const [ships, setShips] = useState([]);
+  const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setGlobalLoading } = useContext(LoadingContext);
 
   const formatData = (data) => {
-    return data.map((ship, index) => ({
+    return data.map((hotel, index) => ({
       index: index + 1,
-      key: ship.id,
-      title: ship.title,
-      address: ship.address,
+      key: hotel.id,
+      title: hotel.title,
+      address: hotel.address,
+      slug: hotel.slug,
     }));
   };
 
-  const getShips = useCallback(async () => {
+  const getHotels = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
     const response = await handleGetHotelsApi();
-    setShips(formatData(response.data));
+    setHotels(formatData(response.data));
     setGlobalLoading(false);
     setLoading(false);
   }, [setGlobalLoading]);
 
   useEffect(() => {
-    getShips();
-  }, [getShips]);
+    getHotels();
+  }, [getHotels]);
 
   return (
     <div className="w-full">
@@ -115,7 +116,7 @@ function Show() {
               fieldDropdown={"title"}
               fieldDropdownLink={"slug"}
               to="/hotel/update/"
-              onSearchResult={(data) => setShips(formatData(data))}
+              onSearchResult={(data) => setHotels(formatData(data))}
               hideDropdown
             />
           </div>
@@ -130,8 +131,8 @@ function Show() {
       </div>
       <Table
         bordered
-        columns={shipsColumn(permissions)}
-        dataSource={ships}
+        columns={hotelsColumn(permissions)}
+        dataSource={hotels}
         loading={loading}
         pagination={{
           pageSize: 5,

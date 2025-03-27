@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "features",
       });
 
+      Products.hasMany(models.LongDescProducts, {
+        foreignKey: "product_id",
+        as: "long_desc_products",
+      });
+
       Products.hasOne(models.Cruise, { foreignKey: "id", as: "cruise" });
       Products.hasOne(models.Hotel, { foreignKey: "id", as: "hotel" });
       Products.hasOne(models.Rooms, { foreignKey: "id", as: "rooms" });

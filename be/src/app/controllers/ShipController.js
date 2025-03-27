@@ -15,15 +15,48 @@ class ShipController {
       next(error);
     }
   };
-  
+
+  createDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+
+      const createDetail = await this.ShipService.createDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.CREATED)
+        .json({ statusCode: StatusCodes.CREATED, createDetail });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const updateDetail = await this.ShipService.updateDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateDetail });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   getFeatureShip = async (req, res, next) => {
     try {
-      const { product_id  } = req.params; 
+      const { product_id } = req.params;
       const feature = await this.ShipService.getFeatureShip(
         product_id,
         req.body,
         req.files
-       );
+      );
       res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, feature });
     } catch (error) {
       next(error);
@@ -33,7 +66,10 @@ class ShipController {
   createFeature = async (req, res, next) => {
     try {
       const { product_id, feature_id } = req.body;
-      const result = await this.ShipService.addFeatureToProduct(product_id, feature_id);
+      const result = await this.ShipService.addFeatureToProduct(
+        product_id,
+        feature_id
+      );
       res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,
         message: "Thêm đặc trưng cho sản phẩm thành công!",
@@ -47,7 +83,10 @@ class ShipController {
   updateFeature = async (req, res, next) => {
     try {
       const { product_id, feature_id } = req.params;
-      const result = await this.ShipService.removeFeatureFromProduct(product_id, feature_id);
+      const result = await this.ShipService.removeFeatureFromProduct(
+        product_id,
+        feature_id
+      );
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
         message: "Xóa đặc trưng khỏi sản phẩm thành công!",
