@@ -52,6 +52,7 @@ import {
   Delete as DeleteHotel,
   CreateDetail as CreateHotelDetail,
   UpdateDetail as UpdateHotelDetail,
+  UpdateFeature as UpdateHotelFeatures,
 } from "../pages/Hotel/HotelAdmin";
 
 import {
@@ -296,7 +297,7 @@ export const privateRoutes = [
     requiredPermission: "ships.update",
   },
   {
-    path: config.routes.ships.updateFeature,
+    path: config.routes.ships.updateFeatures,
     component: UpdateShipFeature,
     layout: AdminLayout,
     requiredPermission: "ships.update",
@@ -362,6 +363,12 @@ export const privateRoutes = [
   {
     path: config.routes.hotel.updateDetail,
     component: UpdateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.updateFeatures,
+    component: UpdateHotelFeatures,
     layout: AdminLayout,
     requiredPermission: "hotel.update",
   },

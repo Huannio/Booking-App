@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
-import { handleGetFeaturesApi } from "~/api";
+import { handleGetAllFeaturesApi } from "~/api";
 
 const columns = [
   {
@@ -51,7 +51,7 @@ function Show() {
   const getFeatures = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
-    const response = await handleGetFeaturesApi();
+    const response = await handleGetAllFeaturesApi();
     const formattedData = response.features.map((feature, index) => ({
       index: index + 1,
       key: feature.id,

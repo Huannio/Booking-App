@@ -130,9 +130,9 @@ function Update() {
               </Link>
             )}
 
-            <Link to={`/hotel/updateFeature/${slug}`}>
+            <Link to={`/hotel/updateFeatures/${slug}`}>
               <Button primary normal>
-                <div className="label md">Đặc trưng du thuyền</div>
+                <div className="label md">Đặc trưng khách sạn</div>
               </Button>
             </Link>
             <Button primary normal submit className="interceptor-loading">
