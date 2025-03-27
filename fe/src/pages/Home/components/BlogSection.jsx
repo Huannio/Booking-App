@@ -34,12 +34,12 @@ function BlogSection() {
 
       <div className={cx("BlogSection-cardList")}>
         {blogs?.map((blog) => (
-          <Link key={blog.id} to={`/blog-detail/${blog.slug}`}>
+          <Link key={blog?.id} to={`/blog-detail/${blog?.slug}`}>
             <BlogCard
-              imgSrc={blog.thumbnail}
-              title={blog.title}
-              description={blog.short_desc}
-              date={formatDate(blog.createdAt)}
+              imgSrc={blog?.thumbnail}
+              title={blog?.title}
+              description={blog?.short_desc}
+              date={formatDate(blog?.createdAt)}
             />
           </Link>
         ))}

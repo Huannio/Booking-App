@@ -23,12 +23,12 @@ const HomeSection = ({ cruiseCategory }) => {
       <div className={cx("Home-cardList")}>
         {cruiseCategory?.map((category) => (
           <Link
-            to={`/tim-du-thuyen?categoryId=${category.id}`}
-            key={category.id}
+            to={`/tim-du-thuyen?categoryId=${category?.id}`}
+            key={category?.id}
           >
             <CategoryCard
-              title={category.name}
-              imgSrc={category.image}
+              title={category?.name}
+              imgSrc={category?.image}
               alt={"mixivivu"}
               button={
                 <Button small outline>

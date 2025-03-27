@@ -108,11 +108,14 @@ class PermissionManagementService {
   getPermissionSearch = async (reqQuery, limit, offset) => {
     try {
       const { name } = reqQuery;
-      const where = {
-        name: {
-          [Op.like]: `%${name}%`,
-        },
-      };
+      let where = {};
+      if (name != null) {
+        where = {
+          name: {
+            [Op.like]: `%${name}%`,
+          },
+        };
+      }
 
       const total = await Permissions.count({ where });
 

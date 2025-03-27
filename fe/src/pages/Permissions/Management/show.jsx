@@ -100,6 +100,7 @@ function Show() {
               fieldDropdownLink={"id"}
               to="/permissions-management/update/"
               onSearchResult={(data) => setPermissions(formatData(data))}
+              // isDebounceEmptyCallApi={false}
             />
           </div>
         </div>
