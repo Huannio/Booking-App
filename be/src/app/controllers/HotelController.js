@@ -147,6 +147,21 @@ class HotelController {
       next(error);
     }
   }
+
+  updateFeature = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const updateFeature = await this.HotelService.updateFeature(
+        slug,
+        req.body
+      );
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateFeature });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new HotelController();

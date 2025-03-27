@@ -155,7 +155,7 @@ function Update() {
               </Link>
             )}
 
-            <Link to={`/ships/updateFeature/${slug}`}>
+            <Link to={`/ships/updateFeatures/${slug}`}>
               <Button primary normal>
                 <div className="label md">Đặc trưng du thuyền</div>
               </Button>

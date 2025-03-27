@@ -3,7 +3,7 @@ import axios from "~/utils/axios.config";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { LoadingContext } from "~/components/Loading/Loading";
 import { useNavigate, useParams } from "react-router-dom";
-import { handleGetAllFeaturesApi, handleGetShipBySlugApi } from "~/api";
+import { handleGetAllFeaturesApi, handleGetHotelBySlugApi } from "~/api";
 function UpdateFeature() {
   const navigate = useNavigate();
 
@@ -16,11 +16,11 @@ function UpdateFeature() {
     setGlobalLoading(true);
     const [featureRes, selectedRes] = await Promise.all([
       handleGetAllFeaturesApi(),
-      handleGetShipBySlugApi(slug),
+      handleGetHotelBySlugApi(slug),
     ]);
 
     const selectedFeaturesIds =
-      selectedRes?.ship?.features.map((feature) => feature.id) || [];
+      selectedRes?.data?.features.map((feature) => feature.id) || [];
 
     const formattedData = featureRes?.features?.map((item) => ({
       key: item.id,
@@ -66,14 +66,14 @@ function UpdateFeature() {
       .filter((item) => item.action)
       .map((item) => item.key);
 
-    const response = await axios.put(`/ships/updateFeature/${slug}`, {
+    const response = await axios.put(`/hotel/updateFeature/${slug}`, {
       selectedFeatures,
     });
     if (response.statusCode === 200) {
       notification.success({
         message: response?.message || "Cập nhật thông tin công!",
       });
-      navigate("/ships");
+      navigate("/hotel");
     }
   };
 

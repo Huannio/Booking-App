@@ -7,6 +7,7 @@ const {
   CruiseCategory,
   LongDescProducts,
   LongDescType,
+  ProductFeature,
 } = require("../../models");
 const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -541,6 +542,34 @@ class ShipService {
         });
       }
       return await LongDescProducts.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProductFeature(slug, reqBody) {
+    try {
+      const ship = await this.getShipBySlug(slug);
+      const { selectedFeatures } = reqBody;
+
+      if (selectedFeatures.length === 0) {
+        return await ProductFeature.destroy({
+          where: { product_id: ship.id },
+        });
+      }
+
+      if (selectedFeatures.length > 0) {
+        const data = selectedFeatures.map((feature) => ({
+          product_id: ship.id,
+          feature_id: feature,
+        }));
+
+        await ProductFeature.destroy({
+          where: { product_id: ship.id },
+        });
+
+        return await ProductFeature.bulkCreate(data);
+      }
     } catch (error) {
       throw error;
     }

@@ -29,6 +29,14 @@ router.put(
   HotelController.updateDetail
 );
 
+// PUT /hotel/updateFeature/:slug
+router.put(
+  "/updateFeature/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  HotelController.updateFeature
+);
+
 // POST /hotel/create
 router.post(
   "/create",

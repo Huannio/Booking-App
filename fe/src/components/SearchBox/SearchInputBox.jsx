@@ -53,7 +53,7 @@ function SearchInputBox({
   };
 
   useEffect(() => {
-    console.log(isFirstRender.current);
+    // console.log(isFirstRender.current);
     
     if (isFirstRender.current) {
       isFirstRender.current = false;

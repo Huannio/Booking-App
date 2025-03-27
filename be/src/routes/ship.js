@@ -26,6 +26,14 @@ router.put(
   ShipController.updateDetail
 );
 
+// PUT /ships/updateFeature/:slug
+router.put(
+  "/updateFeature/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
+  ShipController.updateFeature
+);
+
 // POST /ships/create
 router.post(
   "/create",
