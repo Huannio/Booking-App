@@ -28,7 +28,7 @@ function SearchInputBox({
   const [value, setValue] = useState("");
   const [items, setItems] = useState([]);
   const debounced = useDebounce(value, 700);
-
+  const isFirstRender = useRef(true);
   const handleSelectItem = (item) => {
     setValue(item);
     setDropdownVisible(false);
@@ -53,9 +53,14 @@ function SearchInputBox({
   };
 
   useEffect(() => {
-    if (!isDebounceEmptyCallApi) {
-      if (!debounced.trim()) return;
+    console.log(isFirstRender.current);
+    
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // Bỏ qua lần render đầu tiên
     }
+
+    if (!isDebounceEmptyCallApi && !debounced.trim()) return;
     if (!api) return;
     api(debounced).then((res) => {
       setItems(res.data);
