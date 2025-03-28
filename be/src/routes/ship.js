@@ -28,6 +28,10 @@ router.put(
   ShipController.update
 );
 
+// POST /ships/createFeature
+router.get('/ships/:slug/features', ShipController.getShipFeatures);
+router.put('/ships/:slug/features', ShipController.updateFeatures);
+
 // DELETE /ships/delete/:slug
 router.delete(
   "/delete/:slug",
@@ -41,9 +45,6 @@ router.get("/active", ShipController.getActive);
 
 // GET /ships/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
-
-// GET /ship/feature
-router.get("/feature", ShipController.getFeatureShip);
 
 // GET /ships/:slug
 router.get("/:slug", ShipController.index);

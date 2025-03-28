@@ -116,28 +116,6 @@ class ShipService {
     }
   }
 
-  async getFeatureShip(product_id) {
-    try {
-      return await Features.findAll({
-        attributes: ["id", "icon", "text", "type"],
-        include: [
-          {
-            model: Features,
-            as: "features",
-            attributes: ["text", "id", "icon"],
-          },
-          {
-            model: Products,
-            as: "products",
-            attributes: ["id"],
-            where: { id: product_id },
-          },
-        ],
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
 
   async createShip(reqBody, reqFiles) {
     try {
@@ -153,7 +131,6 @@ class ShipService {
         year,
         admin,
         trip,
-        features,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -227,7 +204,6 @@ class ShipService {
         trip,
         images,
         thumbnail,
-        features,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
@@ -311,10 +287,6 @@ class ShipService {
         }
       );
 
-      if (features && features.length > 0) {
-        await ship.setFeatures(features); 
-      }
-
       return {
         product,
         cruise,
@@ -323,6 +295,59 @@ class ShipService {
       throw error;
     }
   }
+
+  async getShipFeatures(slug) {
+    try {
+      const product = await this.getShipBySlug(slug);
+      return await product.getFeatures({
+        attributes: ['id', 'text', 'icon'],
+        joinTableAttributes: [] 
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateShipFeatures(slug, featureIds) {
+    try {
+      const product = await this.getShipBySlug(slug);
+      
+      // Xóa tất cả feature hiện tại
+      await product.setFeatures([]);
+      
+      // Thêm các feature mới
+      if (featureIds && featureIds.length > 0) {
+        await product.addFeatures(featureIds);
+      }
+      
+      return await this.getShipFeatures(slug);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Có thể giữ lại các phương thức cũ hoặc xóa đi
+  async CreateFeatureProduct(slug, feature_id) {
+    try {
+      const product = await this.getShipBySlug(slug);
+      await product.addFeature(feature_id);
+      return { product_id: product.id, feature_id };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateFeatureProduct(slug, feature_id) {
+    try {
+      const product = await this.getShipBySlug(slug);
+      await product.removeFeatures();
+      await product.addFeature(feature_id);
+      return { product_id: product.id, feature_id };
+    } catch (error) {
+      throw error;
+    }
+  }
+
 
   async deleteShip(slug) {
     try {

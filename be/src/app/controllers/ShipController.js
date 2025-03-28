@@ -16,42 +16,30 @@ class ShipController {
     }
   };
   
-  getFeatureShip = async (req, res, next) => {
+  getShipFeatures = async (req, res, next) => {
     try {
-      const { product_id  } = req.params; 
-      const feature = await this.ShipService.getFeatureShip(
-        product_id,
-        req.body,
-        req.files
-       );
-      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, feature });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  createFeature = async (req, res, next) => {
-    try {
-      const { product_id, feature_id } = req.body;
-      const result = await this.ShipService.addFeatureToProduct(product_id, feature_id);
-      res.status(StatusCodes.CREATED).json({
-        statusCode: StatusCodes.CREATED,
-        message: "Thêm đặc trưng cho sản phẩm thành công!",
-        result,
+      const { slug } = req.params;
+      const features = await this.ShipService.getShipFeatures(slug);
+      res.status(StatusCodes.OK).json({ 
+        statusCode: StatusCodes.OK, 
+        features 
       });
     } catch (error) {
       next(error);
     }
   };
 
-  updateFeature = async (req, res, next) => {
+  updateFeatures = async (req, res, next) => {
     try {
-      const { product_id, feature_id } = req.params;
-      const result = await this.ShipService.removeFeatureFromProduct(product_id, feature_id);
+      const { slug } = req.params;
+      const { feature_ids } = req.body;
+      
+      const features = await this.ShipService.updateShipFeatures(slug, feature_ids);
+      
       res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
-        message: "Xóa đặc trưng khỏi sản phẩm thành công!",
-        result,
+        message: "Cập nhật đặc trưng du thuyền thành công!",
+        features
       });
     } catch (error) {
       next(error);

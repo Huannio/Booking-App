@@ -277,18 +277,14 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "ships.update",
   },
-  // {
-  //   path: config.routes.ships.CreateFeatureShip,
-  //   component: CreateFeatureShip,
-  //   layout: AdminLayout,
-  //   requiredPermission: "ships.create",
-  // },
-  // {
-  //   path: config.routes.ships.updateFeatureShip,
-  //   component: UpdateFeatureShip,
-  //   layout: AdminLayout,
-  //   requiredPermission: "ships.update",
-  // },
+
+  {
+    path: config.routes.ships.getFeatures,
+    component: GetFeatures,
+    layout: AdminLayout,
+    requiredPermission: "ships.update",
+  },
+
   {
     path: config.routes.ships.delete,
     component: DeleteShip,

@@ -1,5 +1,5 @@
 export { default as Show } from "./show";
 export { default as Create } from "./create";
-
 export { default as Update } from "./update";
+export { default as UpdateFeature } from "./UpdateFeature";
 export { default as Delete } from "./delete";
