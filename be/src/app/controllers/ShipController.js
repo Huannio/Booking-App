@@ -46,6 +46,70 @@ class ShipController {
     }
   };
 
+  createDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+
+      const createDetail = await this.ShipService.createDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.CREATED)
+        .json({ statusCode: StatusCodes.CREATED, createDetail });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const updateDetail = await this.ShipService.updateDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateDetail });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getFeatureShip = async (req, res, next) => {
+    try {
+      const { product_id } = req.params;
+      const feature = await this.ShipService.getFeatureShip(
+        product_id,
+        req.body,
+        req.files
+      );
+      res.status(StatusCodes.OK).json({ statusCode: StatusCodes.OK, feature });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateFeature = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const result = await this.ShipService.updateProductFeature(
+        slug,
+        req.body,
+      );
+      res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        message: "Cập nhật thành công!",
+        result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   index = async (req, res, next) => {
     try {
       const { slug } = req.params;

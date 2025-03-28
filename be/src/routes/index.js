@@ -5,7 +5,6 @@ const authRouter = require("./auth");
 const shipRouter = require("./Ship");
 const FeatureRouter = require("./feature");
 const path = require("path");
-const cruiseRouter = require("./cruise");
 const hotelRouter = require("./hotel");
 
 const userCataloguesRouter = require("./userCatalogues");
@@ -21,7 +20,6 @@ const router = (app) => {
   app.use("/ships", shipRouter);
   app.use("/features", FeatureRouter);
   app.use("/blogs", blogsRouter);
-  app.use("/cruises", cruiseRouter);
   app.use("/hotel", hotelRouter);
   app.use("/permissions-management", permissionManagementRouter);
   app.use("/users-permissions", userPermissionRouter)

@@ -8,6 +8,32 @@ const checkPermission = require("../middleware/checkPermission");
 // GET /ships/search
 router.get("/search", ShipController.search);
 
+// POST /ships/createDetail/:slug
+router.post(
+  "/createDetail/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
+  upload.array("images"),
+  ShipController.createDetail
+);
+
+// PUT /ships/updateDetail/:slug
+router.put(
+  "/updateDetail/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
+  upload.array("images"),
+  ShipController.updateDetail
+);
+
+// PUT /ships/updateFeature/:slug
+router.put(
+  "/updateFeature/:slug",
+  authorizeJWT,
+  checkPermission("ships.update"),
+  ShipController.updateFeature
+);
+
 // POST /ships/create
 router.post(
   "/create",
@@ -28,10 +54,6 @@ router.put(
   ShipController.update
 );
 
-// POST /ships/createFeature
-router.get('/ships/:slug/features', ShipController.getShipFeatures);
-router.put('/ships/:slug/features', ShipController.updateFeatures);
-
 // DELETE /ships/delete/:slug
 router.delete(
   "/delete/:slug",
@@ -45,6 +67,9 @@ router.get("/active", ShipController.getActive);
 
 // GET /ships/cruise-category
 router.get("/cruise-category", ShipController.getCruiseCategory);
+
+// GET /ship/feature
+router.get("/feature", ShipController.getFeatureShip);
 
 // GET /ships/:slug
 router.get("/:slug", ShipController.index);

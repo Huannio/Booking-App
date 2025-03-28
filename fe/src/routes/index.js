@@ -37,8 +37,10 @@ import {
   Update as UpdateShip,
   // UpdateFeature as UpdateFeatureShip,
   Delete as DeleteShip,
+  CreateDetail as CreateShipDetail,
+  UpdateDetail as UpdateShipDetail,
+  UpdateFeature as UpdateShipFeature,
 } from "../pages/Ship";
-
 import {
   Show as ShowFeature,
   Create as CreateFeature,
@@ -51,7 +53,14 @@ import {
   Create as CreateHotel,
   Update as UpdateHotel,
   Delete as DeleteHotel,
+  CreateDetail as CreateHotelDetail,
+  UpdateDetail as UpdateHotelDetail,
+  UpdateFeature as UpdateHotelFeatures,
 } from "../pages/Hotel/HotelAdmin";
+
+
+
+
 
 import {
   Show as ShowBlog,
@@ -278,18 +287,100 @@ export const privateRoutes = [
     requiredPermission: "ships.update",
   },
 
-  {
-    path: config.routes.ships.getFeatures,
-    component: GetFeatures,
-    layout: AdminLayout,
-    requiredPermission: "ships.update",
-  },
 
   {
     path: config.routes.ships.delete,
     component: DeleteShip,
     layout: AdminLayout,
     requiredPermission: "ships.delete",
+  },
+  {
+    path: config.routes.ships.createDetail,
+    component: CreateShipDetail,
+    layout: AdminLayout,
+    requiredPermission: "ships.create",
+  },
+  {
+    path: config.routes.ships.updateDetail,
+    component: UpdateShipDetail,
+    layout: AdminLayout,
+    requiredPermission: "ships.update",
+  },
+  {
+    path: config.routes.ships.updateFeatures,
+    component: UpdateShipFeature,
+    layout: AdminLayout,
+    requiredPermission: "ships.update",
+  },
+
+  // Feature
+  {
+    path: config.routes.features.index,
+    component: ShowFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.index",
+  },
+  {
+    path: config.routes.features.create,
+    component: CreateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.create",
+  },
+  {
+    path: config.routes.features.update,
+    component: UpdateFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.update",
+  },
+  {
+    path: config.routes.features.delete,
+    component: DeleteFeature,
+    layout: AdminLayout,
+    requiredPermission: "features.delete",
+  },
+
+  // Hotel
+  {
+    path: config.routes.hotel.index,
+    component: ShowHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.index",
+  },
+  {
+    path: config.routes.hotel.create,
+    component: CreateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.create",
+  },
+  {
+    path: config.routes.hotel.update,
+    component: UpdateHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.delete,
+    component: DeleteHotel,
+    layout: AdminLayout,
+    requiredPermission: "hotel.delete",
+  },
+  {
+    path: config.routes.hotel.createDetail,
+    component: CreateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.updateDetail,
+    component: UpdateHotelDetail,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
+  },
+  {
+    path: config.routes.hotel.updateFeatures,
+    component: UpdateHotelFeatures,
+    layout: AdminLayout,
+    requiredPermission: "hotel.update",
   },
 
   // Feature

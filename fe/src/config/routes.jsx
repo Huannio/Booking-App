@@ -40,8 +40,17 @@ const routes = {
     create: "/ships/create",
     update: "/ships/update/:slug",
     delete: "/ships/delete/:slug",
+    createDetail: "/ships/createDetail/:slug",
+    updateDetail: "/ships/updateDetail/:slug",
+    updateFeatures: "/ships/updateFeatures/:slug",
   },
   features: {
+    index: "/features",
+    create: "/features/create",
+    update: "/features/update/:id",
+    delete: "/features/delete/:id",
+  },
+  feature: {
     index: "/features",
     create: "/features/create",
     update: "/features/update/:id",
@@ -56,6 +65,9 @@ const routes = {
     create: "/hotel/create",
     update: "/hotel/update/:slug",
     delete: "/hotel/delete/:slug",
+    createDetail: "/hotel/createDetail/:slug",
+    updateDetail: "/hotel/updateDetail/:slug",
+    updateFeatures: "/hotel/updateFeatures/:slug",
   },
   account: {
     verification: "/account/verification",

@@ -114,6 +114,54 @@ class HotelController {
       next(error);
     }
   };
+
+  createDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+
+      const createDetail = await this.HotelService.createDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.CREATED)
+        .json({ statusCode: StatusCodes.CREATED, createDetail });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  updateDetail = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const updateDetail = await this.HotelService.updateDetail(
+        slug,
+        req.body,
+        req.files
+      );
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateDetail });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  updateFeature = async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      const updateFeature = await this.HotelService.updateFeature(
+        slug,
+        req.body
+      );
+      res
+        .status(StatusCodes.OK)
+        .json({ statusCode: StatusCodes.OK, updateFeature });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new HotelController();

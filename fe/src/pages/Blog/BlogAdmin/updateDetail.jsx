@@ -1,7 +1,11 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CloseOutlined } from "@ant-design/icons";
-import { TextField, ListField, UploadImageUseFieldArray } from "~/components/Input";
+import {
+  TextField,
+  ListField,
+  UploadImageUseFieldArray,
+} from "~/components/Input";
 import classNames from "classnames/bind";
 import {
   DndContext,
@@ -182,6 +186,12 @@ function UpdateDetail() {
   const navigate = useNavigate();
 
   const handleUpdateDescriptionsBlogForm = async (data) => {
+    if (Object.entries(data.contentBlocks).length === 0) {
+      notification.error({
+        message: "Dữ liệu không được để trống",
+      });
+      return;
+    }
     const formData = new FormData();
     let temp = [];
     data.contentBlocks.forEach((block) => {

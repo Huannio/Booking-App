@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const HotelController = require("../app/controllers/HotelController");
 const upload = require("../middleware/upload");
-
 const checkPermission = require("../middleware/checkPermission");
 const authorizeJWT = require("../middleware/authorize");
 
@@ -11,6 +10,32 @@ router.get("/active", HotelController.getActive);
 
 // GET /hotel/search
 router.get("/search", HotelController.search);
+
+// POST /hotel/createDetail/:slug
+router.post(
+  "/createDetail/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  upload.array("images"),
+  HotelController.createDetail
+);
+
+// PUT /hotel/updateDetail/:slug
+router.put(
+  "/updateDetail/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  upload.array("images"),
+  HotelController.updateDetail
+);
+
+// PUT /hotel/updateFeature/:slug
+router.put(
+  "/updateFeature/:slug",
+  authorizeJWT,
+  checkPermission("hotel.update"),
+  HotelController.updateFeature
+);
 
 // POST /hotel/create
 router.post(

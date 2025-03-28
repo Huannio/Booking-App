@@ -5,6 +5,9 @@ const {
   Features,
   Cruise,
   CruiseCategory,
+  LongDescProducts,
+  LongDescType,
+  ProductFeature,
 } = require("../../models");
 const { Op } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -99,6 +102,23 @@ class ShipService {
             attributes: ["text", "id", "icon"],
             through: { attributes: [] },
           },
+          {
+            model: LongDescProducts,
+            as: "long_desc_products",
+            attributes: [
+              "id",
+              "type_id",
+              "product_id",
+              "text",
+              "caption",
+              "image_url",
+            ],
+            include: {
+              model: LongDescType,
+              as: "type",
+              attributes: ["id", "type"],
+            },
+          },
         ],
       });
     } catch (error) {
@@ -110,6 +130,29 @@ class ShipService {
     try {
       return await CruiseCategory.findAll({
         attributes: ["id", "name", "image"],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getFeatureShip(product_id) {
+    try {
+      return await Features.findAll({
+        attributes: ["id", "icon", "text", "type"],
+        include: [
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"],
+          },
+          {
+            model: Products,
+            as: "products",
+            attributes: ["id"],
+            where: { id: product_id },
+          },
+        ],
       });
     } catch (error) {
       throw error;
@@ -131,6 +174,7 @@ class ShipService {
         year,
         admin,
         trip,
+        schedule,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -168,6 +212,7 @@ class ShipService {
         type_product_id: 1,
         slug,
         active: true,
+        schedule,
       });
 
       const cruise = await Cruise.create({
@@ -202,60 +247,53 @@ class ShipService {
         year,
         admin,
         trip,
-        images,
-        thumbnail,
+        schedule,
+        images: existingImages,
+        thumbnail: existingThumbnail,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
       const checkShip = await Products.findOne({
-        where: { slug: slugify(title), id: { [Op.ne]: ship.id } },
+        where: {
+          slug: slugify(title),
+          id: { [Op.ne]: ship.id },
+        },
       });
 
       if (checkShip) {
         throw new ApiError(StatusCodes.CONFLICT, "Tên du thuyền đã tồn tại!");
       }
 
+      let thumbnailLink = existingThumbnail;
+      if (reqFiles?.thumbnail) {
+        const thumbnail = await uploadToCloudinary(
+          reqFiles.thumbnail[0].buffer,
+          "thumbnail"
+        );
+        thumbnailLink = thumbnail.url;
+      }
+
       let imageLinkList = [];
-      let thumbnailLink = null;
-      if (reqFiles) {
-        if (reqFiles.thumbnail) {
-          const thumbnail = await uploadToCloudinary(
-            reqFiles.thumbnail[0].buffer,
-            "thumbnail"
-          );
-          thumbnailLink = thumbnail.url;
-        }
 
-        if (reqFiles.images) {
-          imageLinkList = await Promise.all(
-            reqFiles.images.map(async (image) => {
-              const uploadedImage = await uploadToCloudinary(
-                image.buffer,
-                slug
-              );
-              return uploadedImage.url;
-            })
-          );
-        }
+      if (reqFiles?.images) {
+        const newImageUrls = await Promise.all(
+          reqFiles.images.map(async (image) => {
+            const uploadedImage = await uploadToCloudinary(image.buffer, slug);
+            return uploadedImage.url;
+          })
+        );
+        imageLinkList.push(...newImageUrls);
       }
 
-      if (images && imageLinkList.length > 0) {
-        imageLinkList.push(...images);
-        imageLinkList = imageLinkList.join(",");
+      if (existingImages) {
+        imageLinkList.push(
+          ...(Array.isArray(existingImages)
+            ? existingImages
+            : existingImages.split(","))
+        );
       }
 
-      if (!images && imageLinkList.length > 0) {
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (images && imageLinkList.length === 0) {
-        imageLinkList = images;
-        imageLinkList = imageLinkList.join(",");
-      }
-
-      if (thumbnail) {
-        thumbnailLink = thumbnail;
-      }
+      const finalImageList = imageLinkList.join(",");
 
       const product = await Products.update(
         {
@@ -265,10 +303,11 @@ class ShipService {
           map_iframe_link,
           default_price,
           thumbnail: thumbnailLink,
-          images: imageLinkList,
+          images: finalImageList,
           type_product_id: 1,
           slug: slugify(title),
           active: true,
+          schedule,
         },
         { where: { id: ship.id } }
       );
@@ -282,15 +321,10 @@ class ShipService {
           admin,
           trip,
         },
-        {
-          where: { id: ship.id },
-        }
+        { where: { id: ship.id } }
       );
 
-      return {
-        product,
-        cruise,
-      };
+      return { product, cruise };
     } catch (error) {
       throw error;
     }
@@ -449,7 +483,17 @@ class ShipService {
     try {
       return await Products.findAll({
         where: { active: true, type_product_id: 1 },
-        attributes: ["id", "title", "thumbnail", "slug", "address", "default_price", "schedule"],
+        attributes: [
+          "id",
+          "title",
+          "thumbnail",
+          "slug",
+          "address",
+          "default_price",
+          "schedule",
+          "num_reviews",
+          "score_reviews",
+        ],
         include: [
           {
             model: Cruise,
@@ -473,6 +517,114 @@ class ShipService {
           },
         ],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+  async createDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image") {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.file ?? null,
+          caption: block.caption ?? null,
+        });
+      });
+
+      return await LongDescProducts.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateDetail(slug, reqBody, reqFiles) {
+    try {
+      const contentBlocks = JSON.parse(reqBody.contentBlocks);
+
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, slug))
+        );
+
+        let fileIndex = 0;
+        contentBlocks.forEach((block) => {
+          if (block.type === "Image" && !block.image_url) {
+            block.file = uploadImages[fileIndex].url;
+            fileIndex++;
+          }
+        });
+      }
+
+      let data = [];
+      let productId;
+      contentBlocks.forEach((block) => {
+        data.push({
+          product_id: block.product_id,
+          type_id: block.type_id,
+          text: block.content ?? null,
+          image_url: block.image_url ? block.image_url.url : block.file ?? null,
+          caption: block.caption ?? null,
+        });
+        productId = block.product_id;
+      });
+
+      const longDescProduct = await LongDescProducts.findAll({
+        where: { product_id: productId },
+      });
+
+      if (longDescProduct.length > 0) {
+        await LongDescProducts.destroy({
+          where: { product_id: productId },
+        });
+      }
+      return await LongDescProducts.bulkCreate(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProductFeature(slug, reqBody) {
+    try {
+      const ship = await this.getShipBySlug(slug);
+      const { selectedFeatures } = reqBody;
+
+      if (selectedFeatures.length === 0) {
+        return await ProductFeature.destroy({
+          where: { product_id: ship.id },
+        });
+      }
+
+      if (selectedFeatures.length > 0) {
+        const data = selectedFeatures.map((feature) => ({
+          product_id: ship.id,
+          feature_id: feature,
+        }));
+
+        await ProductFeature.destroy({
+          where: { product_id: ship.id },
+        });
+
+        return await ProductFeature.bulkCreate(data);
+      }
     } catch (error) {
       throw error;
     }

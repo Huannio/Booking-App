@@ -53,7 +53,7 @@ function Update() {
   const featureTypeOptions =
     featureType?.map((featureType) => (
       <Option key={featureType.id} value={featureType.id}>
-        {featureType.type}
+        {featureType.name}
       </Option>
     )) || [];
 
@@ -65,7 +65,7 @@ function Update() {
     const response = await axios.put(`/features/update/${id}`, formData);
     if (response.statusCode === 200) {
       notification.success({
-        message: response?.message || "Cập nhật đặc trưngtrưng thành công!",
+        message: response?.message || "Cập nhật đặc trưng thành công!",
       });
       navigate("/features");
     }

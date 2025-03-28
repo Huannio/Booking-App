@@ -1,8 +1,16 @@
+import Button from "~/components/Button";
+import styles from "./Ship.module.scss";
+import classNames from "classnames/bind";
+import { useCallback, useContext, useEffect, useState } from "react";
+import config from "~/config";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CloseOutlined } from "@ant-design/icons";
-import { TextField, ListField, UploadImageField } from "~/components/Input";
-import classNames from "classnames/bind";
+import {
+  handleGetBlogDescriptionsTypesApi,
+  handleGetShipBySlugApi,
+} from "~/api";
+import { LoadingContext } from "~/components/Loading/Loading";
+import SortableItem from "~/components/Sort/SortableItem";
 import {
   DndContext,
   useSensor,
@@ -16,42 +24,41 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-
-import styles from "./Blog.module.scss";
-import config from "~/config";
-import Button from "~/components/Button";
-import SortableItem from "~/components/Sort/SortableItem";
-import axios from "~/utils/axios.config";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { handleGetBlogDescriptionsTypesApi } from "~/api";
-import { LoadingContext } from "~/components/Loading/Loading";
-import { notification } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
+import { TextField, UploadImageField, InputField } from "~/components/Input";
+import { CloseOutlined } from "@ant-design/icons";
+import axios from "~/utils/axios.config";
+import { notification } from "antd";
+
+const cx = classNames.bind(styles);
 
 function CreateDetail() {
-  const { id } = useParams();
+  const navigate = useNavigate();
+  const { slug } = useParams();
 
-  const cx = classNames.bind(styles);
   const { setGlobalLoading } = useContext(LoadingContext);
-
+  const [ship, setShip] = useState(null);
   const [blogDescTypes, setBlogDescTypes] = useState(null);
-  const getBlogDescTypes = useCallback(async () => {
+
+  const getData = useCallback(async () => {
     setGlobalLoading(true);
-    const res = await handleGetBlogDescriptionsTypesApi();
-    setBlogDescTypes(res);
+    const blogType = await handleGetBlogDescriptionsTypesApi();
+    const shipData = await handleGetShipBySlugApi(slug);
+    setShip(shipData.ship);
+    setBlogDescTypes(blogType);
     setGlobalLoading(false);
-  }, [setGlobalLoading]);
+  }, [setGlobalLoading, slug]);
 
   useEffect(() => {
-    getBlogDescTypes();
-  }, [getBlogDescTypes]);
+    getData();
+  }, [getData]);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(config.blogDetailSchema),
+    resolver: yupResolver(config.shipDetailSchema),
   });
 
   const { fields, append, remove, move } = useFieldArray({
@@ -59,22 +66,22 @@ function CreateDetail() {
     name: "contentBlocks",
   });
 
+  const handleAddHeader = () => {
+    append({
+      id: Date.now().toString(),
+      type: "Header",
+      type_id: blogDescTypes[0].id,
+      product_id: ship.id,
+      content: "",
+    });
+  };
+
   const handleAddParagraph = () => {
     append({
       id: Date.now().toString(),
       type: "Paragraph",
       type_id: blogDescTypes[1].id,
-      blog_id: id,
-      content: "",
-    });
-  };
-
-  const handleAddList = () => {
-    append({
-      id: Date.now().toString(),
-      type: "List",
-      type_id: blogDescTypes[3].id,
-      blog_id: id,
+      product_id: ship.id,
       content: "",
     });
   };
@@ -84,16 +91,17 @@ function CreateDetail() {
       id: Date.now().toString(),
       type: "Image",
       type_id: blogDescTypes[2].id,
-      blog_id: id,
+      product_id: ship.id,
       file: null,
+      caption: "",
     });
   };
 
-  const paragraphRemove = (index) => {
+  const headerRemove = (index) => {
     remove(index);
   };
 
-  const listRemove = (index) => {
+  const paragraphRemove = (index) => {
     remove(index);
   };
 
@@ -142,9 +150,8 @@ function CreateDetail() {
     move(oldIndex, newIndex);
   };
 
-  const navigate = useNavigate();
-
-  const handleCreateBlogForm = async (data) => {
+  const handleCreateForm = async (data) => {
+    // console.log(data);
     const formData = new FormData();
     const contentBlocks = data.contentBlocks.map((block) => {
       if (block.type === "Image") {
@@ -161,24 +168,23 @@ function CreateDetail() {
       }
     });
 
-    const response = await axios.post("/blogs/createDetails", formData);
+    const response = await axios.post(`/ships/createDetail/${ship.slug}`, formData);
     if (response.statusCode === 201) {
       notification.success({
         message:
-          response?.message || "Tạo thông tin chi tiết bài viết thành công!",
+          response?.message || "Tạo thông tin chi tiết thành công!",
       });
-      navigate("/blogs");
+      navigate("/ships");
     }
   };
 
   return (
     <div className="flex w-full flex-col gap-16">
-      <h6>Tạo chi tiết bài viết</h6>
+      <h1>Thông tin chi tiết</h1>
       <div className="divider"></div>
-
       <form
         className="flex flex-col gap-32"
-        onSubmit={handleSubmit(handleCreateBlogForm)}
+        onSubmit={handleSubmit(handleCreateForm)}
       >
         <div
           className="flex align-center justify-between"
@@ -186,10 +192,22 @@ function CreateDetail() {
             position: "sticky",
             top: 0,
             backgroundColor: "#fff",
-            zIndex: 40,
+            zIndex: 9999,
           }}
         >
           <div className="flex align-center gap-12">
+            <Button
+              normal
+              primary
+              onClick={() =>
+                handleAddHeader({
+                  content: "",
+                })
+              }
+            >
+              Tạo header
+            </Button>
+
             <Button
               normal
               primary
@@ -206,18 +224,6 @@ function CreateDetail() {
               normal
               primary
               onClick={() =>
-                handleAddList({
-                  content: "",
-                })
-              }
-            >
-              Tạo list
-            </Button>
-
-            <Button
-              normal
-              primary
-              onClick={() =>
                 handleAddImage({
                   content: "",
                 })
@@ -226,6 +232,7 @@ function CreateDetail() {
               Tạo hình ảnh
             </Button>
           </div>
+
           <Button
             primary
             normal
@@ -245,6 +252,25 @@ function CreateDetail() {
               {fields.map((field, index) => {
                 return (
                   <SortableItem key={field.id} id={field.id}>
+                    {field.type === "Header" && (
+                      <div className={cx("custom-header")}>
+                        <InputField
+                          control={control}
+                          name={`contentBlocks.${index}.content`}
+                          label={`Header`}
+                          placeholder={`Header`}
+                          error={errors?.contentBlocks?.[index]?.content}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => headerRemove(index)}
+                          className={cx("remove-btn")}
+                        >
+                          <CloseOutlined />
+                        </button>
+                      </div>
+                    )}
+
                     {field.type === "Paragraph" && (
                       <div className={cx("custom-paragraph")}>
                         <TextField
@@ -264,26 +290,6 @@ function CreateDetail() {
                       </div>
                     )}
 
-                    {field.type === "List" && (
-                      <li className={cx("custom-list")}>
-                        <ListField
-                          control={control}
-                          name={`contentBlocks.${index}.content`}
-                          label={`List`}
-                          placeholder={`List`}
-                          error={errors?.contentBlocks?.[index]?.content}
-                          inputGroup={false}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => listRemove(index)}
-                          className={cx("remove-btn")}
-                        >
-                          <CloseOutlined />
-                        </button>
-                      </li>
-                    )}
-
                     {field.type === "Image" && (
                       <div className={cx("custom-image")}>
                         <UploadImageField
@@ -294,6 +300,23 @@ function CreateDetail() {
                           error={errors?.contentBlocks?.[index]?.file}
                           className="optional-height"
                         />
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "6%",
+                            right: "5%",
+                            zIndex: 999,
+                          }}
+                        >
+                          <InputField
+                            control={control}
+                            name={`contentBlocks.${index}.caption`}
+                            label={`Caption`}
+                            placeholder={`Caption`}
+                            error={errors?.contentBlocks?.[index]?.caption}
+                            inputGroup={false}
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={() => imageRemove(index)}

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Select, notification } from "antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -37,11 +37,13 @@ function Update() {
   const { setGlobalLoading } = useContext(LoadingContext);
 
   const { slug } = useParams();
+  const [hotel, setHotel] = useState([]);
   const getHotelBySlug = useCallback(async () => {
     setGlobalLoading(true);
     setLoading(true);
     const response = await handleGetHotelBySlugApi(slug);
 
+    setHotel(response.data);
     reset({
       cities: response.data.hotel.city_id,
       address: response.data.address,
@@ -79,9 +81,7 @@ function Update() {
 
   // Xử lý submit form
   const handleUpdateHotelForm = async (data) => {
-
     console.log(data);
-    
 
     const formData = new FormData();
     formData.append("address", data.address);
@@ -115,10 +115,31 @@ function Update() {
         onSubmit={handleSubmit(handleUpdateHotelForm)}
       >
         <div className="flex justify-between align-center">
-          <h6>Cập nhật thông tin khách sạn</h6>
-          <Button primary normal submit className="interceptor-loading">
-            <div className="label md">Cập nhật</div>
-          </Button>
+          <h6>Tạo mới thông tin khách sạn</h6>
+          <div className="flex align-center gap-16">
+            {hotel?.long_desc_products && hotel?.long_desc_products.length > 0 ? (
+              <Link to={`/hotel/updateDetail/${slug}`}>
+                <Button primary normal>
+                  <div className="label md">Cập nhật thông tin chi tiết</div>
+                </Button>
+              </Link>
+            ) : (
+              <Link to={`/hotel/createDetail/${slug}`}>
+                <Button primary normal>
+                  <div className="label md">Tạo thông tin chi tiết</div>
+                </Button>
+              </Link>
+            )}
+
+            <Link to={`/hotel/updateFeatures/${slug}`}>
+              <Button primary normal>
+                <div className="label md">Đặc trưng khách sạn</div>
+              </Button>
+            </Link>
+            <Button primary normal submit className="interceptor-loading">
+              <div className="label md">Cập nhật</div>
+            </Button>
+          </div>
         </div>
         <div className={cx("group-input")}>
           <div className="form-group">

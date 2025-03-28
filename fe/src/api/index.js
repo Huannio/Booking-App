@@ -88,7 +88,6 @@ export const handleGetCruiseCategoryApi = async () => {
 export const handleGetShipBySlugApi = async (slug) => {
   return await axios.get(`/ships/${slug}`);
 };
-
 export const handleSearchShipsApi = async (
   title = null,
   categoryId = null,
@@ -126,7 +125,7 @@ export const handleSearchPermissionsApi = async (
   return await axios.get(`/permissions-management/search?${params.toString()}`);
 };
 // Feature
-export const handleGetFeaturesApi = async () => {
+export const handleGetAllFeaturesApi = async () => {
   return await axios.get("/features");
 };
 export const handleGetFeatureByIdApi = async (id) => {

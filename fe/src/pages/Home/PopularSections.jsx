@@ -16,7 +16,7 @@ const PopularSections = () => {
 
   const getCruises = useCallback(async () => {
     const cruises = await handleGetShipsActiveApi();
-    setCruises(cruises.data || []);
+    setCruises(cruises?.data || []);
   }, []);
 
   useEffect(() => {
@@ -38,15 +38,15 @@ const PopularSections = () => {
         />
 
         <div className={cx("PopularShips-cardList")}>
-          {cruises.map((cruise) => (
-            <Link key={cruise.id} to={`/du-thuyen/${cruise.slug}`}>
+          {cruises.slice(0, 6).map((cruise) => (
+            <Link key={cruise?.id} to={`/du-thuyen/${cruise?.slug}`}>
               <ProductCard
                 BadgeImageWrapper={
                   <Badge
                     warning
                     BadgeSm
                     ContentXs
-                    content={"4.9 (12) đánh giá"}
+                    content={`${cruise?.score_reviews} (${cruise?.num_reviews}) đánh giá`}
                     svg={
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -89,13 +89,13 @@ const PopularSections = () => {
                         ></path>
                       </svg>
                     }
-                    content={cruise.cruise.cruise_category.name}
+                    content={cruise?.cruise?.cruise_category?.name}
                     className={"ProductCard-location"}
                   />
                 }
-                imgSrc={cruise.thumbnail}
-                title={cruise.title}
-                price={`${formatMoney(cruise.default_price)}đ / khách`}
+                imgSrc={cruise?.thumbnail}
+                title={cruise?.title}
+                price={`${formatMoney(cruise?.default_price)}đ / khách`}
                 iconDescription={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +110,7 @@ const PopularSections = () => {
                     ></path>
                   </svg>
                 }
-                contentDescription={`Hạ thủy ${cruise.cruise.year} - Tàu vỏ ${cruise.cruise.shell} - ... phòng`}
+                contentDescription={`Hạ thủy ${cruise?.cruise?.year} - Tàu vỏ ${cruise?.cruise?.shell} - ... phòng`}
               />
             </Link>
           ))}

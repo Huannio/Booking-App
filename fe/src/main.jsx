@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import GlobalStyles from "./components/GlobalStyles";
 import App from "./App.jsx";
@@ -11,7 +11,7 @@ import { injectStore } from "~/utils/axios.config";
 injectStore(store);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <GlobalStyles>
@@ -19,5 +19,5 @@ createRoot(document.getElementById("root")).render(
         </GlobalStyles>
       </PersistGate>
     </Provider>
-  </StrictMode>
+  // </StrictMode>
 );
