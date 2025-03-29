@@ -71,6 +71,7 @@ function Update() {
       trip: response.ship.cruise.trip,
       year: response.ship.cruise.year,
       images: response.ship.images.split(",").map((image) => image.trim()),
+      sale_prices: response.ship.sale_prices,
     });
   }, [setGlobalLoading, reset, slug]);
 
@@ -112,6 +113,7 @@ function Update() {
     formData.append("map_link", data.map_link);
     formData.append("schedule", data.schedule);
     formData.append("shell", data.shell);
+    formData.append("sale_prices", data.sale_prices);
     formData.append(
       "thumbnail",
       typeof data.thumbnail === "string" ? data.thumbnail : data.thumbnail[0]
@@ -160,6 +162,13 @@ function Update() {
                 <div className="label md">Đặc trưng du thuyền</div>
               </Button>
             </Link>
+
+            <Link to={`/ships/${slug}/rooms`}>
+              <Button primary normal>
+                <div className="label md">Danh sách phòng</div>
+              </Button>
+            </Link>
+
             <Button primary normal submit className="interceptor-loading">
               <div className="label md">Cập nhật</div>
             </Button>
@@ -193,7 +202,10 @@ function Update() {
           </div>
         </div>
 
-        <div className={cx("group-input")}>
+        <div
+          className={cx("group-input")}
+          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+        >
           <div className="form-group">
             <InputField
               label="Tên công ty điều hành"
@@ -217,6 +229,19 @@ function Update() {
               status={errors.default_price && "error"}
               inputGroup={false}
               required
+              addonAfter="vnđ"
+            />
+          </div>
+
+          <div className="form-group">
+            <InputField
+              label="Giá khuyến mãi (nếu có)"
+              name="sale_prices"
+              placeholder="Nhập giá"
+              control={control}
+              error={errors.sale_prices}
+              status={errors.sale_prices && "error"}
+              inputGroup={false}
               addonAfter="vnđ"
             />
           </div>

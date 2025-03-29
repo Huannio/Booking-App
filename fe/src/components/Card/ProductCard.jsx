@@ -78,8 +78,8 @@ ProductCard.propTypes = {
   BadgeLocation: PropTypes.node.isRequired,
   imgSrc: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  iconDescription: PropTypes.node.isRequired,
-  contentDescription: PropTypes.node.isRequired,
+  iconDescription: PropTypes.node,
+  contentDescription: PropTypes.node,
   price: PropTypes.string.isRequired,
   originalPrice: PropTypes.string,
 };

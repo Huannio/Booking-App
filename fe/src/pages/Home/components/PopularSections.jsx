@@ -96,6 +96,11 @@ const PopularSections = () => {
                 imgSrc={cruise?.thumbnail}
                 title={cruise?.title}
                 price={`${formatMoney(cruise?.default_price)}đ / khách`}
+                originalPrice={
+                  cruise.sale_prices === "0"
+                    ? null
+                    : `${formatMoney(cruise.sale_prices)}đ / phòng`
+                }
                 iconDescription={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +115,7 @@ const PopularSections = () => {
                     ></path>
                   </svg>
                 }
-                contentDescription={`Hạ thủy ${cruise?.cruise?.year} - Tàu vỏ ${cruise?.cruise?.shell} - ... phòng`}
+                contentDescription={`Hạ thủy ${cruise?.cruise?.year} - Tàu vỏ ${cruise?.cruise?.shell} - ${cruise?.cruise?.cabin} phòng`}
               />
             </Link>
           ))}

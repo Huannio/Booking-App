@@ -1,15 +1,14 @@
 const { StatusCodes } = require("http-status-codes");
-const cloudinary = require("../../config/cloudinary");
 const RoomService = require("../services/RoomService");
-const uploadToCloudinary = require("../../utils/cloudinary");
 
 class RoomController {
   constructor() {
-    this.roomService = RoomService; 
+    this.roomService = RoomService;
   }
 
   index = async (req, res, next) => {
     try {
+      console.log(req.params.id);
       const data = await this.roomService.getRoomById(req.params.id);
       res.status(StatusCodes.OK).json(data);
     } catch (error) {
@@ -19,7 +18,8 @@ class RoomController {
 
   show = async (req, res, next) => {
     try {
-      const data = await this.roomService.getAllRoom();
+      const { slug } = req.params;
+      const data = await this.roomService.getAllRoom(slug);
       return res.status(StatusCodes.OK).json(data);
     } catch (error) {
       next(error);
@@ -28,7 +28,8 @@ class RoomController {
 
   create = async (req, res, next) => {
     try {
-      const data = await this.roomService.createRoom(req.body, req.file);
+      const { slug } = req.params;
+      const data = await this.roomService.createRoom(slug, req.body, req.files);
       return res.status(StatusCodes.CREATED).json({
         statusCode: StatusCodes.CREATED,
         message: "Tạo phòng thành công",
@@ -43,7 +44,7 @@ class RoomController {
     try {
       const data = await this.roomService.updateRoom(
         req.body,
-        req.file,
+        req.files,
         req.params.id
       );
       return res.status(StatusCodes.OK).json({
@@ -68,16 +69,19 @@ class RoomController {
       next(error);
     }
   };
-  
-  getFeature = async (req, res, next) => {
+
+  updateFeature = async (req, res, next) => {
     try {
-      const roomFeature = await this.roomService.getFeature();
-      return res.status(StatusCodes.OK).json(roomFeature);
+      const data = await this.roomService.updateFeature(req.body, req.params.id);
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        message: "Cập nhật thành công",
+        data,
+      })
     } catch (error) {
       next(error);
     }
   };
-
 }
 
 module.exports = new RoomController();

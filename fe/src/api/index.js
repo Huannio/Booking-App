@@ -178,3 +178,12 @@ export const handleSearchHotelApi = async (
 
   return await axios.get(`/hotel/search?${params.toString()}`);
 };
+
+// Room
+export const handleGetAllRoomByProductSlugApi = async (slug) => {
+  return await axios.get(`/rooms/${slug}`);
+}
+
+export const handleGetRoomByIdApi = async (id) => {
+  return await axios.get(`/rooms/id/${id}`);
+}

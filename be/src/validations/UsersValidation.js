@@ -21,6 +21,7 @@ const updateUser = async (req, res, next) => {
     name: Joi.string().trim().strict(),
     email: Joi.string().email().trim().strict(),
     user_catalogues_id: Joi.number().required(),
+    publish: Joi.boolean(),
   });
 
   try {
