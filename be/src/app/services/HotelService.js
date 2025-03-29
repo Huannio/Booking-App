@@ -35,6 +35,7 @@ class HotelService {
           "images",
           "type_product_id",
           "active",
+          "sale_prices"
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -82,6 +83,7 @@ class HotelService {
           "images",
           "type_product_id",
           "active",
+          "sale_prices"
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -147,6 +149,7 @@ class HotelService {
         map_iframe_link,
         map_link,
         admin,
+        sale_prices
       } = reqBody;
 
       const checkHotel = await Products.findOne({
@@ -185,6 +188,7 @@ class HotelService {
         type_product_id: 2,
         slug,
         active: true,
+        sale_prices
       });
 
       const hotel = await Hotel.create({
@@ -214,6 +218,7 @@ class HotelService {
         admin,
         images: existingImages,
         thumbnail: existingThumbnail,
+        sale_prices
       } = reqBody;
   
       const hotel = await this.getHotelBySlug(slug);
@@ -269,6 +274,7 @@ class HotelService {
           type_product_id: 2,
           slug: slugify(title),
           active: true,
+          sale_prices
         },
         { where: { id: hotel.id } }
       );
@@ -352,6 +358,7 @@ class HotelService {
           "slug",
           "address",
           "default_price",
+          "sale_prices"
         ],
         where: whereProducts,
         include: [
@@ -392,6 +399,7 @@ class HotelService {
           "slug",
           "address",
           "default_price",
+          "sale_prices"
         ],
         include: [
           {

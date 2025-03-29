@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "city_id",
         as: "cities",
       });
-
-      Hotel.hasMany(models.Rooms, {
-        foreignKey: "hotel_id",
-        as: "rooms",
-      });
     }
   }
   Hotel.init(

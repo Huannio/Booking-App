@@ -71,7 +71,7 @@ function UpdateFeature() {
     });
     if (response.statusCode === 200) {
       notification.success({
-        message: response?.message || "Cập nhật thông tin công!",
+        message: response?.message || "Cập nhật thông tin thành công!",
       });
       navigate("/ships");
     }

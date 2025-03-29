@@ -34,6 +34,7 @@ class ShipService {
           "images",
           "type_product_id",
           "active",
+          "sale_prices",
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -81,6 +82,7 @@ class ShipService {
           "images",
           "type_product_id",
           "active",
+          "sale_prices",
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -174,6 +176,7 @@ class ShipService {
         admin,
         trip,
         schedule,
+        sale_prices,
       } = reqBody;
 
       const checkShip = await Products.findOne({
@@ -212,6 +215,7 @@ class ShipService {
         slug,
         active: true,
         schedule,
+        sale_prices,
       });
 
       const cruise = await Cruise.create({
@@ -249,6 +253,7 @@ class ShipService {
         schedule,
         images: existingImages,
         thumbnail: existingThumbnail,
+        sale_prices,
       } = reqBody;
 
       const ship = await this.getShipBySlug(slug);
@@ -307,6 +312,7 @@ class ShipService {
           slug: slugify(title),
           active: true,
           schedule,
+          sale_prices,
         },
         { where: { id: ship.id } }
       );
@@ -387,7 +393,15 @@ class ShipService {
       const ships = await Products.findAndCountAll({
         limit,
         offset,
-        attributes: ["id", "title", "thumbnail", "slug", "address"],
+        attributes: [
+          "id",
+          "title",
+          "thumbnail",
+          "slug",
+          "address",
+          "sale_prices",
+          "default_price",
+        ],
         where: whereProducts,
         include: [
           {
@@ -437,6 +451,7 @@ class ShipService {
           "address",
           "default_price",
           "schedule",
+          "sale_prices"
         ],
         include: [
           {

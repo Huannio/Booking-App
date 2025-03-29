@@ -14,6 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "product_id",
         as: "products",
       });
+
+      Features.belongsToMany(models.Rooms, {
+        through: models.RoomFeatures,
+        foreignKey: "feature_id",
+        otherKey: "room_id",
+        as: "rooms",
+      });
     }
   }
 

@@ -10,7 +10,7 @@ class UserService {
   async getAllUsers() {
     try {
       return await Users.findAll({
-        attributes: ["id", "name", "email"],
+        attributes: ["id", "name", "email", "publish"],
         include: [
           {
             model: UserCatalogues,
@@ -110,7 +110,7 @@ class UserService {
     try {
       const user = await this.getUserById(id);
 
-      const { name, email, user_catalogues_id } = data;
+      const { name, email, user_catalogues_id, publish } = data;
       const checkEmail = await Users.findOne({
         where: { email, id: { [Op.ne]: id } },
       });
@@ -120,9 +120,10 @@ class UserService {
       }
 
       return await user.update({
-        name: name,
-        email: email,
-        user_catalogues_id: user_catalogues_id,
+        name,
+        email,
+        user_catalogues_id,
+        publish,
       });
     } catch (error) {
       throw error;

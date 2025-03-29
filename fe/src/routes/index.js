@@ -38,6 +38,15 @@ import {
   UpdateDetail as UpdateShipDetail,
   UpdateFeature as UpdateShipFeature,
 } from "../pages/Ship";
+
+import {
+  Show as ShowRoom,
+  Create as CreateRoom,
+  Update as UpdateRoom,
+  Delete as DeleteRoom,
+  UpdateFeature as UpdateRoomFeature,
+} from "../pages/Room";
+
 import {
   Show as ShowFeature,
   Create as CreateFeature,
@@ -371,6 +380,69 @@ export const privateRoutes = [
     component: UpdateHotelFeatures,
     layout: AdminLayout,
     requiredPermission: "hotel.update",
+  },
+
+  // Room
+  {
+    path: config.routes.ships.showRoom,
+    component: ShowRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.createRoom,
+    component: CreateRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.updateRoom,
+    component: UpdateRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.deleteRoom,
+    component: DeleteRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.updateRoomFeatures,
+    component: UpdateRoomFeature,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+
+  {
+    path: config.routes.hotel.showRoom,
+    component: ShowRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.createRoom,
+    component: CreateRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.updateRoom,
+    component: UpdateRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.deleteRoom,
+    component: DeleteRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.updateRoomFeatures,
+    component: UpdateRoomFeature,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
   },
 
   // Blogs
