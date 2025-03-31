@@ -44,12 +44,13 @@ const PopularSections = () => {
           {hotels.map((hotel) => (
             <Link key={hotel?.id} to={`/tim-khach-san/${hotel?.slug}`}>
               <ProductCard
+                grid
                 BadgeImageWrapper={
                   <Badge
                     warning
                     BadgeSm
                     ContentXs
-                    content={"4.9 (12) đánh giá"}
+                    content={`${hotel.score_reviews} (${hotel.num_reviews}) đánh giá`}
                     svg={
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +102,7 @@ const PopularSections = () => {
                 price={`${formatMoney(hotel.default_price)}đ / phòng`}
                 // Render ra original price của hotel => Sẽ bổ sung sau vì thiếu api
                 originalPrice={
-                  hotel.sale_prices === '0'
+                  hotel.sale_prices === "0"
                     ? null
                     : `${formatMoney(hotel.sale_prices)}đ / phòng`
                 }

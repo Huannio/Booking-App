@@ -41,12 +41,13 @@ const PopularSections = () => {
           {cruises.map((cruise) => (
             <Link key={cruise?.id} to={`/du-thuyen/${cruise?.slug}`}>
               <ProductCard
+                grid
                 BadgeImageWrapper={
                   <Badge
                     warning
                     BadgeSm
                     ContentXs
-                    content={"4.9 (12) đánh giá"}
+                    content={`${cruise.score_reviews} (${cruise.num_reviews}) đánh giá`}
                     svg={
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

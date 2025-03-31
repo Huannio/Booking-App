@@ -35,7 +35,7 @@ class HotelService {
           "images",
           "type_product_id",
           "active",
-          "sale_prices"
+          "sale_prices",
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -83,7 +83,7 @@ class HotelService {
           "images",
           "type_product_id",
           "active",
-          "sale_prices"
+          "sale_prices",
         ],
         include: [
           { model: ProductType, as: "type", attributes: ["name", "id"] },
@@ -149,7 +149,7 @@ class HotelService {
         map_iframe_link,
         map_link,
         admin,
-        sale_prices
+        sale_prices,
       } = reqBody;
 
       const checkHotel = await Products.findOne({
@@ -188,7 +188,7 @@ class HotelService {
         type_product_id: 2,
         slug,
         active: true,
-        sale_prices
+        sale_prices,
       });
 
       const hotel = await Hotel.create({
@@ -218,22 +218,22 @@ class HotelService {
         admin,
         images: existingImages,
         thumbnail: existingThumbnail,
-        sale_prices
+        sale_prices,
       } = reqBody;
-  
+
       const hotel = await this.getHotelBySlug(slug);
-  
+
       const checkHotel = await Products.findOne({
-        where: { 
-          slug: slugify(title), 
-          id: { [Op.ne]: hotel.id } 
+        where: {
+          slug: slugify(title),
+          id: { [Op.ne]: hotel.id },
         },
       });
-  
+
       if (checkHotel) {
         throw new ApiError(StatusCodes.CONFLICT, "Tên Khách sạn đã tồn tại!");
       }
-  
+
       let thumbnailLink = existingThumbnail;
       if (reqFiles?.thumbnail) {
         const uploadedThumbnail = await uploadToCloudinary(
@@ -241,9 +241,9 @@ class HotelService {
         );
         thumbnailLink = uploadedThumbnail.url;
       }
-  
+
       let imageLinkList = [];
-      
+
       if (reqFiles?.images) {
         const newImageUrls = await Promise.all(
           reqFiles.images.map(async (image) => {
@@ -253,15 +253,17 @@ class HotelService {
         );
         imageLinkList.push(...newImageUrls);
       }
-  
+
       if (existingImages) {
-        imageLinkList.push(...(Array.isArray(existingImages) 
-          ? existingImages 
-          : existingImages.split(',')));
+        imageLinkList.push(
+          ...(Array.isArray(existingImages)
+            ? existingImages
+            : existingImages.split(","))
+        );
       }
-  
-      const finalImageList = imageLinkList.join(',');
-  
+
+      const finalImageList = imageLinkList.join(",");
+
       const product = await Products.update(
         {
           title,
@@ -274,11 +276,11 @@ class HotelService {
           type_product_id: 2,
           slug: slugify(title),
           active: true,
-          sale_prices
+          sale_prices,
         },
         { where: { id: hotel.id } }
       );
-  
+
       const updateHotel = await Hotel.update(
         {
           city_id: cities,
@@ -286,7 +288,7 @@ class HotelService {
         },
         { where: { id: hotel.id } }
       );
-  
+
       return { product, updateHotel };
     } catch (error) {
       throw error;
@@ -358,7 +360,9 @@ class HotelService {
           "slug",
           "address",
           "default_price",
-          "sale_prices"
+          "sale_prices",
+          "num_reviews",
+          "score_reviews",
         ],
         where: whereProducts,
         include: [
@@ -399,7 +403,9 @@ class HotelService {
           "slug",
           "address",
           "default_price",
-          "sale_prices"
+          "sale_prices",
+          "num_reviews",
+          "score_reviews",
         ],
         include: [
           {

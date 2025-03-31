@@ -1,9 +1,6 @@
 import { AdminLayout } from "../components/Layout";
 import Home from "../pages/Home";
-import {
-  Cruise as CruiseSearch,
-  Flight as FlightSearch,
-} from "../pages/Search";
+import { Cruise as CruiseSearch, Hotel as HotelSearch } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Hotel from "../pages/Hotel/HomeHotel";
@@ -113,16 +110,16 @@ export const publicRoutes = [
     component: CruiseSearch,
   },
   {
-    path: "/tim-ve-may-bay",
-    component: FlightSearch,
-  },
-  {
     path: "/doanh-nghiep",
     component: BusinessPage,
   },
   {
     path: "/khach-san",
     component: Hotel,
+  },
+  {
+    path: "/tim-khach-san",
+    component: HotelSearch,
   },
 
   // Footer
