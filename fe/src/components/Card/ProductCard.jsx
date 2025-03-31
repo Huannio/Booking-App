@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import styles from "./Card.module.scss";
 import PropTypes from "prop-types";
 import Button from "../Button";
+import Badge from "../Badge/Badge";
 
 const cx = classNames.bind(styles);
 
@@ -14,15 +15,24 @@ function ProductCard({
   contentDescription,
   price,
   originalPrice,
+  grid,
+  list,
+  tags,
 }) {
   return (
-    <div className={cx("Card", "ProductCard-grid")}>
+    <div
+      className={cx(
+        "Card",
+        { "ProductCard-grid": grid },
+        { "ProductCard-list": list }
+      )}
+    >
       <div className={cx("ProductCard-imageWrapper")}>
         <div
           className={cx("ProductCard-imageWrapper-image")}
           style={{
             width: "352px",
-            height: "216px",
+            height: grid ? "216px" : "264px",
             position: "relative",
             overflow: "hidden",
           }}
@@ -47,6 +57,21 @@ function ProductCard({
             <p className="sm">{contentDescription}</p>
           </div>
         </div>
+
+        {tags && (
+          <div className={cx("ProductCard-tags")}>
+            {tags?.map((tag) => (
+              <Badge
+                BadgeDefault
+                BadgeSm
+                ContentXs
+                content={tag.text}
+                key={tag.id}
+              />
+            ))}
+          </div>
+        )}
+
         <div className={cx("ProductCard-footer")}>
           <div>
             <div>
@@ -82,6 +107,9 @@ ProductCard.propTypes = {
   contentDescription: PropTypes.node,
   price: PropTypes.string.isRequired,
   originalPrice: PropTypes.string,
+  grid: PropTypes.bool,
+  list: PropTypes.bool,
+  tags: PropTypes.array,
 };
 
 export default ProductCard;

@@ -9,7 +9,7 @@ const {
   LongDescType,
   ProductFeature,
 } = require("../../models");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
@@ -349,7 +349,11 @@ class ShipService {
     categoryId,
     title,
     greaterDefaultPrice,
-    lowerDefaultPrice
+    lowerDefaultPrice,
+    featuresArray,
+    scoreReviewsArray,
+    orderBy,
+    orderType
   ) {
     try {
       let whereCruise = {};
@@ -378,18 +382,50 @@ class ShipService {
         }
       }
 
+      if (scoreReviewsArray.length > 0) {
+        whereProducts.score_reviews = {
+          [Op.in]: scoreReviewsArray,
+        };
+      }
+
+      let filteredProductIds = [];
+
+      if (featuresArray.length > 0) {
+        // Tìm products có tất cả features trong danh sách
+        const filteredProducts = await Products.findAll({
+          attributes: ["id"],
+          where: whereProducts,
+          include: [
+            {
+              model: Features,
+              as: "features",
+              attributes: ["id"],
+              where: { id: { [Op.in]: featuresArray } },
+              through: { attributes: [] },
+            },
+          ],
+          group: ["Products.id"],
+          having: Sequelize.literal(
+            `COUNT(DISTINCT features.id) = ${featuresArray.length}`
+          ),
+        });
+
+        filteredProductIds = filteredProducts.map((p) => p.id);
+
+        if (filteredProductIds.length === 0) {
+          return { total: 0, data: [], totalPages: 0 };
+        }
+
+        // Cập nhật whereProducts để chỉ lấy những products đã lọc được
+        whereProducts.id = { [Op.in]: filteredProductIds };
+      }
+
+      // Truy vấn lấy đầy đủ thông tin products và tất cả features
       const total = await Products.count({
         where: whereProducts,
-        include: [
-          {
-            model: Cruise,
-            as: "cruise",
-            where: whereCruise,
-          },
-        ],
+        include: [{ model: Cruise, as: "cruise", where: whereCruise }],
       });
 
-      // Về sau nếu thiếu trường nào thì hãy vào đây viết thêm để query vào trường đó
       const ships = await Products.findAndCountAll({
         limit,
         offset,
@@ -401,6 +437,8 @@ class ShipService {
           "address",
           "sale_prices",
           "default_price",
+          "num_reviews",
+          "score_reviews",
         ],
         where: whereProducts,
         include: [
@@ -425,12 +463,18 @@ class ShipService {
               },
             ],
           },
+          {
+            model: Features,
+            as: "features",
+            attributes: ["text", "id", "icon"], // Lấy tất cả features
+            through: { attributes: [] },
+          },
         ],
-        order: [["createdAt", "DESC"]],
+        order: [[orderBy, orderType]],
       });
 
       return {
-        total: total,
+        total,
         data: ships.rows,
         totalPages: Math.ceil(total / limit),
       };
@@ -451,7 +495,9 @@ class ShipService {
           "address",
           "default_price",
           "schedule",
-          "sale_prices"
+          "sale_prices",
+          "num_reviews",
+          "score_reviews",
         ],
         include: [
           {

@@ -1,11 +1,11 @@
-import styles from "./SearchBox.module.scss";
 import Proptypes from "prop-types";
 import classNames from "classnames/bind";
 import { useEffect, useRef, useState } from "react";
-
-const cx = classNames.bind(styles);
+import styles from "./SearchBox.module.scss";
 
 function SearchSelectBox({
+  stylesModule,
+  baseClass = "SearchBox",
   className,
   inputGroup,
   name,
@@ -18,13 +18,17 @@ function SearchSelectBox({
   onSelectItem,
   fieldSelectItem,
 }) {
+  const appliedStyles = stylesModule || styles;
+  const cx = classNames.bind(appliedStyles);
+  
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [value, setValue] = useState(defaultValue);
 
   const handleSelectItem = (item) => {
     setValue(item?.[fieldDropdown] ?? item);
     setDropdownVisible(false);
-    if(onSelectItem) onSelectItem(item?.[fieldSelectItem] ?? item?.[fieldDropdown]);
+    if (onSelectItem)
+      onSelectItem(item?.[fieldSelectItem] ?? item?.[fieldDropdown]);
   };
 
   const wrapperRef = useRef(null);
@@ -39,9 +43,8 @@ function SearchSelectBox({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   return (
-    <div ref={wrapperRef} className={cx('SearchBox-selectInput', className)}>
+    <div ref={wrapperRef} className={cx(`${baseClass}-selectInput`, className)}>
       <div>
         <label
           htmlFor={name}
@@ -50,6 +53,7 @@ function SearchSelectBox({
           {firstIcon}
 
           <input
+            style={{ width: "100%" }}
             name={name}
             className="p-md"
             id={name}
@@ -67,18 +71,18 @@ function SearchSelectBox({
       </div>
 
       {dropdownVisible && (
-        <div className={cx("SearchBox-dropdown")}>
-            <div
-              key={defaultValue}
-              className={cx("SearchBox-dropdown-item")}
-              onClick={() => handleSelectItem(defaultValue)}
-            >
-              {defaultValue}
-            </div>
+        <div className={cx(`${baseClass}-dropdown`)}>
+          <div
+            key={defaultValue}
+            className={cx(`${baseClass}-dropdown-item`)}
+            onClick={() => handleSelectItem(defaultValue)}
+          >
+            {defaultValue}
+          </div>
           {items.map((item) => (
             <div
               key={item?.[fieldDropdown]}
-              className={cx("SearchBox-dropdown-item")}
+              className={cx(`${baseClass}-dropdown-item`)}
               onClick={() => handleSelectItem(item)}
             >
               {item?.[fieldDropdown]}
@@ -102,6 +106,8 @@ SearchSelectBox.propTypes = {
   fieldDropdown: Proptypes.string,
   onSelectItem: Proptypes.func,
   fieldSelectItem: Proptypes.string,
+  baseClass: Proptypes.string,
+  stylesModule: Proptypes.object,
 };
 
 export default SearchSelectBox;

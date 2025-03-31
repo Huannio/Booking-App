@@ -79,7 +79,7 @@ export const handleGetShipsApi = async () => {
 
 export const handleGetShipsActiveApi = async () => {
   return await axios.get("/ships/active");
-}
+};
 
 export const handleGetCruiseCategoryApi = async () => {
   return await axios.get("/ships/cruise-category");
@@ -94,7 +94,11 @@ export const handleSearchShipsApi = async (
   greaterDefaultPrice = null,
   lowerDefaultPrice = null,
   page = 0,
-  limit = null
+  limit = null,
+  features = [],
+  scoreReviews = [],
+  orderBy = "id",
+  orderType = "ASC"
 ) => {
   const params = new URLSearchParams();
 
@@ -106,6 +110,13 @@ export const handleSearchShipsApi = async (
     params.append("lowerDefaultPrice", lowerDefaultPrice);
   if (page !== null) params.append("page", page);
   if (limit !== null) params.append("limit", limit);
+  if (features.length > 0) params.append("features", features.join("%"));
+  if (scoreReviews.length > 0)
+    params.append("scoreReviews", scoreReviews.join("%"));
+  if (orderBy) {
+    params.append("orderBy", orderBy);
+    params.append("orderType", orderType.toUpperCase());
+  }
 
   return await axios.get(`/ships/search?${params.toString()}`);
 };
@@ -155,7 +166,7 @@ export const handleGetHotelBySlugApi = async (slug) => {
 
 export const handleGetActiveHotelApi = async () => {
   return await axios.get("/hotel/active");
-}
+};
 
 export const handleSearchHotelApi = async (
   title = null,
@@ -182,8 +193,8 @@ export const handleSearchHotelApi = async (
 // Room
 export const handleGetAllRoomByProductSlugApi = async (slug) => {
   return await axios.get(`/rooms/${slug}`);
-}
+};
 
 export const handleGetRoomByIdApi = async (id) => {
   return await axios.get(`/rooms/id/${id}`);
-}
+};

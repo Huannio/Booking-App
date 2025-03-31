@@ -7,6 +7,39 @@
 
 // ProductCard
 .ProductCard {
+  &-list {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+
+    & .ProductCard-cardContent {
+      padding-right: 20px;
+    }
+
+    & .ProductCard-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 32px;
+    }
+
+    & .ProductCard-body {
+      padding: 0;
+    }
+
+    & .ProductCard-tags {
+      margin: 24px 0;
+      padding: 0;
+    }
+
+    & .ProductCard-footer {
+      padding: 20px 0 0;
+      border-top: 1px solid var(--gray-200, #eaecf0);
+    }
+  }
+
   &-grid {
     width: 384px;
     display: flex;
@@ -43,6 +76,14 @@
     align-items: flex-start;
     gap: 8px;
     align-self: stretch;
+  }
+
+  &-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding: 0 24px;
   }
 
   &-description {
