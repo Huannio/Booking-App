@@ -3,14 +3,13 @@ const {
   Products,
   Hotel,
   Cities,
-  Rooms,
   ProductType,
   Features,
   LongDescProducts,
   LongDescType,
   ProductFeature,
 } = require("../../models");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
 const slugify = require("../../utils/slugify");
 const uploadToCloudinary = require("../../utils/cloudinary");
@@ -309,7 +308,11 @@ class HotelService {
     cityId,
     title,
     greaterDefaultPrice,
-    lowerDefaultPrice
+    lowerDefaultPrice,
+    featuresArray,
+    scoreReviewsArray,
+    orderBy,
+    orderType
   ) {
     try {
       let whereHotel = {};
@@ -338,18 +341,47 @@ class HotelService {
         }
       }
 
+      if (scoreReviewsArray.length > 0) {
+        whereProducts.score_reviews = {
+          [Op.in]: scoreReviewsArray,
+        };
+      }
+
+      let filteredProductIds = [];
+
+      if (featuresArray.length > 0) {
+        const filteredProducts = await Products.findAll({
+          attributes: ["id"],
+          where: whereProducts,
+          include: [
+            {
+              model: Features,
+              as: "features",
+              attributes: ["id"],
+              where: { id: { [Op.in]: featuresArray } },
+              through: { attributes: [] },
+            },
+          ],
+          group: ["Products.id"],
+          having: Sequelize.literal(
+            `COUNT(DISTINCT features.id) = ${featuresArray.length}`
+          ),
+        });
+
+        filteredProductIds = filteredProducts.map((p) => p.id);
+
+        if (filteredProductIds.length === 0) {
+          return { total: 0, data: [], totalPages: 0 };
+        }
+
+        whereProducts.id = { [Op.in]: filteredProductIds };
+      }
+
       const total = await Products.count({
         where: whereProducts,
-        include: [
-          {
-            model: Hotel,
-            as: "hotel",
-            where: whereHotel,
-          },
-        ],
+        include: [{ model: Hotel, as: "hotel", where: whereHotel }],
       });
 
-      // Về sau nếu thiếu trường nào thì hãy vào đây viết thêm để query vào trường đó
       const hotels = await Products.findAndCountAll({
         limit,
         offset,
@@ -371,6 +403,13 @@ class HotelService {
             as: "hotel",
             where: whereHotel,
             attributes: ["id", "city_id", "admin"],
+            include: [
+              {
+                model: Cities,
+                as: "cities",
+                attributes: ["name", "id"],
+              },
+            ],
           },
           {
             model: Features,
@@ -379,7 +418,7 @@ class HotelService {
             through: { attributes: [] },
           },
         ],
-        order: [["id", "ASC"]],
+        order: [[orderBy, orderType]],
       });
 
       return {
