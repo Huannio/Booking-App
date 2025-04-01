@@ -16,7 +16,6 @@ const router = (app) => {
   app.use("/users", userRouter);
   app.use("/users-catalogues", userCataloguesRouter);
   app.use("/auth", authRouter);
-  
   app.use("/ships", shipRouter);
   app.use("/features", FeatureRouter);
   app.use("/blogs", blogsRouter);

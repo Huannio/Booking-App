@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import styles from "./BlogSection.module.scss";
 import { handleGetBlogPaginationApi } from "~/api";
 import SectionHeader from "~/components/SectionHeader/SectionHeader";
-import BlogCard from "../../components/Card/BlogCard";
+import BlogCard from "../../../components/Card/BlogCard";
 import { formatDate } from "~/utils/formatters.js";
 import Button from "~/components/Button/Button";
 

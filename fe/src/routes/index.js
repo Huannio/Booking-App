@@ -1,9 +1,7 @@
 import { AdminLayout } from "../components/Layout";
 import Home from "../pages/Home";
-import {
-  Cruise as CruiseSearch,
-  Flight as FlightSearch,
-} from "../pages/Search";
+import CruiseSearch from "../pages/CruiseSearch";
+import Flight from "../pages/Flight";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Hotel from "../pages/Hotel/HomeHotel";
@@ -33,14 +31,13 @@ import {
 import {
   Show as ShowShip,
   Create as CreateShip,
-  // CreateFeature as CreateFeatureShip,
   Update as UpdateShip,
-  // UpdateFeature as UpdateFeatureShip,
   Delete as DeleteShip,
   CreateDetail as CreateShipDetail,
   UpdateDetail as UpdateShipDetail,
   UpdateFeature as UpdateShipFeature,
 } from "../pages/Ship";
+
 import {
   Show as ShowFeature,
   Create as CreateFeature,
@@ -57,10 +54,6 @@ import {
   UpdateDetail as UpdateHotelDetail,
   UpdateFeature as UpdateHotelFeatures,
 } from "../pages/Hotel/HotelAdmin";
-
-
-
-
 
 import {
   Show as ShowBlog,
@@ -112,7 +105,7 @@ export const publicRoutes = [
   },
   {
     path: "/tim-ve-may-bay",
-    component: FlightSearch,
+    component: Flight,
   },
   {
     path: "/doanh-nghiep",

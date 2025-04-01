@@ -1,9 +1,9 @@
-import Banner from "./Banner";
-import ReviewSections from "./ReviewSections";
-import PopularSections from "./PopularSections";
-import HomeSection from "./HomeSection";
-import HomePartnersSection from "./HomePartnersSection";
-import BlogSection from "./BlogSection";
+import Banner from "./components/Banner";
+import ReviewSections from "./components/ReviewSections";
+import PopularSections from "./components/PopularSections";
+import HomeSection from "./components/HomeSection";
+import HomePartnersSection from "./components/HomePartnersSection";
+import BlogSection from "./components/BlogSection";
 import { useEffect, useState } from "react";
 import { handleGetCruiseCategoryApi } from "~/api";
 
