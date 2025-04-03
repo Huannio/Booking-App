@@ -1,20 +1,20 @@
-import Button from "~/components/Button";
-import classNames from "classnames/bind";
-import styles from "./Banner.module.scss";
+import  { useState } from 'react';
+import classNames from 'classnames/bind';
+import styles from './Banner.module.scss';
 import SearchBox from "~/components/SearchBox/SearchBox";
-import SearchInputBox from "~/components/SearchBox/SearchInputBox";
-import { handleSearchShipsApi } from "~/api";
-import SearchSelectBox from "~/components/SearchBox/SearchSelectBox";
 import { Controller, useForm } from "react-hook-form";
-import PropTypes from "prop-types";
+import CustomDatePicker from "~/components/DatePicker/DatePicker";
+import Button from "~/components/Button";
+
 const cx = classNames.bind(styles);
 
-function Banner() {
-  const { control, setValue, handleSubmit } = useForm();
+const Banner = () => {
+  const { control, handleSubmit } = useForm();
 
   const handleSearchShipsForm = (data) => {
     console.log(data);
   };
+
 
   return (
     <div className={cx("Home-banner")}>
@@ -25,161 +25,178 @@ function Banner() {
         muted
         loop
       />
-
       <form onSubmit={handleSubmit(handleSearchShipsForm)}>
+      <div className={cx('flight-search-container')}>
         <SearchBox
           className={cx("Home-searchBox")}
           title={"Mở cánh cửa khám phá cùng Mixivivu"}
           description={"Mixivivu - Đặt chân lên đỉnh mây với một bước nhảy"}
         >
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <SearchInputBox
-                isDebounceEmptyCallApi={false}
-                inputGroup
-                name="title"
-                firstIcon={
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-                      stroke="black"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                }
-                placeholder="Tìm kiếm"
-                reactHookFormChange={(e) => field.onChange(e.target.value)}
-                api={handleSearchShipsApi}
-                fieldDropdown={"title"}
-                fieldDropdownLink={"slug"}
-                to="/du-thuyen/"
+        
+        <div className={cx('trip-type-selector')}>
+          <label className={cx('trip-type-option')}>
+            <input
+              type="radio"
+              name="tripType"
+              checked={formData.tripType === 'oneWay'}
+              onChange={() => handleTripTypeChange('oneWay')}
+            />
+            <span className={cx('trip-type-label')}>Một chiều</span>
+          </label>
+          
+          <label className={cx('trip-type-option')}>
+            <input
+              type="radio"
+              name="tripType"
+              checked={formData.tripType === 'roundTrip'}
+              onChange={() => handleTripTypeChange('roundTrip')}
+            />
+            <span className={cx('trip-type-label')}>Khứ hồi</span>
+          </label>
+          
+          <div className={cx('cheapest-ticket')}>
+            <input 
+              type="checkbox" 
+              id="cheapestTicket" 
+              checked={formData.cheapestTicket}
+              onChange={handleCheapestTicketChange}
+            />
+            <label htmlFor="cheapestTicket">Vé rẻ nhất tháng</label>
+          </div>
+        </div>
+        
+        <div className={cx('search-form-container')}>
+          <div className={cx('location-inputs')}>
+            <div className={cx('input-group')}>
+              <label>Điểm đi</label>
+              <div className={cx('input-with-icon')}>
+                <input
+                  type="text"
+                  name="departureLoc"
+                  value={formData.departureLoc}
+                  onChange={handleLocationChange}
+                  placeholder="Vui lòng nhập điểm đi"
+                />
+                <svg className={cx('location-icon')} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+            </div>
+            
+            <div className={cx('input-group')}>
+              <label>Điểm đến</label>
+              <div className={cx('input-with-icon')}>
+                <input
+                  type="text"
+                  name="arrivalLoc"
+                  value={formData.arrivalLoc}
+                  onChange={handleLocationChange}
+                  placeholder="Vui lòng nhập điểm đến"
+                />
+                <svg className={cx('location-icon')} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div className={cx('date-inputs', { 'single-date': formData.tripType === 'oneWay' })}>
+            <div className={cx('input-group')}>
+              <label>Ngày đi</label>
+              <CustomDatePicker
+                selected={formData.departureDate}
+                onChange={(date) => handleDateChange(date, 'departureDate')}
+                placeholderText="Chọn ngày đi"
+                minDate={new Date()}
               />
+            </div>
+            
+            {formData.tripType === 'roundTrip' && (
+              <div className={cx('input-group')}>
+                <label>Ngày về</label>
+                <CustomDatePicker
+                  selected={formData.returnDate}
+                  onChange={(date) => handleDateChange(date, 'returnDate')}
+                  placeholderText="Chọn ngày về"
+                  minDate={formData.departureDate}
+                />
+              </div>
             )}
-          />
-
-          <SearchSelectBox
-            inputGroup
-            name="categoryId"
-            firstIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M5.7 15C4.03377 15.6353 3 16.5205 3 17.4997C3 19.4329 7.02944 21 12 21C16.9706 21 21 19.4329 21 17.4997C21 16.5205 19.9662 15.6353 18.3 15M12 9H12.01M18 9C18 13.0637 13.5 15 12 18C10.5 15 6 13.0637 6 9C6 5.68629 8.68629 3 12 3C15.3137 3 18 5.68629 18 9ZM13 9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9C11 8.44772 11.4477 8 12 8C12.5523 8 13 8.44772 13 9Z"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            }
-            lastIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M6 9L12 15L18 9"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            }
-          />
-
-          <SearchSelectBox
-            inputGroup
-            name="price"
-            firstIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M15 10V9.91667C15 8.85812 14.1419 8 13.0833 8H11C9.89543 8 9 8.89543 9 10C9 11.1046 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14C15 15.1046 14.1046 16 13 16H10.9583C9.87678 16 9 15.1232 9 14.0417V14M12 17.5V6.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                  stroke="#101828"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            }
-            lastIcon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M6 9L12 15L18 9"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></path>
-              </svg>
-            }
-            items={[
-              {
-                label: "Từ 1 đến 3 triệu",
-                queryObject: {
-                  greater_defaultPrice: 1000000,
-                  lower_defaultPrice: 3000000,
-                },
-              },
-              {
-                label: "Từ 3 đến 6 triệu",
-                queryObject: {
-                  greater_defaultPrice: 3000000,
-                  lower_defaultPrice: 6000000,
-                },
-              },
-              {
-                label: "Trên 6 triệu",
-                queryObject: { greater_defaultPrice: 6000000 },
-              },
-            ]}
-            fieldDropdown="label"
-            fieldSelectItem="queryObject"
-            defaultValue="Tất cả mức giá"
-            onSelectItem={(value) => {
-              setValue("price", value);
-            }}
-          />
-
-          <Button submit color normal className="SearchBox-submit-btn">
-            <div className="label md">Tìm kiếm</div>
-          </Button>
-        </SearchBox>
+          </div>
+          
+          <div className={cx('passenger-inputs')}>
+            <div className={cx('passenger-group')}>
+              <label>Người lớn</label>
+              <div className={cx('counter')}>
+                <button
+                  onClick={() => handlePassengerChange('adults', Math.max(1, formData.adults - 1))}
+                  disabled={formData.adults <= 1}
+                  className={cx('counter-btn')}
+                >
+                  -
+                </button>
+                <span>{formData.adults}</span>
+                <button
+                  onClick={() => handlePassengerChange('adults', formData.adults + 1)}
+                  className={cx('counter-btn')}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            
+            <div className={cx('passenger-group')}>
+              <label>Trẻ em</label>
+              <div className={cx('counter')}>
+                <button
+                  onClick={() => handlePassengerChange('children', Math.max(0, formData.children - 1))}
+                  disabled={formData.children <= 0}
+                  className={cx('counter-btn')}
+                >
+                  -
+                </button>
+                <span>{formData.children}</span>
+                <button
+                  onClick={() => handlePassengerChange('children', formData.children + 1)}
+                  className={cx('counter-btn')}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            
+            <div className={cx('passenger-group')}>
+              <label>Em bé</label>
+              <div className={cx('counter')}>
+                <button
+                  onClick={() => handlePassengerChange('infants', Math.max(0, formData.infants - 1))}
+                  disabled={formData.infants <= 0}
+                  className={cx('counter-btn')}
+                >
+                  -
+                </button>
+                <span>{formData.infants}</span>
+                <button
+                  onClick={() => handlePassengerChange('infants', formData.infants + 1)}
+                  className={cx('counter-btn')}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <Button submit color normal className="SearchBox-submit-btn">
+          <div className="label md">Tìm chuyến bay</div>
+        </Button>
+      </SearchBox>
+      </div>
       </form>
     </div>
   );
-}
-
-Banner.propTypes = {
-  cruiseCategory: PropTypes.array,
 };
 
 export default Banner;

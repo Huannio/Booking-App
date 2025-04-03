@@ -43,6 +43,11 @@ const routes = {
     createDetail: "/ships/createDetail/:slug",
     updateDetail: "/ships/updateDetail/:slug",
     updateFeatures: "/ships/updateFeatures/:slug",
+    showRoom: "/ships/:slug/rooms",
+    createRoom: "/ships/:slug/rooms/create",
+    updateRoom: "/ships/:slug/rooms/update/:id",
+    deleteRoom: "/ships/:slug/rooms/delete/:id",
+    updateRoomFeatures: "/ships/:slug/rooms/update/:id/features",
   },
   features: {
     index: "/features",
@@ -68,6 +73,11 @@ const routes = {
     createDetail: "/hotel/createDetail/:slug",
     updateDetail: "/hotel/updateDetail/:slug",
     updateFeatures: "/hotel/updateFeatures/:slug",
+    showRoom: "/hotel/:slug/rooms",
+    createRoom: "/hotel/:slug/rooms/create",
+    updateRoom: "/hotel/:slug/rooms/update/:id",
+    deleteRoom: "/hotel/:slug/rooms/delete/:id",
+    updateRoomFeatures: "/hotel/:slug/rooms/update/:id/features",
   },
   account: {
     verification: "/account/verification",

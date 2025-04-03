@@ -8,37 +8,48 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Rooms.hasMany(models.Products, {
+      // define association here
+      Rooms.belongsTo(models.Products, {
         foreignKey: "product_id",
         as: "product",
+      });
+      
+      Rooms.belongsToMany(models.Features, {
+        through: {
+          model: models.RoomFeatures,
+          attributes: [],
+        },
+        foreignKey: "room_id",
+        as: "features",
       });
     }
   }
   Rooms.init(
     {
       id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-    },
-    product_id:{
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "products",
-        key: "id",
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
       },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    },
-    title: DataTypes.STRING,
-    size: DataTypes.INTEGER,
-    max_persons: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    images: DataTypes.TEXT,
-    sale_prices: DataTypes.INTEGER,
-    bed_type: DataTypes.STRING,
-    view: DataTypes.STRING,
+      product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "products",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      title: DataTypes.STRING,
+      size: DataTypes.INTEGER,
+      max_persons: DataTypes.INTEGER,
+      default_price: DataTypes.INTEGER,
+      images: DataTypes.TEXT,
+      sale_prices: DataTypes.INTEGER,
+      bed_type: DataTypes.STRING,
+      view: DataTypes.STRING,
     },
     {
       sequelize,

@@ -89,6 +89,7 @@ function Create() {
     formData.append("title", data.title);
     formData.append("trip", data.trip);
     formData.append("year", data.year);
+    formData.append("sale_prices", data.sale_prices);
 
     data.images.forEach((image) => formData.append("images", image));
     const response = await axios.post("/ships/create", formData);
@@ -140,7 +141,10 @@ function Create() {
           </div>
         </div>
 
-        <div className={cx("group-input")}>
+        <div
+          className={cx("group-input")}
+          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+        >
           <div className="form-group">
             <InputField
               label="Tên công ty điều hành"
@@ -164,6 +168,19 @@ function Create() {
               status={errors.default_price && "error"}
               inputGroup={false}
               required
+              addonAfter="vnđ"
+            />
+          </div>
+
+          <div className="form-group">
+            <InputField
+              label="Giá khuyến mãi (nếu có)"
+              name="sale_prices"
+              placeholder="Nhập giá"
+              control={control}
+              error={errors.sale_prices}
+              status={errors.sale_prices && "error"}
+              inputGroup={false}
               addonAfter="vnđ"
             />
           </div>
@@ -314,6 +331,4 @@ function Create() {
   );
 }
 
-
 export default Create;
-

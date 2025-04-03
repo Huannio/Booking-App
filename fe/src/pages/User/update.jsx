@@ -16,7 +16,6 @@ function Update() {
   const { id } = useParams();
   const { setGlobalLoading } = useContext(LoadingContext);
 
-
   const {
     control,
     handleSubmit,
@@ -24,7 +23,6 @@ function Update() {
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(config.userSchema) });
-
 
   const [userCatalogues, setUserCatalogues] = useState(null);
 
@@ -39,16 +37,15 @@ function Update() {
     setGlobalLoading(true);
     const response = await axios.get(`/users/${id}`);
     reset({
-
       name: response.user.name,
       email: response.user.email,
       user_catalogues_id: response.user.user_catalogues.id,
+      publish: response.user.publish,
     });
     setGlobalLoading(false);
   }, [id, reset, setGlobalLoading]);
 
   useEffect(() => {
-
     getUserCatalogues();
     getOneUser();
   }, [getUserCatalogues, getOneUser]);
@@ -71,6 +68,13 @@ function Update() {
         </Option>
       )) || [],
     [userCatalogues]
+  );
+
+  const publishOption = (
+    <>
+      <Option value={true}>Kích hoạt</Option>
+      <Option value={false}>Chưa kích hoạt</Option>
+    </>
   );
 
   return (
@@ -114,7 +118,6 @@ function Update() {
         <div className="group-input">
           <div className="form-group">
             <SelectField
-
               name="user_catalogues_id"
               label="Chọn vai trò"
               placeholder="Chọn một vai trò"
@@ -126,8 +129,20 @@ function Update() {
               required
             />
           </div>
-        </div>
 
+          <div className="form-group">
+            <SelectField
+              name="publish"
+              label="Chọn vai trò"
+              placeholder="Chọn một vai trò"
+              control={control}
+              error={errors.publish}
+              options={publishOption}
+              onChange={(value) => setValue("publish", value)}
+              required
+            />
+          </div>
+        </div>
 
         <Button
           primary

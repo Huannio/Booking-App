@@ -1,0 +1,7 @@
+.group-input {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 24px;
+  gap: 24px;
+  justify-content: flex-start;
+}

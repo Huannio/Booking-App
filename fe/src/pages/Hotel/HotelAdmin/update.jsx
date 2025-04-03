@@ -54,6 +54,7 @@ function Update() {
       thumbnail: response.data.thumbnail,
       title: response.data.title,
       images: response.data.images.split(",").map((image) => image.trim()),
+      sale_prices: response.data.sale_prices,
     });
   }, [setGlobalLoading, reset, slug]);
 
@@ -95,6 +96,7 @@ function Update() {
       "thumbnail",
       typeof data.thumbnail === "string" ? data.thumbnail : data.thumbnail[0]
     );
+    formData.append("sale_prices", data.sale_prices);
 
     data.images.forEach((image) => formData.append("images", image));
 
@@ -117,7 +119,8 @@ function Update() {
         <div className="flex justify-between align-center">
           <h6>Tạo mới thông tin khách sạn</h6>
           <div className="flex align-center gap-16">
-            {hotel?.long_desc_products && hotel?.long_desc_products.length > 0 ? (
+            {hotel?.long_desc_products &&
+            hotel?.long_desc_products.length > 0 ? (
               <Link to={`/hotel/updateDetail/${slug}`}>
                 <Button primary normal>
                   <div className="label md">Cập nhật thông tin chi tiết</div>
@@ -136,12 +139,22 @@ function Update() {
                 <div className="label md">Đặc trưng khách sạn</div>
               </Button>
             </Link>
+
+            <Link to={`/hotel/${slug}/rooms`}>
+              <Button primary normal>
+                <div className="label md">Danh sách phòng</div>
+              </Button>
+            </Link>
+
             <Button primary normal submit className="interceptor-loading">
               <div className="label md">Cập nhật</div>
             </Button>
           </div>
         </div>
-        <div className={cx("group-input")}>
+        <div
+          className={cx("group-input")}
+          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+        >
           <div className="form-group">
             <InputField
               label="Tên khách sạn"
@@ -167,12 +180,7 @@ function Update() {
               inputGroup={false}
             />
           </div>
-        </div>
 
-        <div
-          className={cx("group-input")}
-          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
-        >
           <div className="form-group">
             <InputField
               label="Tên công ty điều hành"
@@ -185,7 +193,12 @@ function Update() {
               inputGroup={false}
             />
           </div>
+        </div>
 
+        <div
+          className={cx("group-input")}
+          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+        >
           <div className="form-group">
             <InputField
               label="Giá"
@@ -214,6 +227,19 @@ function Update() {
               popupMatchSelectWidth={false}
               loading={loading}
               required
+            />
+          </div>
+
+          <div className="form-group">
+            <InputField
+              label="Giá khuyến mãi (nếu có)"
+              name="sale_prices"
+              placeholder="Nhập giá"
+              control={control}
+              error={errors.sale_prices}
+              status={errors.sale_prices && "error"}
+              inputGroup={false}
+              addonAfter="vnđ"
             />
           </div>
         </div>

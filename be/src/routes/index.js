@@ -6,11 +6,13 @@ const shipRouter = require("./Ship");
 const FeatureRouter = require("./feature");
 const path = require("path");
 const hotelRouter = require("./hotel");
+const roomRouter = require("./rooms");
 
 const userCataloguesRouter = require("./userCatalogues");
 const blogsRouter = require("./blogs");
 const permissionManagementRouter = require("./permissionManagement");
 const userPermissionRouter = require("./userPermission");
+
 
 const router = (app) => {
   app.use("/users", userRouter);
@@ -22,6 +24,7 @@ const router = (app) => {
   app.use("/hotel", hotelRouter);
   app.use("/permissions-management", permissionManagementRouter);
   app.use("/users-permissions", userPermissionRouter)
+  app.use("/rooms", roomRouter);
 };
 
 module.exports = router;

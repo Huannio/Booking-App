@@ -23,9 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         as: "long_desc_products",
       });
 
+      Products.hasMany(models.Rooms, {
+        foreignKey: "product_id",
+        as: "rooms",
+      });
+
       Products.hasOne(models.Cruise, { foreignKey: "id", as: "cruise" });
       Products.hasOne(models.Hotel, { foreignKey: "id", as: "hotel" });
-      Products.hasOne(models.Rooms, { foreignKey: "id", as: "rooms" });
     }
   }
 
@@ -51,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       slug: DataTypes.STRING,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
+      sale_prices: DataTypes.DECIMAL,
     },
     {
       sequelize,

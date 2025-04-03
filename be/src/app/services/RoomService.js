@@ -1,131 +1,164 @@
-// const env = require("../../config/environment");
-// const { StatusCodes } = require("http-status-codes");
-// const { Room, Cruise, CruiseCategory, ShipType } = require("../../models");
-// const slugify = require("../../utils/slugify");
-// const uploadToCloudinary = require("../../utils/cloudinary");
-// const { Op } = require("sequelize");
-// const ApiError = require("../../middleware/ApiError");
+const { Rooms, Products, Features, RoomFeatures } = require("../../models");
+const uploadToCloudinary = require("../../utils/cloudinary");
 
-// class ShipService {
-//   async getAllShip() {
-//     try {
-//       return await Ships.findAll({
-//         attributes: ["id", "title", "address", "map_link", "map_iframe_link", "default_price", "slug", "num_reviews", "score_review", "schedule", "thumbnail", "images", "active"],
-//         include: [
-//         {
-//           model: ShipType,
-//           as: "product_type",
-//           attributes: ["name"],
-//         },
-//         {
-//           model: Cruise,
-//           as: "cruise",
-//           attributes: ["admin"],
-//         }
-//       ],
-//       });
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+class RoomService {
+  async getAllRoom(slugProduct) {
+    try {
+      let where = {};
+      if (slugProduct) {
+        where = { slug: slugProduct };
+      }
+      return await Products.findOne({
+        where,
+        attributes: [],
+        include: [
+          {
+            model: Rooms,
+            as: "rooms",
+          },
+        ],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 
-//   async getShipById(id) {
-//     try {
-//       const ship = await Ships.findOne({
-//         where: { id },
-//         attributes: ["id", "title", "address", "map_link", "map_iframe_link", "default_price", "slug", "num_reviews", "score_review", "schedule", "thumbnail", "images", "active"],
-//         include: [
-//           {
-//             model: ShipType,
-//             as: "product_type",
-//             attributes: ["id","name"],
-//           },
-//         ],
-//       });
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+  async getRoomById(id) {
+    try {
+      return await Rooms.findOne({
+        where: { id },
+        include: [
+          {
+            model: Features,
+            as: "features",
+            attributes: ["id", "text", "icon"],
+            through: { attributes: [] },
+          },
+        ],
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 
-//   async createShip(reqBody, reqFile) {
-//     try {
-//       const { title, address, map_link, map_iframe_link, default_price, schedule,num_reviews, score_review, active, type_product } = reqBody;
-//       const data = {
-//         title,
-//         address,
-//         map_link,
-//         map_iframe_link,
-//         default_price,
-//         schedule,
-//         num_reviews,
-//         score_review,
-//         active,
-//         type_product,
-//         slug: slugify(title),
-//       };
-//       if (reqFile) {
-//         const uploadImage = await uploadToCloudinary(
-//           reqFile.buffer,
-//           "thumbnail",
-//           "images"
-//         )
-//         data.thumbnail = uploadImage.url
-//         data.images = uploadImage.url
-//       }
+  async createRoom(slug, reqBody, reqFiles) {
+    try {
+      const {
+        title,
+        default_price,
+        bed_type,
+        max_persons,
+        sale_prices,
+        view,
+        size,
+      } = reqBody;
 
-//       return await Ships.create(data);
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+      const productId = await Products.findOne({
+        where: { slug },
+        attributes: ["id"],
+      });
 
-//   async updateShip(reqBody, reqFile, id) {
-//     try {
-//       const { title, address, map_link, map_iframe_link, default_price, schedule,num_reviews, score_review, active, type_product } = reqBody;
-//       const data = {
-//         title,
-//         address,
-//         map_link,
-//         map_iframe_link,
-//         default_price,
-//         schedule,
-//         num_reviews,
-//         score_review,
-//         active,
-//         type_product,
-//       };
-//       if (reqFile) {
-//         const uploadImage = await uploadToCloudinary(
-//           reqFile.buffer,
-//           "thumbnail",
-//           "images"
-//         )
-//         data.thumbnail = uploadImage.url
-//         data.images = uploadImage.url
-//       }
-      
-//       return await Ships.update(data, { where: { id } });
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
+      let imageUrl = [];
+      if (reqFiles) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, "default"))
+        );
+        imageUrl = uploadImages.map((image) => image.secure_url);
+      }
 
-//   async deleteShip(id) {
-//     try {
-//       return await Ships.destroy({ where: { id } });
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-//   async getTypes() {
-//     try {
-//       return await ShipType.findAll({
-//         attributes: ["id", "name"],
-//       });
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// }
+      const data = {
+        title,
+        default_price,
+        bed_type,
+        max_persons,
+        sale_prices,
+        view,
+        images: imageUrl.join(","),
+        product_id: productId.id,
+        size,
+      };
 
-// module.exports = new ShipService();
+      return await Rooms.create(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateRoom(reqBody, reqFiles, id) {
+    try {
+      const {
+        title,
+        default_price,
+        bed_type,
+        max_persons,
+        sale_prices,
+        view,
+        images: existingImages,
+        size,
+      } = reqBody;
+
+      let imageUrl = [];
+
+      if (reqFiles.length > 0) {
+        const uploadImages = await Promise.all(
+          reqFiles?.map((file) => uploadToCloudinary(file.buffer, "default"))
+        );
+        imageUrl = uploadImages.map((image) => image.secure_url);
+      }
+
+      if (existingImages) {
+        imageUrl.push(
+          ...(Array.isArray(existingImages)
+            ? existingImages
+            : existingImages.split(","))
+        );
+      }
+
+      const data = {
+        title,
+        default_price,
+        bed_type,
+        max_persons,
+        sale_prices,
+        view,
+        size,
+        images: imageUrl.join(","),
+      };
+
+      return await Rooms.update(data, { where: { id } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteRoom(id) {
+    try {
+      return await Rooms.destroy({ where: { id } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateFeature(reqBody, id) {
+    try {
+      const { selectedFeatures } = reqBody;
+      if (selectedFeatures.length === 0) {
+        return await RoomFeatures.destroy({ where: { room_id: id } });
+      }
+
+      if (selectedFeatures.length > 0) {
+        const data = selectedFeatures.map((feature) => ({
+          room_id: id,
+          feature_id: feature,
+        }));
+
+        await RoomFeatures.destroy({ where: { room_id: id } });
+        return await RoomFeatures.bulkCreate(data);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
+module.exports = new RoomService();

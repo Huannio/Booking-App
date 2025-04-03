@@ -1,0 +1,123 @@
+.custom-datepicker {
+  position: relative;
+  width: 100%;
+  
+  .datepicker-input {
+    width: 100%;
+    padding: 12px 15px;
+    padding-right: 35px; // Space for calendar icon
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #333;
+    background-color: white;
+    
+    &:focus {
+      outline: none;
+      border-color: #31c4be;
+    }
+    
+    &::placeholder {
+      color: #999;
+    }
+  }
+  
+  .calendar-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; // Allow clicks to pass through to input
+  }
+  
+  // Custom calendar styling
+  :global(.react-datepicker-wrapper),
+  :global(.react-datepicker__input-container) {
+    display: block;
+    width: 100%;
+  }
+  
+  :global(.react-datepicker) {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  :global(.react-datepicker__header) {
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 10px;
+  }
+  
+  :global(.react-datepicker__day-name) {
+    color: #666;
+    width: 36px;
+    margin: 2px;
+  }
+  
+  :global(.react-datepicker__day) {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    margin: 2px;
+    border-radius: 50%;
+    
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  
+  :global(.react-datepicker__day--selected) {
+    background-color: #31c4be;
+    color: white;
+    
+    &:hover {
+      background-color: darken(#31c4be, 10%);
+    }
+  }
+  
+  :global(.react-datepicker__day--today) {
+    font-weight: bold;
+    color: #31c4be;
+  }
+  
+  // Custom header styling
+  .custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    
+    .month-title {
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      
+      &:hover:not(:disabled) {
+        background-color: #f5f5f5;
+      }
+      
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  // Custom calendar class added to the popup
+  .custom-calendar {
+    width: 300px;
+    padding: 10px;
+  }
+}

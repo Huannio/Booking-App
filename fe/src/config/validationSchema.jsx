@@ -161,3 +161,13 @@ export const hotelDetailSchema = yup.object().shape({
     })
   ),
 });
+
+// Room
+export const roomSchema = yup.object().shape({
+  title: yup.string().required("Vui lòng nhập tên phòng"),
+  default_price: yup.number().required("Vui lòng nhập giá phòng"),
+  bed_type: yup.string().required("Vui lòng chọn loại giường"),
+  max_persons: yup.number().required("Vui lòng nhập số lượng người tối đa"),
+  images: yup.array().required("Vui lòng chọn ảnh"),
+  size: yup.number().required("Vui lòng nhập diện tích"),
+});

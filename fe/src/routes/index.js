@@ -1,7 +1,7 @@
 import { AdminLayout } from "../components/Layout";
 import Home from "../pages/Home";
-import CruiseSearch from "../pages/CruiseSearch";
 import Flight from "../pages/Flight";
+import { Cruise as CruiseSearch, Hotel as HotelSearch } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Hotel from "../pages/Hotel/HomeHotel";
@@ -37,6 +37,14 @@ import {
   UpdateDetail as UpdateShipDetail,
   UpdateFeature as UpdateShipFeature,
 } from "../pages/Ship";
+
+import {
+  Show as ShowRoom,
+  Create as CreateRoom,
+  Update as UpdateRoom,
+  Delete as DeleteRoom,
+  UpdateFeature as UpdateRoomFeature,
+} from "../pages/Room";
 
 import {
   Show as ShowFeature,
@@ -114,6 +122,10 @@ export const publicRoutes = [
   {
     path: "/khach-san",
     component: Hotel,
+  },
+  {
+    path: "/tim-khach-san",
+    component: HotelSearch,
   },
 
   // Footer
@@ -421,11 +433,75 @@ export const privateRoutes = [
     layout: AdminLayout,
     requiredPermission: "hotel.update",
   },
+
   {
     path: config.routes.hotel.delete,
     component: DeleteHotel,
     layout: AdminLayout,
     requiredPermission: "hotel.delete",
+  },
+
+  // Room
+  {
+    path: config.routes.ships.showRoom,
+    component: ShowRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.createRoom,
+    component: CreateRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.updateRoom,
+    component: UpdateRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.deleteRoom,
+    component: DeleteRoom,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+  {
+    path: config.routes.ships.updateRoomFeatures,
+    component: UpdateRoomFeature,
+    layout: AdminLayout,
+    requiredPermission: "ships.room",
+  },
+
+  {
+    path: config.routes.hotel.showRoom,
+    component: ShowRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.createRoom,
+    component: CreateRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.updateRoom,
+    component: UpdateRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.deleteRoom,
+    component: DeleteRoom,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
+  },
+  {
+    path: config.routes.hotel.updateRoomFeatures,
+    component: UpdateRoomFeature,
+    layout: AdminLayout,
+    requiredPermission: "hotel.room",
   },
 
   // Blogs

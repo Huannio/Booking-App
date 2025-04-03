@@ -28,6 +28,16 @@ const getUserTableColumns = (permissions) => {
       dataIndex: "user_catalogues",
       render: (user_catalogues) => <Tag color="green">{user_catalogues}</Tag>,
     },
+    {
+      title: "Trạng thái",
+      key: "publish",
+      dataIndex: "publish",
+      render: (publish) => (
+        <Tag color={publish ? "green" : "red"}>
+          {publish ? "Đã kích hoạt" : "Chưa kích hoạt"}
+        </Tag>
+      ),
+    },
   ];
 
   if (
@@ -69,6 +79,7 @@ function Show() {
       email: user.email,
       user_catalogues: user.user_catalogues.name,
       user_catalogues_id: user.user_catalogues.id,
+      publish: user.publish,
     }));
   };
   const getUsers = useCallback(async () => {
