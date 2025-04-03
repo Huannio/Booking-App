@@ -174,7 +174,11 @@ export const handleSearchHotelApi = async (
   greaterDefaultPrice = null,
   lowerDefaultPrice = null,
   page = 0,
-  limit = null
+  limit = null,
+  features = [],
+  scoreReviews = [],
+  orderBy = "id",
+  orderType = "ASC"
 ) => {
   const params = new URLSearchParams();
 
@@ -186,6 +190,13 @@ export const handleSearchHotelApi = async (
     params.append("lowerDefaultPrice", lowerDefaultPrice);
   if (page !== null) params.append("page", page);
   if (limit !== null) params.append("limit", limit);
+  if (features.length > 0) params.append("features", features.join("%"));
+  if (scoreReviews.length > 0)
+    params.append("scoreReviews", scoreReviews.join("%"));
+  if (orderBy) {
+    params.append("orderBy", orderBy);
+    params.append("orderType", orderType.toUpperCase());
+  }
 
   return await axios.get(`/hotel/search?${params.toString()}`);
 };

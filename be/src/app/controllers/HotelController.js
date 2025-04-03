@@ -80,11 +80,25 @@ class HotelController {
 
   search = async (req, res, next) => {
     try {
-      const { title, greaterDefaultPrice, lowerDefaultPrice } = req.query;
+      const {
+        title,
+        greaterDefaultPrice,
+        lowerDefaultPrice,
+        features,
+        scoreReviews,
+        orderBy,
+        orderType,
+      } = req.query;
       const page = parseInt(req.query.page) || 0;
       const limit = req.query.limit ? parseInt(req.query.limit) : null;
       const offset = page * limit;
       const cityId = req.query.cityId || null;
+      const featuresArray = features
+        ? features.split("%").map((id) => parseInt(id))
+        : [];
+      const scoreReviewsArray = scoreReviews
+        ? scoreReviews.split("%").map((id) => parseInt(id))
+        : [];
       const { total, data, totalPages } =
         await this.HotelService.getHotelSearch(
           limit,
@@ -92,7 +106,11 @@ class HotelController {
           cityId,
           title,
           greaterDefaultPrice,
-          lowerDefaultPrice
+          lowerDefaultPrice,
+          featuresArray,
+          scoreReviewsArray,
+          orderBy,
+          orderType
         );
       return res.status(StatusCodes.OK).json({
         statusCode: StatusCodes.OK,
@@ -130,7 +148,7 @@ class HotelController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   updateDetail = async (req, res, next) => {
     try {
@@ -146,7 +164,7 @@ class HotelController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   updateFeature = async (req, res, next) => {
     try {
@@ -161,7 +179,7 @@ class HotelController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
 
 module.exports = new HotelController();
