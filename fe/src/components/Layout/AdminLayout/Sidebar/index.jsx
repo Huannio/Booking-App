@@ -84,6 +84,11 @@ const Sidebar = () => {
       label: <Link to={config.routes.blogs.index}>Quản lý bài viết</Link>,
       icon: <ContainerOutlined />,
     },
+    permissions.includes("orders.index") && {
+      key: "/orders",
+      label: <Link to={config.routes.orders.index}>Quản lý đơn hàng</Link>,
+      icon: <ContainerOutlined />,
+    }
   ];
 
   useEffect(() => {

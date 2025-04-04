@@ -14,6 +14,7 @@ import {
   shipDetailSchema,
   hotelDetailSchema,
   roomSchema,
+  orderSchema
 } from "./validationSchema";
 const config = {
   routes,
@@ -31,6 +32,7 @@ const config = {
   shipDetailSchema,
   hotelDetailSchema,
   roomSchema,
+  orderSchema
 };
 
 export default config;

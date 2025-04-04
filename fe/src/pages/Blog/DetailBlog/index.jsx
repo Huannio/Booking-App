@@ -32,6 +32,7 @@ function DetailBlog() {
       <div className={cx("BlogDetail-breadcrumbsWrapper")}>
         <div className={cx("container", "BlogDetail-breadcrumbs")}>
           <BreadCrumb
+            titleOption="Blog"
             option="blog"
             content={blog?.title}
             linkSlug={`/blog-detail/${slug}`}

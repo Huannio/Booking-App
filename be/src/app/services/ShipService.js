@@ -8,6 +8,8 @@ const {
   LongDescProducts,
   LongDescType,
   ProductFeature,
+  ShortDescProducts,
+  Rooms,
 } = require("../../models");
 const { Op, Sequelize } = require("sequelize");
 const ApiError = require("../../middleware/ApiError");
@@ -120,6 +122,26 @@ class ShipService {
               as: "type",
               attributes: ["id", "type"],
             },
+          },
+          {
+            model: ShortDescProducts,
+            as: "short_desc_products",
+            attributes: ["id", "product_id", "description"],
+          },
+          {
+            model: Rooms,
+            as: "rooms",
+            attributes: [
+              "id",
+              "title",
+              "default_price",
+              "size",
+              "images",
+              "sale_prices",
+              "bed_type",
+              "view",
+              "max_persons"
+            ],
           },
         ],
       });

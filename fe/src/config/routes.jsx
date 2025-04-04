@@ -76,6 +76,17 @@ const routes = {
   account: {
     verification: "/account/verification",
   },
+
+  timDuThuyen: {
+    index: "/tim-du-thuyen",
+  },
+  timKhachSan: "/tim-khach-san",
+
+  orders: {
+    index: "/orders",
+    update: "/orders/update/:id",
+    delete: "/orders/delete/:id",
+  },
 };
 
 export default routes;
