@@ -14,6 +14,7 @@ import Rules from "./components/Rules";
 import Ques from "./components/Ques";
 import Map from "./components/Map";
 import Sidebar from "./components/Sidebar";
+import Carousel from "./components/Carousel";
 
 const cx = classNames.bind(styles);
 
@@ -64,7 +65,7 @@ function Cruise() {
         address={data.address}
       />
 
-      <div className={cx("ShipDetail-carousel")}>Carousel</div>
+      <Carousel imagesString={data.images} thumbnail={data.thumbnail} />
 
       <Sidebar
         infoHeader="Thông tin du thuyền"
