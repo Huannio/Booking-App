@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 import styles from "./Cruise.module.scss";
 import { handleGetShipBySlugApi } from "~/api";
 import BreadCrumbs from "./components/BreadCrumbs";
+import ShipCarousel from "./components/ShipCarousel";
 import Navigation from "./components/Navigation";
 import Tabs from "~/components/Tabs";
 import SectionHeader from "~/components/SectionHeader/SectionHeader";
@@ -76,7 +77,10 @@ function Cruise() {
         address={data.address}
       />
 
-      <div className={cx("ShipDetail-carousel")}>Carousel</div>
+      <ShipCarousel 
+        imagesString={data.images} 
+        thumbnail={data.thumbnail} 
+      />
 
       <Sidebar
         infoHeader="Thông tin du thuyền"
