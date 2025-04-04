@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 
-import styles from "./Cruise.module.scss";
-import { handleGetShipBySlugApi } from "~/api";
+import styles from "./Hotel.module.scss";
+import { handleGetHotelBySlugApi } from "~/api";
 import BreadCrumbs from "./components/BreadCrumbs";
 import Navigation from "./components/Navigation";
 import Tabs from "~/components/Tabs";
@@ -40,15 +40,15 @@ const tabList = [
   },
 ];
 
-function Cruise() {
+function Hotel() {
   const [data, setData] = useState([]);
 
   const { slug } = useParams();
 
   useEffect(() => {
     const getData = async () => {
-      const data = await handleGetShipBySlugApi(slug);
-      setData(data.ship);
+      const data = await handleGetHotelBySlugApi(slug);
+      setData(data.data);
     };
     getData();
   }, [slug]);
@@ -119,11 +119,11 @@ function Cruise() {
 
           <Sidebar
             infoHeader="Thông tin du thuyền"
-            year={data?.cruise?.year}
-            cabin={data?.cruise?.cabin}
-            shell={data?.cruise?.shell}
-            trip={data?.cruise?.trip}
-            admin={data?.cruise?.admin}
+            year={data?.hotel?.year}
+            cabin={data?.hotel?.cabin}
+            shell={data?.hotel?.shell}
+            trip={data?.hotel?.trip}
+            admin={data?.hotel?.admin}
           />
         </div>
       </div>
@@ -131,4 +131,4 @@ function Cruise() {
   );
 }
 
-export default Cruise;
+export default Hotel;

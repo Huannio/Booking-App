@@ -6,7 +6,7 @@ import Button from "~/components/Button/Button";
 import RoomCard from "~/components/Card/RoomCard";
 
 import { formatMoney } from "~/utils/formatters";
-import styles from "../Cruise.module.scss";
+import styles from "../Hotel.module.scss";
 import { useEffect, useRef, useState } from "react";
 import Popup from "./Popup";
 

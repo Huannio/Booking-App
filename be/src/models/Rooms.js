@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "product_id",
         as: "product",
       });
-      
+
       Rooms.belongsToMany(models.Features, {
         through: {
           model: models.RoomFeatures,
@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         foreignKey: "room_id",
         as: "features",
+      });
+
+      Rooms.hasMany(models.BookingRooms, {
+        foreignKey: "room_id",
+        as: "bookingRooms",
       });
     }
   }

@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import classNames from "classnames/bind";
-import styles from "../Cruise.module.scss";
+import styles from "../Hotel.module.scss";
 import Button from "~/components/Button/Button";
 import { useEffect, useRef, useState } from "react";
-import InputField from "../../../components/Input/InputField";
+import InputField from "~/components/Input/InputField";
 
 const cx = classNames.bind(styles);
 function RoomPicker({ control, setValue }) {

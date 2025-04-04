@@ -3,7 +3,12 @@ import Home from "../pages/Home";
 import { Cruise as CruiseSearch, Hotel as HotelSearch } from "../pages/Search";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import Hotel from "../pages/Hotel/HomeHotel";
+import HomeHotel from "../pages/Hotel/HomeHotel";
+import {
+  Show as ShowOrder,
+  Update as UpdateOrder,
+  Delete as DeleteOrder,
+} from "../pages/Order";
 
 import {
   Show as ShowUser,
@@ -76,6 +81,8 @@ import BusinessPage from "../pages/business";
 import BlogPage from "../pages/Blog/Homeblog";
 import DetailBlog from "../pages/Blog/DetailBlog";
 
+import Hotel from "../pages/Hotel/Detail/Hotel";
+
 // Footer
 import {
   AboutUs,
@@ -121,11 +128,15 @@ export const publicRoutes = [
   },
   {
     path: "/khach-san",
-    component: Hotel,
+    component: HomeHotel,
   },
   {
     path: "/tim-khach-san",
     component: HotelSearch,
+  },
+  {
+    path: "/tim-khach-san/:slug",
+    component: Hotel,
   },
 
   // Footer
@@ -484,6 +495,24 @@ export const privateRoutes = [
     component: DeleteBlog,
     layout: AdminLayout,
     requiredPermission: "blogs.delete",
+  },
+  {
+    path: config.routes.orders.index,
+    component: ShowOrder,
+    layout: AdminLayout,
+    requiredPermission: "orders.index",
+  },
+  {
+    path: config.routes.orders.update,
+    component: UpdateOrder,
+    layout: AdminLayout,
+    requiredPermission: "orders.update",
+  },
+  {
+    path: config.routes.orders.delete,
+    component: DeleteOrder,
+    layout: AdminLayout,
+    requiredPermission: "orders.delete",
   },
 ];
 

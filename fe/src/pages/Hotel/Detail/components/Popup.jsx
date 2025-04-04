@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import styles from "../Cruise.module.scss";
+import styles from "../Hotel.module.scss";
 import { TextField, InputField } from "~/components/Input";
 import Button from "~/components/Button/Button";
 import Datepicker from "~/components/DatePicker/DatePicker";

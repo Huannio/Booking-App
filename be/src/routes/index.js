@@ -12,6 +12,8 @@ const blogsRouter = require("./blogs");
 const permissionManagementRouter = require("./permissionManagement");
 const userPermissionRouter = require("./userPermission");
 
+const orders = require("./orders");
+
 
 const router = (app) => {
   app.use("/users", userRouter);
@@ -24,6 +26,7 @@ const router = (app) => {
   app.use("/permissions-management", permissionManagementRouter);
   app.use("/users-permissions", userPermissionRouter)
   app.use("/rooms", roomRouter);
+  app.use("/orders", orders);
 };
 
 module.exports = router;

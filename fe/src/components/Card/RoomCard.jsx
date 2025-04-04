@@ -1,16 +1,18 @@
+/* eslint-disable react/prop-types */
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
 import styles from "./Card.module.scss";
 import Button from "../Button/Button";
 import { formatMoney } from "~/utils/formatters";
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 const cx = classNames.bind(styles);
 
 const RoomCard = forwardRef(
   (
     {
       imgSrc,
+      id,
       title,
       size,
       bedType,
@@ -19,15 +21,38 @@ const RoomCard = forwardRef(
       default_price,
       handleTotalPrice,
       option = "",
+      onRoomSelect,
+      quantityRoomOrder,
     },
     ref
   ) => {
     const [quantity, setQuantity] = useState(0);
 
+    useEffect(() => {
+      const roomOrder = quantityRoomOrder?.find((room) => room.room_id === id);
+      if (roomOrder) {
+        setQuantity(roomOrder.quantity);
+      }
+    }, [quantityRoomOrder, id]);
+
     const handleIncreaseQuantity = () => {
       setQuantity((prevQuantity) => {
         const newQuantity = prevQuantity + 1;
         handleTotalPrice(default_price, 1);
+        if (onRoomSelect) {
+          const room = {
+            id: id,
+            title: title,
+            size: size,
+            bedType: bedType,
+            view: view,
+            max_persons: max_persons,
+            default_price: default_price,
+            quantity: newQuantity,
+            images: imgSrc,
+          };
+          onRoomSelect(room, newQuantity);
+        }
         return newQuantity;
       });
     };
@@ -37,8 +62,30 @@ const RoomCard = forwardRef(
         if (prevQuantity > 0) {
           const newQuantity = prevQuantity - 1;
           handleTotalPrice(default_price, -1);
+          if (onRoomSelect) {
+            const room = {
+              id: id,
+              title: title,
+              size: size,
+              bedType: bedType,
+              view: view,
+              max_persons: max_persons,
+              default_price: default_price,
+              quantity: newQuantity,
+              images: imgSrc,
+            };
+            onRoomSelect(room, newQuantity);
+          }
+
           return newQuantity;
         }
+
+        if (prevQuantity === 0) {
+          if (onRoomSelect) {
+            onRoomSelect(null, 0);
+          }
+        }
+
         return prevQuantity;
       });
     };

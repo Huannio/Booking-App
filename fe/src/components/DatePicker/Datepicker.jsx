@@ -56,7 +56,7 @@ function Datepicker({ control, setValue }) {
   return (
     <div className="DatePicker-mixiDatePicker">
       <Controller
-        name="date"
+        name="checkin_date"
         control={control}
         defaultValue={formatDate(startDate)} // Lưu dưới dạng chuỗi "dd/MM/yyyy"
         render={({ field }) => {
@@ -69,7 +69,7 @@ function Datepicker({ control, setValue }) {
               selected={selectedDate} // Truyền kiểu Date vào DatePicker
               onChange={(date) => {
                 setStartDate(date);
-                setValue("date", formatDate(date)); // Lưu chuỗi "dd/MM/yyyy"
+                setValue("checkin_date", formatDate(date)); // Lưu chuỗi "dd/MM/yyyy"
               }}
               disabledKeyboardNavigation
               minDate={new Date()}
@@ -165,7 +165,7 @@ function Datepicker({ control, setValue }) {
                       </svg>
                     }
                     label="Ngày nhận phòng"
-                    name="date"
+                    name="checkin_date"
                     control={control}
                     readOnly
                   />
