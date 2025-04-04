@@ -95,6 +95,8 @@ import {
 
 import AccountVerification from "../pages/Auth/AccountVerification";
 
+import Cruise from "../pages/Cruise/Cruise";
+
 export const publicRoutes = [
   {
     path: config.routes.account.verification,
@@ -108,6 +110,10 @@ export const publicRoutes = [
   {
     path: "/tim-du-thuyen",
     component: CruiseSearch,
+  },
+  {
+    path: "/du-thuyen/:slug",
+    component: Cruise,
   },
   {
     path: "/doanh-nghiep",

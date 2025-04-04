@@ -169,3 +169,9 @@ export const roomSchema = yup.object().shape({
   images: yup.array().required("Vui lòng chọn ảnh"),
   size: yup.number().required("Vui lòng nhập diện tích"),
 });
+
+export const orderSchema = yup.object().shape({
+  // name: yup.string().required("Vui lòng nhập tên"),
+  // email: yup.string().required("Vui lòng nhập email"),
+  // phone_number: yup.string().required("Vui lòng nhập số điện thoại"),
+});

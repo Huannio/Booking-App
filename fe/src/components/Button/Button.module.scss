@@ -78,8 +78,8 @@ button {
   box-shadow: none;
 
   &:hover {
-    color: var(--primary);
-    fill: var(--primary);
+    color: var(--primary-base);
+    fill: var(--primary-base);
     cursor: pointer;
 
     > svg > path {

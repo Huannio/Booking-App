@@ -6,7 +6,12 @@ import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function BreadCrumb({ option = "ship", linkSlug, content }) {
+function BreadCrumb({
+  option = "ship",
+  titleOption = "ship",
+  linkSlug,
+  content,
+}) {
   return (
     <div className={cx("BreadCrumbs-breadCrumbsContainer")}>
       <Link to={config.routes.home} className={cx("BreadCrumbs-breadCrumb")}>
@@ -40,7 +45,9 @@ function BreadCrumb({ option = "ship", linkSlug, content }) {
               strokeLinejoin="round"
             ></path>
           </svg>
-          <div className={cx("BreadCrumbs-breadCrumb", "capitalize")}>{option}</div>
+          <div className={cx("BreadCrumbs-breadCrumb", "capitalize")}>
+            {titleOption}
+          </div>
         </div>
       </Link>
 
@@ -71,6 +78,7 @@ function BreadCrumb({ option = "ship", linkSlug, content }) {
 
 BreadCrumb.propTypes = {
   option: PropTypes.string,
+  titleOption: PropTypes.string,
   linkSlug: PropTypes.string,
   content: PropTypes.string,
 };

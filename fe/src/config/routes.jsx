@@ -76,6 +76,11 @@ const routes = {
   account: {
     verification: "/account/verification",
   },
+
+  timDuThuyen: {
+    index: "/tim-du-thuyen",
+  },
+  timKhachSan: "/tim-khach-san",
 };
 
 export default routes;
