@@ -1,0 +1,42 @@
+.Tabs {
+  &-header {
+    display: flex;
+    padding: 4px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-100, #f2f4f7);
+    background: var(--gray-50, #f9fafb);
+  }
+
+  &-item {
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-500);
+    border-radius: 6px;
+    padding: 8px 12px;
+    width: -moz-fit-content;
+    width: fit-content;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &-sm {
+    padding: 8px 12px;
+  }
+
+  &-active,
+  &-item:hover {
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+
+  &-active,
+  &-item:focus,
+  &-item:hover {
+    color: var(--gray-700);
+    background: var(--base-white);
+  }
+}

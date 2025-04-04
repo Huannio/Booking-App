@@ -37,9 +37,11 @@ function SectionHeader({
         )}
       </div>
 
-      <label htmlFor="" className={cx("lg", "SectionHeader-description")}>
-        {mainContent}
-      </label>
+      {mainContent && (
+        <label htmlFor="" className={cx("lg", "SectionHeader-description")}>
+          {mainContent}
+        </label>
+      )}
 
       {column && (
         <div>

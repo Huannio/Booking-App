@@ -30,6 +30,9 @@ function InputField({
   className = "",
   required = false,
   inputGroup = true,
+  firstIcon,
+  lastIcon,
+  defaultValue,
   ...passProps
 }) {
   return (
@@ -38,9 +41,11 @@ function InputField({
         htmlFor={name}
         className={inputGroup ? "input-group" : "not-input-group"}
       >
+        {firstIcon}
         <Controller
           name={name}
           control={control}
+          defaultValue={defaultValue}
           render={({ field }) => (
             <Input
               type={type}
@@ -53,6 +58,9 @@ function InputField({
             />
           )}
         />
+
+        {lastIcon}
+
         {inputGroup && (
           <label
             htmlFor={name}

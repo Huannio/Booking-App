@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "long_desc_products",
       });
 
+      Products.hasMany(models.ShortDescProducts, {
+        foreignKey: "product_id",
+        as: "short_desc_products",
+      });
+
       Products.hasMany(models.Rooms, {
         foreignKey: "product_id",
         as: "rooms",
