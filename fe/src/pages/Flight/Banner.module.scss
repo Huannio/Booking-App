@@ -1,259 +1,108 @@
-/* Banner */
-.Home-banner {
+/* Banner.module.scss */
+.Flight-banner {
   position: relative;
-  max-width: 1392px;
-  max-height: 784px;
-  margin: auto;
-  border-radius: 24px;
-  height: 55vw;
-  width: calc(100vw - 64px);
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  max-height: 800px;
   overflow: hidden;
+  margin-bottom: 80px;
 
-  & .Home-bg-video {
+  .Flight-bg-video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .form-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .Flight-searchBox {
+    background: white;
     border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .FlightSearchBox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .Input-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 28px;
+    background: white;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: #94a3b8;
+    }
+
+    &:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    input, .react-datepicker-wrapper input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0 8px;
+      background: transparent;
+    }
+
+    .label-input {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: white;
+      padding: 0 4px;
+      font-size: 12px;
+      color: #64748b;
+    }
+  }
+
+  .Checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  .search-button-container {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+
+    button {
+      width: 100%;
+      height: 56px;
+      border-radius: 28px;
+    }
   }
 }
-
-.Input-input-group { 
-  position: absolute;
-  top: 0;
-  transform: translateY(-50%);
-  left: 16px;
-  background-color: #fff;
-  padding: 0 4px;
-  color: var(--gray-600, #475467);
-}
-
-.Flight-banner {
-  position: relative;
-  margin: auto;
-  width: calc(100vw - 64px);
-  height: 55vw;
-  max-width: 1392px;
-  max-height: 784px;
-  border-radius: 24px;
-  font-family: Archivo, sans-serif;
-  box-sizing: border-box;
-  padding: 0;
-}
-.fresnel-container {
-  font-family: Archivo, sans-serif;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-.Flight-bg-video {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  font-family: Archivo, sans-serif;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-.Flight-searchBox {
-  position: absolute;
-  bottom: -200px;
-  transform: translateX(-50%);
-  left: 50%;
-  font-family: Archivo, sans-serif;
-  box-sizing: border-box;
-
-}
-.Flight-searchBox-searchBox {
-  padding: 40px 24px 24px;
-  width: 1216px;
-  margin: 0;
-  z-index: 2;
-}
-.Card-card {
-  border-radius: 32px;
-  border: 1px solid var(--gray-200, #eaecf0);
-  background: var(--base-white, #fff);
-  box-shadow: var(--shadow-sm);
-}
-
-.card-custom{
-  width: 90%;
-  padding: 30px;
-}
-
-.gap-40 {
-  gap: 40px;
-}
-.justify-centrer {
-  justify-content: center;
-}
-.flex-col {
-  flex-direction: column;
-}
-.flex {
-  display: flex;
-}
-.text-center {
-  text-align: center;
-  margin: 0;
-}
-.h4, h5 {
-  font-weight: 700;
-  color: var(--gray-900, #101828);
-  font-size: 36px;
-  line-height: 44px;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.gap-16 {
-  gap: 16px;
-}
-.Checkbox-container {
-  width: fit-content;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  cursor: pointer;
-}
-.Checkbox_container input {
-  position: absolute;
-  opacity: 0;
-  height: 0;
-  width: 0;
-  border-radius: 100%;
-}
-.Checkbox_checkmark {
-  border: 1px solid var(--primary-dark, #0e4f4f);
-  background: var(--primary-base, #77dada);
-  width: 16px;
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2px;
-  cursor: pointer;
-}
-.checkbox-textgroup {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1 0;
-}
-
-
-.label.sm {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  color: var(--gray-700, #344054);
-} 
-.p.sm {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  word-wrap: break-word;
-  margin: 0;
-}
-.FlightSearchBox-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-row-gap: 24px;
-  grid-column-gap: 16px;
-}
-.FlightSearchBox-selectInput {
-  position: relative;
-}
-
-input {
-  border: none;
-}
-
-input::placeholder{
-  color: #0e4f4f;
-}
-
-.Input-input-group {
-  position: relative;
-  padding: 16px 20px;
-  border-radius: 28px;
-  border: 1px solid var(--gray-200);
-  box-shadow: var(--shadow-xs);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  fill: var(--base-white);
-}
-.Input-input-group {
-  /* border: none; */
-  flex-grow: 1;
-  /* width: 0; */
-  color: var(--gray-800);
-  /* height: 24px; */
-}
-
-.wrapper{
-  display: flex;
-}
-
-.p-md {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  width: 100%;
-}
-
-.label-input {
-  position: absolute;
-  top: -10px;
-  background-color: white;
-  padding: 0 5px;
-}
-
-/*.Input-input-group { 
-  position: absolute;
-  top: 0;
-  transform: translateY(-50%);
-  left: 16px;
-  background-color: #fff;
-  padding: 0 4px;
-  color: var(--gray-600, #475467);
-} */
-.DatePicker-mixi-date-picker {
-  width: 100%;
-}
-.react-datepicker-wrapper {
-  display: inline-block;
-  padding: 0;
-  border: 0;
-}
-.react-datepicker {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-/*.Input_input-group {
-  position: relative;
-  padding: 16px 20px;
-  border-radius: 28px;
-  border: 1px solid var(--gray-200);
-  box-shadow: var(--shadow-xs);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  fill: var(--base-white);
-}*/
-.Input_input-group {
-  width: 20px;
-  height: 20px;
-}
-
-
-
